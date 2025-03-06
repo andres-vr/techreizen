@@ -1,6 +1,4 @@
-@extends('layouts.app')
-
-@section('content')
+<x-layout.home>
     <div class = "row justify-content-center">
         <div class="text-center">
             <div id="images" class="carousel slide carousel-fade" data-bs-ride="carousel">
@@ -37,4 +35,4 @@
             </div>
         </div>
     </div>
-@endsection
+</x-layout.home>
