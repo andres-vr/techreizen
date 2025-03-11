@@ -15,6 +15,9 @@ All guest Routes List
 Route::middleware(['auth', 'user-access:guest'])->group(function () {
 
     Route::get('/disclaimerPage', [HomeController::class, 'disclaimerPage'])->name('guest.disclaimer');
+    Route::get('/register', function () {
+        return redirect()->route('guest.disclaimer');
+    })->name('register');
 });
 /*------------------------------------------
 --------------------------------------------
@@ -24,7 +27,7 @@ All traveller Routes List
 Route::middleware(['auth', 'user-access:traveller'])->group(function () {
 
     Route::get('/traveller/home', [HomeController::class, 'travellerHome'])->name('traveller.home');
-});     
+});
 
 /*------------------------------------------
 --------------------------------------------
