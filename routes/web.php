@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 
@@ -13,7 +14,7 @@ All guest Routes List
 --------------------------------------------*/
 Route::middleware(['auth', 'user-access:guest'])->group(function () {
 
-    //Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::get('/disclaimerPage', [HomeController::class, 'disclaimerPage'])->name('guest.disclaimer');
 });
 /*------------------------------------------
 --------------------------------------------
@@ -23,7 +24,7 @@ All traveller Routes List
 Route::middleware(['auth', 'user-access:traveller'])->group(function () {
 
     Route::get('/traveller/home', [HomeController::class, 'travellerHome'])->name('traveller.home');
-});
+});     
 
 /*------------------------------------------
 --------------------------------------------
@@ -44,7 +45,3 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
 
     Route::get('/admin/home', [HomeController::class, 'adminHome'])->name('admin.home');
 });
-
-Route::get('/disclaimer', function () {
-    return view('auth.disclaimer');
-})->name('disclaimer');

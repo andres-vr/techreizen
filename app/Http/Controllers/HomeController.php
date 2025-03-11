@@ -54,4 +54,10 @@ class HomeController extends Controller
     {
         return view('admin.home');
     }
+
+    public function disclaimerPage(): View
+    {
+        //guest.disclaimer is the file found in the views folder
+        return view('guest.disclaimer');
+    }
 }

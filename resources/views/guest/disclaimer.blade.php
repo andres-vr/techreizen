@@ -10,7 +10,7 @@
             <li>Uw gebruik van deze website en het verstrekken van uw gegevens is geheel op eigen risico.</li>
         </ul>
         <p>Als u vragen heeft over deze disclaimer, neem dan contact met ons op.</p>
-        <form action="{{ route('disclaimer.accept') }}" method="POST">
+        <form action="{{ route('guest.disclaimer') }}" method="POST">
             @csrf
             <button type="submit" class="btn btn-primary">Accepteer en Doorgaan</button>
         </form>
