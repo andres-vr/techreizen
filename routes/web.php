@@ -46,3 +46,7 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
 });
 
 Route::get('/home', [HomeController::class, 'index']);
+Route::get('/daba', function () {
+    $data = DB::table('pages')->select('id', 'name', 'content')->get();
+    return response()->json($data);
+});
