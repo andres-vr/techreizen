@@ -20,6 +20,21 @@
         @endif
     </head>
     <body class="font-sans antialiased dark:bg-black dark:text-white/50">
+    <!-- Keep your existing content -->
+    
+    <h1 class="mb-4">Welcome to TechReizen</h1>
+
+    <!-- Add the list of pages below your existing content -->
+    <h2 class="mt-4">Pages List</h2>
+    
+    <ul class="list-group">
+        @foreach($pages as $page)
+            <li class="list-group-item">
+                <a href="{{ url('/pages', $page->id) }}">{{ $page->name }}</a>
+            </li>
+        @endforeach
+    </ul>
+
         <div class="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
             <img id="background" class="absolute -left-20 top-0 max-w-[877px]" src="https://laravel.com/assets/img/welcome/background.svg" alt="Laravel background" />
             <div class="relative min-h-screen flex flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white">
