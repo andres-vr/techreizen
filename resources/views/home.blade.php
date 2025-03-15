@@ -18,22 +18,5 @@
             </div>
         </div>
     </div>
-    <div class="row justify-content-center p-2">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-                    <h2>
-                        {{ __('You are a visitor!') }}
-                    </h2>
-                </div>
-            </div>
-        </div>
-    </div>
+    {{$content}}
 </x-layout.home>
