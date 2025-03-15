@@ -1,5 +1,5 @@
 <x-layout.home>
-
+        
     <div class = "row justify-content-center">
         <div class="text-center">
             <div id="images" class="carousel slide carousel-fade" data-bs-ride="carousel">
@@ -19,21 +19,13 @@
         </div>
     </div>
     <div class="row justify-content-center p-2">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-                    <h2>
-                        {{ __('You are a visitor!') }}
-                    </h2>
-                </div>
+        <div class="pt-3">
+              
+            <div class="px-5 pb-5 pt-4 border-b border-t border-r border-l border-gray-600 rounded-md">
+                <span class="bg-white px-3 text-sm font-medium"> {{ $page->content }}</span>
             </div>
-        </div>
+          </div>
+
+       
     </div>
 </x-layout.home>

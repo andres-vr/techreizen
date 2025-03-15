@@ -4,8 +4,10 @@ use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\GuestRegistrationController;
+use App\Http\Controllers\PageController;
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', [PageController::class, 'show'])->name('home');
+Route::resource('page', PageController::class);
 
 //route for AJAX request
 Route::get('/majors/{educationId}', [GuestRegistrationController::class, 'getMajorsByEducation'])->name('majors.byEducation');
@@ -84,8 +86,4 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
     Route::get('/admin/home', [HomeController::class, 'adminHome'])->name('admin.home');
 });
 
-Route::get('/home', [HomeController::class, 'index']);
-Route::get('/daba', function () {
-    $data = DB::table('pages')->select('id', 'name', 'content')->get();
-    return response()->json($data);
-});
+Route::get('/home', [PageController::class, 'show'])->name('home');

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->tinyInteger('access_level');
             $table->timestamp('created_at');
             $table->timestamp('updated_at');
-            $table->string('description', 255);
+            $table->string('type', 255);
         });
     }
 
