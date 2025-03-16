@@ -22,7 +22,7 @@
         <div class="pt-3">
               
             <div class="px-5 pb-5 pt-4 border-b border-t border-r border-l border-gray-600 rounded-md">
-                <span class="bg-white px-3 text-sm font-medium"> {{ $page->content }}</span>
+                <span class="bg-white px-3 text-sm font-medium"> {{ $page }}</span>
             </div>
           </div>
 
