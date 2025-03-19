@@ -40,10 +40,19 @@ class GuestRegistrationController extends Controller
 
         return redirect()->route('guest.registration.personal-info');
     }
-    // TODO Submit Basic Info Form
-    public function submitBasicInfo(Request $request){}
+    // Show Personal Info Form
+    public function showPersonalInfoForm(Request $request)
+    {
+        $registration = $request->session()->get(self::SESSION_KEY, ['step' => 1]);
+        
+        if ($registration['step'] < 2) {
+            return redirect()->route('guest.registration.basic-info');
+        }
 
-    // TODO Show Personal Info Form
-    public function showPersonalInfoForm(Request $request){}
+        return view('guest.registration.personal-info', ['registration' => (object)$registration]);
+    }
+
+    // TODO Submit Personal Info Form
+    public function submitPersonalInfo(Request $request){}
 
 }
