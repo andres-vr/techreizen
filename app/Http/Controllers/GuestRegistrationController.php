@@ -35,16 +35,41 @@ class GuestRegistrationController extends Controller
     // Submit Basic Info Form
     public function submitBasicInfo(Request $request)
     {
-        $validated = $request->validate([
+        // Get the raw form data to debug what's being submitted
+        $formData = $request->all();
+        
+        // Create a validator with proper error messages
+        $validator = validator($formData, [
             'trip' => 'required|string|max:255',
-            'student_number' => 'required|string|max:255',
+            'student_number' => [
+                'required', 
+                'string', 
+                'max:255',
+                'regex:/^[RUB]\d{7}$/'
+            ],
+            // Note: These are validated but may not be in the form properly
             'education' => 'required|string|max:255',
             'major' => 'required|string|max:255',
+        ], [
+            'student_number.regex' => 'Studentnummer moet beginnen met R, U of B en gevolgd worden door 7 cijfers.',
+            'trip.required' => 'Selecteer een reis.',
+            'education.required' => 'Selecteer een opleiding.',
+            'major.required' => 'Selecteer een afstudeerrichting.',
         ]);
+        
+        // If validation fails, redirect back with errors
+        if ($validator->fails()) {
+            return back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+        
+        // Get the validated data
+        $validated = $validator->validated();
 
         // Get current session data and update it
         $registration = $request->session()->get(self::SESSION_KEY, []);
-        $registration = array_merge($registration, $validated, ['step' => 2]); // IMPORTANT: save current steps so we can the progress in a partial view
+        $registration = array_merge($registration, $validated, ['step' => 2]);
         
         // Save updated data back to session
         $request->session()->put(self::SESSION_KEY, $registration);
