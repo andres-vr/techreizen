@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('pages', function (Blueprint $table) {
             $table->integer('id')->autoIncrement();
-            $table->string('name', 25);
-            $table->string('content',1024);
+            $table->string('name', 255);
+            $table->string('content',10960); //tekst
             $table->tinyInteger('access_level');
             $table->timestamp('created_at');
             $table->timestamp('updated_at');
-            $table->string('type', 255);
+            $table->string('type', 1024); //content veranderen naar HTML, PDF, ...
         });
     }
 
