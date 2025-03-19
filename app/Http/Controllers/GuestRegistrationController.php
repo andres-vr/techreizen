@@ -53,6 +53,27 @@ class GuestRegistrationController extends Controller
     }
 
     // TODO Submit Personal Info Form
-    public function submitPersonalInfo(Request $request){}
+    public function submitPersonalInfo(Request $request)
+    {
+        $validated = $request->validate([
+            'date_of_birth' => 'required|date',
+            'nationality' => 'required|string|max:255',
+            'passport_number' => 'required|string|max:255',
+            'passport_expiry' => 'required|date',
+            'address' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'postal_code' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
+        ]);
+
+        // Get current session data and update it
+        $registration = $request->session()->get(self::SESSION_KEY, []);
+        $registration = array_merge($registration, $validated, ['step' => 3]);
+        
+        // Save updated data back to session
+        $request->session()->put(self::SESSION_KEY, $registration);
+
+        return redirect()->route('guest.registration.medical-info');
+    }
 
 }
