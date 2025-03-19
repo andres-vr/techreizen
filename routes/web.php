@@ -13,8 +13,29 @@ All guest Routes List
 --------------------------------------------
 --------------------------------------------*/
 Route::middleware(['auth', 'user-access:guest'])->group(function () {
-
+    // Disclaimer page
     Route::get('/disclaimerPage', [HomeController::class, 'disclaimerPage'])->name('guest.disclaimer');
+
+    //TODO: This function has not been implemented yet in the controller class !!!
+    Route::post('/disclaimerPage', [HomeController::class, 'acceptDisclaimer'])->name('guest.disclaimer.accept');
+    
+    // Guest Registration Routes 
+    Route::prefix('registration')->group(function () {
+        // Step 1: Basic Info
+        Route::get('/basic-info', [GuestRegistrationController::class, 'showBasicInfoForm'])
+            ->name('guest.registration.basic-info');
+        Route::post('/basic-info', [GuestRegistrationController::class, 'submitBasicInfo'])
+            ->name('guest.registration.basic-info.submit');
+            
+        // Step 2: Personal Info
+        Route::get('/personal-info', [GuestRegistrationController::class, 'showPersonalInfoForm'])
+            ->name('guest.registration.personal-info');
+        Route::post('/personal-info', [GuestRegistrationController::class, 'submitPersonalInfo'])
+            ->name('guest.registration.personal-info.submit');
+            
+        // TODO: Step 3: Medical Info and Account Creation
+    });
+    
     Route::get('/register', function () {
         return redirect()->route('guest.disclaimer');
     })->name('register');
