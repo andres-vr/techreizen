@@ -46,7 +46,7 @@
                             <div class="col-md-6">
                                 <input id="student_number" type="text" class="form-control @error('student_number') is-invalid @enderror" 
                                        name="student_number" value="{{ old('student_number', $registration->student_number) }}" required>
-                                <span id="student_number_error" class="text-danger" style="display: none;">{{ __('Studentnummer moet beginnen met R, U of B en gevolgd worden door 7 cijfers.') }}</span>
+                                <span id="student_number_error" class="text-danger" style="display: none;">{{ __('Studentnummer moet beginnen met r, u of b en gevolgd worden door 7 cijfers.') }}</span>
                                 @error('student_number')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -110,7 +110,7 @@
         const errorSpan = document.getElementById('student_number_error');
 
         studentNumberInput.addEventListener('input', function () {
-            const pattern = /^[RUB]\d{7}$/;
+            const pattern = /^[rub]\d{7}$/;
             if (!pattern.test(studentNumberInput.value)) {
                 errorSpan.style.display = 'block';
             } else {
