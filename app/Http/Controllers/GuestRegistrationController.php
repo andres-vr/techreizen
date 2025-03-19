@@ -52,17 +52,18 @@ class GuestRegistrationController extends Controller
         return view('guest.registration.personal-info', ['registration' => (object)$registration]);
     }
 
-    // TODO Submit Personal Info Form
+    // Submit Personal Info Form
     public function submitPersonalInfo(Request $request)
     {
         $validated = $request->validate([
-            'date_of_birth' => 'required|date',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'gender' => 'required|string|in:male,female,other',
             'nationality' => 'required|string|max:255',
-            'passport_number' => 'required|string|max:255',
-            'passport_expiry' => 'required|date',
+            'date_of_birth' => 'required|date',
+            'place_of_birth' => 'required|string|max:255',
             'address' => 'required|string|max:255',
             'city' => 'required|string|max:255',
-            'postal_code' => 'required|string|max:255',
             'country' => 'required|string|max:255',
         ]);
 
