@@ -58,8 +58,11 @@
                         <div class="row mb-3">
                             <label for="education" class="col-md-4 col-form-label text-md-end">{{ __('Opleiding*') }}</label>
                             <div class="col-md-6">
-                                <input id="education" type="text" class="form-control @error('education') is-invalid @enderror" 
-                                       name="education" value="{{ old('education', $registration->education) }}" required>
+                                <select id="trip" class="form-control @error('trip') is-invalid @enderror" 
+                                       name="trip" required>
+                                    <option value="">-- Selecteer Opleiding --</option>
+                                    <option value="london" {{ old('education', $registration->education) == 'elo_ict' ? 'selected' : '' }}>ELO-ICT</option>
+                                </select>
                                 @error('education')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -72,8 +75,11 @@
                         <div class="row mb-3">
                             <label for="major" class="col-md-4 col-form-label text-md-end">{{ __('Afstudeerrichting*') }}</label>
                             <div class="col-md-6">
-                                <input id="major" type="text" class="form-control @error('major') is-invalid @enderror" 
-                                       name="major" value="{{ old('major', $registration->major) }}" required>
+                                <select id="trip" class="form-control @error('trip') is-invalid @enderror" 
+                                       name="trip" required>
+                                    <option value="">-- Selecteer Afstudeerrichting --</option>
+                                    <option value="london" {{ old('major', $registration->major) == 'ict' ? 'selected' : '' }}>ICT</option>
+                                </select>
                                 @error('major')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
