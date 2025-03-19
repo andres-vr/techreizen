@@ -60,4 +60,9 @@ class HomeController extends Controller
         //guest.disclaimer is the file found in the views folder
         return view('guest.disclaimer');
     }
+
+    public function acceptDisclaimer(Request $request)
+    {
+        return redirect()->route('guest.registration.basic-info');
+    }
 }

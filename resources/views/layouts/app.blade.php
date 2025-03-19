@@ -19,7 +19,7 @@
 </head>
 
 <body>
-    <div class= "fixed-top" style="z-index: 100">
+    <div style="z-index: 100; position: relative;"> <!-- Changed from fixed-top to relative -->
         <div class="d-flex flex-row bg-light">
             <div class="p-2"> <img src="{{ asset('images/ucll_logo.png') }}" class="rounded" alt="logo ucll"></div>
             <div class="d-flex flex-column">
@@ -31,6 +31,8 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div> <!-- Removed margin-top to allow natural scrolling -->
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">

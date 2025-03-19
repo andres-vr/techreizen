@@ -19,7 +19,18 @@ class GuestRegistrationController extends Controller
         $this->middleware('user-access:guest');
     }
     // TODO: Show Basic Info Form
-    public function showBasicInfoForm(Request $request){}
+    public function showBasicInfoForm(Request $request)
+    {
+        $registration = $request->session()->get(self::SESSION_KEY, [
+            'step' => 1,
+            'trip' => '',
+            'student_number' => '',
+            'education' => '',
+            'major' => '',
+        ]);
+
+        return view('guest.registration.basic-info', ['registration' => (object)$registration]);
+    }
     
     // Submit Basic Info Form
     public function submitBasicInfo(Request $request)
