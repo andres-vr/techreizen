@@ -7,6 +7,7 @@ use App\Http\Controllers\PageController;
 Route::get('/', [PageController::class, 'show'])->name('home');
 Route::resource('page', PageController::class);
 
+
 Auth::routes();
 /*------------------------------------------
 --------------------------------------------
