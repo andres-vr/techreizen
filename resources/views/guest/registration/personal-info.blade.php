@@ -113,6 +113,7 @@ c:\Users\lucas\Downloads\Laragon\www\techreizen\resources\views\guest\registrati
                                             value="{{ old('nationality', $registration->nationality ?? '') }}">
                                     </div>
                                 </div>
+<<<<<<< Updated upstream
                                     <div class="mb-4">
                                         <h5 class="border-bottom pb-2">{{ __('Adres Informatie') }}</h5>
                                     </div>
@@ -128,6 +129,20 @@ c:\Users\lucas\Downloads\Laragon\www\techreizen\resources\views\guest\registrati
                                             </span>
                                         @enderror
                                     </div>
+=======
+                            </div>
+                            <div class="row mb-3">
+                                <label for="city" class="col-md-4 col-form-label text-md-end">{{ __('Stad*') }}</label>
+                                <div class="col-md-6 d-flex align-items-center">
+                                    <input id="city" type="text" class="form-control @error('city') is-invalid @enderror"
+                                        name="city" value="{{ old('city', $registration->city ?? '') }}" required>
+                                    <button type="button" class="btn btn-primary ms-2"><strong>{{ __('+') }}</strong></button>
+                                    @error('city')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+>>>>>>> Stashed changes
                                 </div>
 
                                 <div class="row mb-3">
@@ -173,4 +188,9 @@ c:\Users\lucas\Downloads\Laragon\www\techreizen\resources\views\guest\registrati
                 </div>
             </div>
         </div>
+<<<<<<< Updated upstream
 @endsection
+=======
+    </div>
+@endsection
+>>>>>>> Stashed changes
