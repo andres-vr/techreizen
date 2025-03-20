@@ -108,9 +108,13 @@ c:\Users\lucas\Downloads\Laragon\www\techreizen\resources\views\guest\registrati
                                     class="col-md-4 col-form-label text-md-end">{{ __('Nationaliteit') }}</label>
                                 <div class="col-md-6">
                                     <input id="nationality" type="text"
-                                        class="form-control" name="nationality"
-                                        value="{{ old('nationality', $registration->nationality ?? '') }}">
-                                    
+                                        class="form-control @error('nationality') is-invalid @enderror" name="nationality"
+                                        value="{{ old('nationality', $registration->nationality ?? '') }}" required>
+                                    @error('nationality')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                             </div>
 
@@ -164,9 +168,9 @@ c:\Users\lucas\Downloads\Laragon\www\techreizen\resources\views\guest\registrati
                                     <a href="{{ route('guest.registration.basic-info') }}" class="btn btn-secondary me-2">
                                         {{ __('Vorige') }}
                                     </a>
-                                    <button type="submit" class="btn btn-primary">
+                                    <a href="{{ route('guest.registration.contact-info') }}" class="btn btn-primary">
                                         {{ __('Volgende') }}
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                         </form>
