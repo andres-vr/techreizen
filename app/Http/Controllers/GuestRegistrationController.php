@@ -135,7 +135,7 @@ class GuestRegistrationController extends Controller
             'phone_number' => 'required|string|max:255',
             'emergency_contact_phone1' => 'required|string|max:255',
             'emergency_contact_phone2' => 'string|max:255',
-            'medical_conditions' => 'string|max:255',
+            'medical_conditions' => 'string|max:2048',
         ]);
 
         // Get current session data and update it
