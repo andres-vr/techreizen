@@ -18,7 +18,7 @@
         
         <!-- Progress line -->
         <div class="progress-line">
-            <div class="progress-completed" style="width: {{ ($currentStep - 1) * 50 }}%"></div>
+            <div class="progress-completed" style="width: {{ $currentStep == 1 ? 15 : ($currentStep == 2 ? 50 : 85) }}%"></div>
         </div>
     </div>
 </div>
