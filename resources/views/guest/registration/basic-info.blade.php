@@ -51,7 +51,7 @@
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @else
-                                    <small class="form-text text-muted">Moet beginnen met R, U of B en gevolgd worden door 7 cijfers.</small>
+                                    <small class="form-text text-muted">Moet beginnen met r, u of b en gevolgd worden door 7 cijfers.</small>
                                 @enderror
                             </div>
                         </div>
@@ -113,7 +113,7 @@
         
         // Only validate on form submission
         form.addEventListener('submit', function (event) {
-            const pattern = /^[RUBrub]\d{7}$/i;  // Case insensitive regex
+            const pattern = /^[rub]\d{7}$/;  // Case insensitive regex
             
             // Reset any previous visual styling
             studentNumberInput.classList.remove('is-invalid');
@@ -130,7 +130,7 @@
         
         // Remove invalid class on input to provide immediate feedback
         studentNumberInput.addEventListener('input', function () {
-            const pattern = /^[RUBrub]\d{7}$/i;
+            const pattern = /^[rub]\d{7}$/;
             if (pattern.test(studentNumberInput.value)) {
                 studentNumberInput.classList.remove('is-invalid');
             }

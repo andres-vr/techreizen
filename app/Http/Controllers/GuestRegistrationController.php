@@ -45,13 +45,13 @@ class GuestRegistrationController extends Controller
                 'required', 
                 'string', 
                 'max:255',
-                'regex:/^[RUB]\d{7}$/'
+                'regex:/^[rub]\d{7}$/'
             ],
             // Note: These are validated but may not be in the form properly
             'education' => 'required|string|max:255',
             'major' => 'required|string|max:255',
         ], [
-            'student_number.regex' => 'Studentnummer moet beginnen met R, U of B en gevolgd worden door 7 cijfers.',
+            'student_number.regex' => 'Studentnummer moet beginnen met r, u of b en gevolgd worden door 7 cijfers.',
             'trip.required' => 'Selecteer een reis.',
             'education.required' => 'Selecteer een opleiding.',
             'major.required' => 'Selecteer een afstudeerrichting.',
