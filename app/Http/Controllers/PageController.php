@@ -21,7 +21,7 @@ class PageController extends Controller
     public function show(PageModel $page)
     {
         $pageData = $page->find(1, ['content']); // Fetch het 'content' veld
-        return view('content.show', ['page' => $pageData->content]);
+        return view('content.show', ['page' => $pageData]);
     }
 
     /**
