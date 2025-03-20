@@ -47,11 +47,11 @@ class LoginController extends Controller
     {
         $input = $request->all();
         $this->validate($request, [
-            'email' => 'required|email',
+            'login' => 'required',
             'password' => 'required',
         ]);
 
-        if (auth()->attempt(array('email' => $input['email'], 'password' => $input['password']))) {
+        if (auth()->attempt(array('login' => $input['login'], 'password' => $input['password']))) {
             if (auth()->user()->role == 'traveller') {
                 return redirect()->route('traveller.home');
             } else if (auth()->user()->role == 'guide') {
