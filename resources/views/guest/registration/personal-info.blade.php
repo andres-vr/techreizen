@@ -13,7 +13,7 @@ c:\Users\lucas\Downloads\Laragon\www\techreizen\resources\views\guest\registrati
                         </div>
                     </div>
 
-                    < class="card-body">
+                    <div class="card-body">
                         <x-registration-progress :currentStep="2" />
 
                         <form method="POST" action="{{ route('guest.registration.personal-info.submit') }}">
@@ -118,19 +118,13 @@ c:\Users\lucas\Downloads\Laragon\www\techreizen\resources\views\guest\registrati
                                 </div>
                             </div>
 
-                            <div class="mb-2 mt-3 text-center">
-                                <h5 class="border-bottom pb-2"></h5>
+                            <div class="mb-4 mt-4">
+                                <h5 class="border-bottom pb-2">{{ __('Adresinformatie') }}</h5>
                             </div>
-
-
-
-
 
                             <div class="row mb-3">
                                 <label for="address" class="col-md-4 col-form-label text-md-end">{{ __('Adres*') }}</label>
-
                                 <div class="col-md-6">
-
                                     <input id="address" type="text"
                                         class="form-control @error('address') is-invalid @enderror" name="address"
                                         value="{{ old('address', $registration->address ?? '') }}" required>
@@ -142,13 +136,11 @@ c:\Users\lucas\Downloads\Laragon\www\techreizen\resources\views\guest\registrati
                                 </div>
                             </div>
 
-
                             <div class="row mb-3">
                                 <label for="city" class="col-md-4 col-form-label text-md-end">{{ __('Stad*') }}</label>
-                                <div class="col-md-6 d-flex">
+                                <div class="col-md-6">
                                     <input id="city" type="text" class="form-control @error('city') is-invalid @enderror"
                                         name="city" value="{{ old('city', $registration->city ?? '') }}" required>
-                                    <button type="button" class="btn btn-primary ms-2" style="font-weight: bold; font-size: 1rem;">{{ __('+') }}</button>
                                     @error('city')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
