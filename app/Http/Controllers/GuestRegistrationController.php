@@ -12,7 +12,7 @@ use Illuminate\View\View;
 class GuestRegistrationController extends Controller
 {
     const SESSION_KEY = 'guest_registration';
-    
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -29,21 +29,21 @@ class GuestRegistrationController extends Controller
             'major' => '',
         ]);
 
-        return view('guest.registration.basic-info', ['registration' => (object)$registration]);
+        return view('guest.registration.basic-info', ['registration' => (object) $registration]);
     }
-    
+
     // Submit Basic Info Form
     public function submitBasicInfo(Request $request)
     {
         // Get the raw form data to debug what's being submitted
         $formData = $request->all();
-        
+
         // Create a validator with proper error messages
         $validator = validator($formData, [
             'trip' => 'required|string|max:255',
             'student_number' => [
-                'required', 
-                'string', 
+                'required',
+                'string',
                 'max:255',
                 'regex:/^[rub]\d{7}$/'
             ],
@@ -56,36 +56,37 @@ class GuestRegistrationController extends Controller
             'education.required' => 'Selecteer een opleiding.',
             'major.required' => 'Selecteer een afstudeerrichting.',
         ]);
-        
+
         // If validation fails, redirect back with errors
         if ($validator->fails()) {
             return back()
                 ->withErrors($validator)
                 ->withInput();
         }
-        
+
         // Get the validated data
         $validated = $validator->validated();
 
         // Get current session data and update it
         $registration = $request->session()->get(self::SESSION_KEY, []);
         $registration = array_merge($registration, $validated, ['step' => 2]);
-        
+
         // Save updated data back to session
         $request->session()->put(self::SESSION_KEY, $registration);
 
         return redirect()->route('guest.registration.personal-info');
     }
+
     // Show Personal Info Form
     public function showPersonalInfoForm(Request $request)
     {
         $registration = $request->session()->get(self::SESSION_KEY, ['step' => 1]);
-        
+
         if ($registration['step'] < 2) {
             return redirect()->route('guest.registration.basic-info');
         }
 
-        return view('guest.registration.personal-info', ['registration' => (object)$registration]);
+        return view('guest.registration.personal-info', ['registration' => (object) $registration]);
     }
 
     // Submit Personal Info Form
@@ -106,11 +107,44 @@ class GuestRegistrationController extends Controller
         // Get current session data and update it
         $registration = $request->session()->get(self::SESSION_KEY, []);
         $registration = array_merge($registration, $validated, ['step' => 3]);
-        
+
         // Save updated data back to session
         $request->session()->put(self::SESSION_KEY, $registration);
 
         return redirect()->route('guest.registration.medical-info');
     }
 
+
+    // Show Contact Info Form
+    public function showContactInfoForm(Request $request)
+    {
+        $registration = $request->session()->get(self::SESSION_KEY, ['step' => 1]);
+
+        if ($registration['step'] < 3) {
+            return redirect()->route('guest.registration.personal-info');
+        }
+
+        return view('guest.registration.contact-info', ['registration' => (object) $registration]);
+    }
+
+    // Submit Contact Info Form
+    public function submitContactInfo(Request $request)
+    {
+        $validated = $request->validate([
+            'email' => 'required|email|max:255',
+            'phone_number' => 'required|string|max:255',
+            'emergency_contact_phone1' => 'required|string|max:255',
+            'emergency_contact_phone2' => 'string|max:255',
+            'medical_conditions' => 'string|max:255',
+        ]);
+
+        // Get current session data and update it
+        $registration = $request->session()->get(self::SESSION_KEY, []);
+        $registration = array_merge($registration, $validated, ['step' => 4]);
+
+        // Save updated data back to session
+        $request->session()->put(self::SESSION_KEY, $registration);
+
+        return redirect()->route('guest.registration.confirmation');
+    }
 }

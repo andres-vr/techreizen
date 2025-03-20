@@ -34,7 +34,7 @@ Route::middleware(['auth', 'user-access:guest'])->group(function () {
         Route::post('/personal-info', [GuestRegistrationController::class, 'submitPersonalInfo'])
             ->name('guest.registration.personal-info.submit');
 
-        // TODO: Step 3: Medical Info and Account Creation
+        // TODO: Step 3: Contact Info and Account Creation
         Route::get('/contact-info', [GuestRegistrationController::class, 'showContactInfoForm'])
             ->name('guest.registration.contact-info');
         Route::post('/contact-info', [GuestRegistrationController::class, 'submitContactInfo'])
