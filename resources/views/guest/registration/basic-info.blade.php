@@ -106,7 +106,6 @@
 @endsection
 
 <script>
-    // Client side Validation 
     document.addEventListener('DOMContentLoaded', function () {
         const studentNumberInput = document.getElementById('student_number');
         const form = studentNumberInput.closest('form');
