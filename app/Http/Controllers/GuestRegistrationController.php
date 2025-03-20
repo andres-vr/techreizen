@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 use Illuminate\Support\Str;
 
-class GuestRegistrationController extends Controller {
+class GuestRegistrationController extends Controller
+{
     const SESSION_KEY = 'guest_registration';
 
     public function __construct()
@@ -19,7 +20,7 @@ class GuestRegistrationController extends Controller {
         $this->middleware('auth');
         $this->middleware('user-access:guest');
     }
-    
+
     // Show Basic Info Form
     public function showBasicInfoForm(Request $request)
     {
@@ -29,7 +30,7 @@ class GuestRegistrationController extends Controller {
             'student_number' => '',
             'education' => '',
             'major' => '',
-                    ]);
+        ]);
 
         return view('guest.registration.basic-info', ['registration' => (object) $registration]);
     }
@@ -96,14 +97,12 @@ class GuestRegistrationController extends Controller {
             'last_name' => 'required|string|max:255',
             'gender' => 'required|string|in:male,female,other',
             'nationality' => 'required|string|max:255',
-            'date_of_birth' => 'required|date|before:today', 
+            'date_of_birth' => 'required|date|before:today',
             'place_of_birth' => 'required|string|max:255',
             'address' => 'required|string|max:255',
             'city' => 'required|string|max:255',
             'country' => 'required|string|max:255',
-            // Optional fields
-            'email' => 'nullable|email|max:255',
-            'phone' => 'nullable|string|max:255',
+
         ], [
             'first_name.required' => 'Voornaam is verplicht.',
             'last_name.required' => 'Achternaam is verplicht.',
@@ -116,7 +115,7 @@ class GuestRegistrationController extends Controller {
             'address.required' => 'Adres is verplicht.',
             'city.required' => 'Stad is verplicht.',
             'country.required' => 'Land is verplicht.',
-            'email.email' => 'Voer een geldig e-mailadres in.',
+
         ]);
 
         // Get current session data and update it

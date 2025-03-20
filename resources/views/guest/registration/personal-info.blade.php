@@ -174,19 +174,3 @@ c:\Users\lucas\Downloads\Laragon\www\techreizen\resources\views\guest\registrati
             </div>
         </div>
 @endsection
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-    </div>
-@endsection
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
