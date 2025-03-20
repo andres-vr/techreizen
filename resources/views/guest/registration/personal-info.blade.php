@@ -54,7 +54,8 @@ c:\Users\lucas\Downloads\Laragon\www\techreizen\resources\views\guest\registrati
                             </div>
 
                             <div class="row mb-3">
-                                <label for="gender" class="col-md-4 col-form-label text-md-end">{{ __('Geslacht*') }}</label>
+                                <label for="gender"
+                                    class="col-md-4 col-form-label text-md-end">{{ __('Geslacht*') }}</label>
                                 <div class="col-md-6">
                                     <select id="gender" class="form-control @error('gender') is-invalid @enderror"
                                         name="gender" required>
@@ -108,18 +109,9 @@ c:\Users\lucas\Downloads\Laragon\www\techreizen\resources\views\guest\registrati
                                     class="col-md-4 col-form-label text-md-end">{{ __('Nationaliteit') }}</label>
                                 <div class="col-md-6">
                                     <input id="nationality" type="text"
-                                        class="form-control @error('nationality') is-invalid @enderror" name="nationality"
-                                        value="{{ old('nationality', $registration->nationality ?? '') }}" required>
-                                    @error('nationality')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
+                                        class="form-control" name="nationality"
+                                        value="{{ old('nationality', $registration->nationality ?? '') }}">
                                 </div>
-                            </div>
-
-                            <div class="mb-4 mt-4">
-                                <h5 class="border-bottom pb-2">{{ __('Adresinformatie') }}</h5>
                             </div>
 
                             <div class="row mb-3">
@@ -168,9 +160,9 @@ c:\Users\lucas\Downloads\Laragon\www\techreizen\resources\views\guest\registrati
                                     <a href="{{ route('guest.registration.basic-info') }}" class="btn btn-secondary me-2">
                                         {{ __('Vorige') }}
                                     </a>
-                                    <a href="{{ route('guest.registration.contact-info') }}" class="btn btn-primary">
+                                    <button type="submit" class="btn btn-primary">
                                         {{ __('Volgende') }}
-                                    </a>
+                                    </button>
                                 </div>
                             </div>
                         </form>
