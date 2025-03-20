@@ -108,13 +108,9 @@ c:\Users\lucas\Downloads\Laragon\www\techreizen\resources\views\guest\registrati
                                     class="col-md-4 col-form-label text-md-end">{{ __('Nationaliteit') }}</label>
                                 <div class="col-md-6">
                                     <input id="nationality" type="text"
-                                        class="form-control @error('nationality') is-invalid @enderror" name="nationality"
-                                        value="{{ old('nationality', $registration->nationality ?? '') }}" required>
-                                    @error('nationality')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
+                                        class="form-control" name="nationality"
+                                        value="{{ old('nationality', $registration->nationality ?? '') }}">
+                                    
                                 </div>
                             </div>
 
