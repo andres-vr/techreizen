@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('travellers', function (Blueprint $table) {
             $table->id();
-            $table->integer('traveller_id')->length(10);
-            $table->integer('user_id')->length(10);
+            $table->unsignedBigInteger('user_id'); // Changed to unsignedBigInteger
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->integer('zip_id')->length(10);
             $table->integer('major_id')->length(10);
             $table->string('first_name');
