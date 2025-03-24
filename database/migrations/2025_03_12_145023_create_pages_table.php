@@ -18,7 +18,7 @@ return new class extends Migration
             $table->tinyInteger('access_level');
             $table->timestamp('created_at');
             $table->timestamp('updated_at');
-            $table->string('type', 1024); //content veranderen naar HTML, PDF, ...
+            $table->enum('type', ["html", "pdf"]); //content veranderen naar HTML, PDF, ...
         });
     }
 

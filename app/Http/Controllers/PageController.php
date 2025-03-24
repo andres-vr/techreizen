@@ -20,8 +20,8 @@ class PageController extends Controller
      */
     public function show(PageModel $page)
     {
-        $pageData = $page->find(1, ['content'/*, 'image'*/]); // Fetch het 'content' veld
-        return view('content.show', ['page' => $pageData]); 
+        $pageData = $page->find(1); // Fetch the entire page data
+        return view('content.show', ['page' => $pageData]);
     }
 
     /**
@@ -37,7 +37,7 @@ class PageController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**
