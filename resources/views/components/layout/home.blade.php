@@ -38,7 +38,7 @@
                 style="padding: 5px; color: black; white-space: nowrap; display: inline-block;">
                  Home
              </a>
-             <a class="navbar-brand" href="{{ url('/home') }}" 
+             <a class="navbar-brand" href="{{ url('/voorbeeldreizen') }}" 
              style="padding: 5px; color: black; white-space: nowrap; display: inline-block;">
               Voorbeeldreis
           </a>
