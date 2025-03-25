@@ -49,3 +49,5 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
 });
 
 Route::get('/home', [PageController::class, 'show'])->name('home');
+
+Route::get('/voorbeeldreizen', [PageController::class, 'show'])->name('voorbeeldreizen');

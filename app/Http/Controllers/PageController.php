@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\PageModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 class PageController extends Controller
 {
@@ -20,8 +21,8 @@ class PageController extends Controller
      */
     public function show(PageModel $page)
     {
-        $pageData = $page->find(1, ['content'/*, 'image'*/]); // Fetch het 'content' veld
-        return view('content.show', ['page' => $pageData]); 
+        $pageData = $page->find(1, ['content']); // Fetch het 'content' veld
+        return view('content.show', ['page' => $pageData]);
     }
 
     /**
@@ -37,7 +38,7 @@ class PageController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**
