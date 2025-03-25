@@ -96,7 +96,7 @@ class GuestRegistrationController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'gender' => 'required|string|in:male,female,other',
-            'nationality' => 'required|string|max:255',
+            'nationality' => 'nullable|string|max:255',
             'date_of_birth' => 'required|date|before:today',
             'place_of_birth' => 'required|string|max:255',
             'address' => 'required|string|max:255',
@@ -145,29 +145,65 @@ class GuestRegistrationController extends Controller
     public function submitContactInfo(Request $request)
     {
         $validated = $request->validate([
-            'email' => 'required|email|max:255',
-            'phone' => 'required|string|max:255',
-            'emergency_contact' => 'required|string|max:255',
-            'optional_emergency_contact' => 'nullable|string|max:255',
+            'email' => 'required|email|max:255|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
+            'phone' => 'required|string|max:15|regex:/^\+?[0-9]{7,15}$/',
+            'emergency_contact' => 'required|string|max:15|regex:/^\+?[0-9]{7,15}$/',
+            'optional_emergency_contact' => 'nullable|string|max:15|regex:/^\+?[0-9]{7,15}$/',
             'medical_info' => 'required|in:yes,no',
             'medical_details' => 'required_if:medical_info,yes|nullable|string',
         ], [
             'email.required' => 'E-mailadres is verplicht.',
             'email.email' => 'Voer een geldig e-mailadres in.',
+            'email.regex' => 'Het e-mailadres moet een geldig formaat hebben.',
             'phone.required' => 'Telefoonnummer is verplicht.',
+            'phone.regex' => 'Het telefoonnummer moet een geldig formaat hebben (bijv. +32412345678).',
             'emergency_contact.required' => 'Noodnummer 1 is verplicht.',
+            'emergency_contact.regex' => 'Het noodnummer moet een geldig formaat hebben (bijv. +32412345678).',
+            'optional_emergency_contact.regex' => 'Het optionele noodnummer moet een geldig formaat hebben (bijv. +32412345678).',
             'medical_info.required' => 'Geef aan of er medische informatie is.',
-            'medical_details.required_if' => 'Vul de medische details in als u "Ja" selecteert.'
+            'medical_details.required_if' => 'Vul de medische details in als u "Ja" selecteert.',
         ]);
 
-        // Get current session data and update it
+        // Get current session data
         $registration = $request->session()->get(self::SESSION_KEY, []);
+
+        // Merge the validated data from the current form
         $registration = array_merge($registration, $validated, ['step' => 4]);
 
         // Save updated data back to session
         $request->session()->put(self::SESSION_KEY, $registration);
 
-        return redirect()->route('guest.registration.confirmation');
+        // Check if the user already exists
+        if (User::where('login', $registration['email'])->exists()) {
+            return back()->withErrors(['email' => 'Een gebruiker met dit e-mailadres bestaat al.'])->withInput();
+        }
+
+        // Create a new user with the role 'traveller' using all collected data
+        User::create([
+            'login' => $registration['email'], // Ensure the login field is provided
+            'role' => 'traveller',
+            'password' => bcrypt('default_password'), // Vervang met het ingevoerde wachtwoord
+            'phone' => $registration['phone'],
+            'emergency_contact' => $registration['emergency_contact'],
+            'optional_emergency_contact' => $registration['optional_emergency_contact'] ?? null,
+            'medical_info' => $registration['medical_info'],
+            'medical_details' => $registration['medical_info'] === 'yes' ? $registration['medical_details'] : null,
+            'first_name' => $registration['first_name'],
+            'last_name' => $registration['last_name'],
+            'gender' => $registration['gender'],
+            'nationality' => $registration['nationality'] ?? null,
+            'date_of_birth' => $registration['date_of_birth'],
+            'place_of_birth' => $registration['place_of_birth'],
+            'address' => $registration['address'],
+            'city' => $registration['city'],
+            'country' => $registration['country'],
+            'trip' => $registration['trip'],
+            'student_number' => $registration['student_number'],
+            'education' => $registration['education'],
+            'major' => $registration['major'],
+        ]);
+
+        return redirect()->route('home')->with('success', 'Registratie voltooid en gebruiker aangemaakt.');
     }
 
 }

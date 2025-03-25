@@ -23,10 +23,14 @@
 
                         <div class="row mb-3">
                             <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('E-mailadres*') }}</label>
-                            <div class="col-md-6 d-flex">
-                                <input id="email" type="text" class="form-control @error('email') is-invalid @enderror" 
-                                       name="email" value="{{ old('email', $registration->email ?? '') }}" required>
-                                <input type="text" class="form-control ms-2" style="background-color: #e9ecef;" value="@student.ucll.be" readonly>
+                            <div class="col-md-6">
+                                @if (str_starts_with(session('guest_registration.student_number'), 'b'))
+                                    <input id="email" type="text" class="form-control @error('email') is-invalid @enderror" 
+                                           name="email" value="{{ old('email', $registration->email ?? '') }}" required>
+                                @else
+                                    <input id="email" type="text" class="form-control" style="background-color: #e9ecef; color: black;" 
+                                           name="email" value="{{ session('guest_registration.student_number') . '@ucll.be' }}" readonly>
+                                @endif
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
