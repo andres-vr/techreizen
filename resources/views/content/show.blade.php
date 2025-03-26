@@ -1,11 +1,11 @@
 <x-layout.home>
     <div class="row justify-content-center">
         <div>
-
             <!-- Display the content based on type -->
-            <div>
+            <div class="page-container">
                 @if($page->type == 'html')
                     <!-- Render HTML content -->
+                    
                     <span>{!! $page->content !!}</span>
                     @elseif($page->type == 'pdf')
                     @php
@@ -17,7 +17,8 @@
                         <iframe 
                             src="{{ asset('storage/' . $pdfPath) }}" 
                             width="100%" 
-                            height="500px"
+                            height="auto" 
+                            style="min-height: 100vh;"
                         ></iframe>
                     @else
                         <div class="alert alert-danger">
