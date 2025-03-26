@@ -21,8 +21,15 @@ class PageController extends Controller
      */
     public function show(PageModel $page)
     {
-        $pageData = $page->find(1, ['content']); // Fetch het 'content' veld
-        return view('content.show', ['page' => $pageData]);
+        $routeName = Route::currentRouteName();
+        if ($routeName == "home") {
+            $pageData = $page->find(1); // Fetch the entire page data
+            return view('content.show', ['page' => $pageData]);
+        }
+        if ($routeName == "voorbeeldreizen") {
+            $pageData = $page->find(2); // Fetch the entire page data
+            return view('content.show', ['page' => $pageData]);
+        }
     }
 
     /**

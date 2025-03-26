@@ -1,3 +1,12 @@
-@tailwind base;
+/* @tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities; */
+
+html, body {
+    height: 100%;
+    overflow: scroll;
+}
+.page-container{
+    margin-top: -23px;
+}
+
