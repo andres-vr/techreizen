@@ -21,7 +21,6 @@ class PageController extends Controller
      */
     public function show(PageModel $page)
     {
-
         $routeName = Route::currentRouteName();
         if ($routeName == "home") {
             $pageData = $page->find(1); // Fetch the entire page data

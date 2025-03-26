@@ -15,7 +15,7 @@
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
     <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    @vite(['resources/sass/app.scss', 'resources/js/app.js','resources/css/app.css'])
 </head>
 
 <body>
@@ -89,7 +89,7 @@
                 </div>
             </div>
         </nav>
-        <div class = "row justify-content-center">
+        {{-- <div class = "row justify-content-center">
             <div class="text-center">
                 <div id="images" class="carousel slide carousel-fade" data-bs-ride="carousel">
                     <!-- slideshow images -->
@@ -106,7 +106,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <main class="py-4">
             {{ $slot }}
         </main>
