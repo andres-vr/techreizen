@@ -16,7 +16,7 @@
                     @if(file_exists(storage_path('app/public/' . $pdfPath)))
                         <iframe 
                             src="{{ asset('storage/' . $pdfPath) }}" 
-                            width="100%" 
+                            width="100%"
                             height="auto" 
                             style="min-height: 100vh;"
                         ></iframe>
