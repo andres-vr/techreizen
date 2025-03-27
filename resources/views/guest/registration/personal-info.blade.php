@@ -106,7 +106,7 @@ c:\Users\lucas\Downloads\Laragon\www\techreizen\resources\views\guest\registrati
 
                                 <div class="row mb-3">
                                     <label for="nationality"
-                                        class="col-md-4 col-form-label text-md-end">{{ __('Nationaliteit*') }}</label>
+                                        class="col-md-4 col-form-label text-md-end">{{ __('Nationaliteit') }}</label>
                                     <div class="col-md-6">
                                         <input id="nationality" type="text"
                                             class="form-control" name="nationality"
