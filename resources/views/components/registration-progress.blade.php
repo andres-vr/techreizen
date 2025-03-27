@@ -1,21 +1,26 @@
 @props(['currentStep' => 1])
 
 <div class="mb-4">
-    
     <div class="d-flex justify-content-between position-relative registration-steps">
         <div class="step {{ $currentStep >= 1 ? 'active' : '' }}">
-            <div class="step-circle">1</div>
-            <div class="step-text">Basisgegevens</div>
+            <a href="{{ route('guest.registration.basic-info') }}" class="step-link">
+                <div class="step-circle">1</div>
+                <div class="step-text">Basis gegevens</div>
+            </a>
         </div>
         <div class="step {{ $currentStep >= 2 ? 'active' : '' }}">
-            <div class="step-circle">2</div>
-            <div class="step-text">Persoonlijke gegevens</div>
+            <a href="{{ $currentStep >= 1 ? route('guest.registration.personal-info') : '#' }}" class="step-link {{ $currentStep < 1 ? 'disabled' : '' }}">
+                <div class="step-circle">2</div>
+                <div class="step-text">Persoonlijke gegevens</div>
+            </a>
         </div>
         <div class="step {{ $currentStep >= 3 ? 'active' : '' }}">
-            <div class="step-circle">3</div>
-            <div class="step-text">Contact gegevens</div>
+            <a href="{{ $currentStep >= 2 ? route('guest.registration.contact-info') : '#' }}" class="step-link {{ $currentStep < 2 ? 'disabled' : '' }}">
+                <div class="step-circle">3</div>
+                <div class="step-text">Contact gegevens</div>
+            </a>
         </div>
-        
+
         <!-- Progress line -->
         <div class="progress-line">
             <div class="progress-completed" style="width: {{ $currentStep == 1 ? 15 : ($currentStep == 2 ? 50 : 85) }}%"></div>
@@ -33,6 +38,18 @@
     text-align: center;
     z-index: 1;
     width: 33%;
+}
+
+.step-link {
+    text-decoration: none;
+    display: block;
+    cursor: pointer;
+}
+
+.step-link.disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    pointer-events: none;
 }
 
 .step-circle {
