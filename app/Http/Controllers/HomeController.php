@@ -15,30 +15,30 @@ class HomeController extends Controller
 
     public function index()
     {
-        $page = DB::table('pages')->where('name', 'test')->first();
+        $page = DB::table('pages')->where('name', 'home')->first();
         $content = $page ? $page->content : '';
-        return view('home', ['content' => $content]);
+        return view('home', ['page' => $page, 'content' => $content]);
     }
 
     public function travellerHome(): View
     {
-        $page = DB::table('pages')->where('name', 'test')->first();
+        $page = DB::table('pages')->where('name', 'home')->first();
         $content = $page ? $page->content : '';
-        return view('home', ['content' => $content]);
+        return view('home', ['page' => $page, 'content' => $content]);
     }
 
     public function guideHome(): View
     {
-        $page = DB::table('pages')->where('name', 'test')->first();
+        $page = DB::table('pages')->where('name', 'home')->first();
         $content = $page ? $page->content : '';
-        return view('home', ['content' => $content]);
+        return view('home', ['page' => $page, 'content' => $content]);
     }
 
     public function adminHome(): View
     {
-        $page = DB::table('pages')->where('name', 'test')->first();
+        $page = DB::table('pages')->where('name', 'home')->first();
         $content = $page ? $page->content : '';
-        return view('home', ['content' => $content]);
+        return view('home', ['page' => $page, 'content' => $content]);
     }
 
     public function disclaimerPage(): View
