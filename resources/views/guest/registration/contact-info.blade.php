@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="d-flex justify-content-between align-items-center">
-                        <span>{{ __('Registratie - Contact Gegevens') }}</span>
+                        <span>{{ __('Registratie - Contactgegevens') }}</span>
                     </div>
                 </div>
 
@@ -18,7 +18,7 @@
                         @csrf
 
                         <div class="mb-4">
-                            <h5 class="border-bottom pb-2">{{ __('Contact Gegevens') }}</h5>
+                            <h5 class="border-bottom pb-2">{{ __('Contactgegevens') }}</h5>
                         </div>
 
                         <div class="row mb-3">

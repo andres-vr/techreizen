@@ -17,7 +17,7 @@
         <div class="step {{ $currentStep >= 3 ? 'active' : '' }}">
             <a href="{{ $currentStep >= 2 ? route('guest.registration.contact-info') : '#' }}" class="step-link {{ $currentStep < 2 ? 'disabled' : '' }}">
                 <div class="step-circle">3</div>
-                <div class="step-text">Contact gegevens</div>
+                <div class="step-text">Contactgegevens</div>
             </a>
         </div>
 
