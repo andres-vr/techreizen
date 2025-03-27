@@ -18,7 +18,7 @@
                             src="{{ asset('storage/' . $pdfPath) }}" 
                             width="100%"
                             height="auto" 
-                            style="min-height: 100vh;"
+                            style="min-height: 400vh;"
                         ></iframe>
                     @else
                         <div class="alert alert-danger">
