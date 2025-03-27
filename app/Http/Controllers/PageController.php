@@ -30,6 +30,7 @@ class PageController extends Controller
             $pageData = $page->find(2); // Fetch the entire page data
             return view('content.show', ['page' => $pageData]);
         }
+        
     }
 
     /**
