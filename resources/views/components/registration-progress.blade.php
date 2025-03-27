@@ -9,13 +9,13 @@
             </a>
         </div>
         <div class="step {{ $currentStep >= 2 ? 'active' : '' }}">
-            <a href="{{ $currentStep >= 1 ? route('guest.registration.personal-info') : '#' }}" class="step-link {{ $currentStep < 1 ? 'disabled' : '' }}">
+            <a href="{{ $currentStep >= 1 ? route('guest.registration.personal-info') : '#' }}" class="step-link {{ $currentStep < 2 ? 'disabled' : '' }}">
                 <div class="step-circle">2</div>
                 <div class="step-text">Persoonlijke gegevens</div>
             </a>
         </div>
         <div class="step {{ $currentStep >= 3 ? 'active' : '' }}">
-            <a href="{{ $currentStep >= 2 ? route('guest.registration.contact-info') : '#' }}" class="step-link {{ $currentStep < 2 ? 'disabled' : '' }}">
+            <a href="{{ $currentStep >= 2 ? route('guest.registration.contact-info') : '#' }}" class="step-link {{ $currentStep < 3 ? 'disabled' : '' }}">
                 <div class="step-circle">3</div>
                 <div class="step-text">Contactgegevens</div>
             </a>
@@ -48,7 +48,7 @@
 
 .step-link.disabled {
     cursor: not-allowed;
-    opacity: 0.6;
+    opacity: 1;
     pointer-events: none;
 }
 

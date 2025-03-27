@@ -160,7 +160,7 @@ c:\Users\lucas\Downloads\Laragon\www\techreizen\resources\views\guest\registrati
 
                                 <div class="row mb-0">
                                     <div class="col-md-6 offset-md-4">
-                                        <a href="{{ route('guest.registration.basic-info') }}" class="btn btn-secondary me-2">
+                                        <a type="submit" href="{{ route('guest.registration.basic-info') }}" class="btn btn-secondary me-2">
                                             {{ __('Vorige') }}
                                         </a>
                                         <button type="submit" class="btn btn-primary">
