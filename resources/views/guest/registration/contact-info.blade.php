@@ -39,6 +39,21 @@
                             </div>
                         </div>
 
+                        @if (str_starts_with(session('guest_registration.student_number'), 'r'))
+                        <div class="row mb-3">
+                            <label for="secondary_email" class="col-md-4 col-form-label text-md-end">{{ __('E-mailadres 2') }}</label>
+                            <div class="col-md-6">
+                                <input id="secondary_email" type="text" class="form-control @error('secondary_email') is-invalid @enderror" 
+                                       name="secondary_email" value="{{ old('secondary_email', $registration->secondary_email ?? '') }}">
+                                @error('secondary_email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        @endif
+
                         <div class="row mb-3">
                             <label for="phone" class="col-md-4 col-form-label text-md-end">{{ __('Telefoonnummer*') }}</label>
                             <div class="col-md-6">
