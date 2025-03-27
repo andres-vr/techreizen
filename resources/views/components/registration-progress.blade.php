@@ -13,7 +13,7 @@
         </div>
         <div class="step {{ $currentStep >= 3 ? 'active' : '' }}">
             <div class="step-circle">3</div>
-            <div class="step-text">Contact gegevens</div>
+            <div class="step-text">Contactgegevens</div>
         </div>
         
         <!-- Progress line -->
