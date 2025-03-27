@@ -124,7 +124,7 @@
                                     {{ __('Vorige') }}
                                 </a>
                                 <button type="submit" class="btn btn-primary">
-                                    {{ __('Registreer') }}
+                                    {{ __('Volgende') }}
                                 </button>
                             </div>
                         </div>
