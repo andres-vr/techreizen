@@ -1,15 +1,13 @@
 <x-layout.home>
     <div class="row justify-content-center">
-        <div>
-            <!-- Display the content based on type -->
+        <div class="col-md-10">
             <div class="page-container">
                 @if($page->type == 'html')
-                    <!-- Render HTML content -->
-                    
-                    <span>{!! $page->content !!}</span>
-                    @elseif($page->type == 'pdf')
+                    <div class="trix-content">
+                        {!! $page->content !!}
+                    </div>
+                @elseif($page->type == 'pdf')
                     @php
-                        // Assuming $page->content = "test.pdf" (just the filename)
                         $pdfPath = 'pdfs/' . $page->content;
                     @endphp
                 
@@ -17,16 +15,21 @@
                         <iframe 
                             src="{{ asset('storage/' . $pdfPath) }}" 
                             width="100%"
-                            height="auto" 
-                            style="min-height: 400vh;"
+                            height="600"
+                            style="border: 1px solid #ddd;"
                         ></iframe>
                     @else
                         <div class="alert alert-danger">
                             PDF not found: {{ $pdfPath }}
-                            <br>Full path: {{ storage_path('app/public/' . $pdfPath) }}
                         </div>
                     @endif
                 @endif
+                
+                <div class="mt-4">
+                    <a href="{{ route('editor') }}" class="btn btn-primary">
+                        Edit Content
+                    </a>
+                </div>
             </div>
         </div>
     </div>

@@ -30,6 +30,10 @@ class PageController extends Controller
             $pageData = $page->find(2); // Fetch the entire page data
             return view('content.show', ['page' => $pageData]);
         }
+        if ($routeName == "editor") {
+            $pageData = $page->find(2); // Fetch the entire page data
+            return view('content.editor', compact('page'));
+        }
         
     }
 
@@ -62,7 +66,28 @@ class PageController extends Controller
      */
     public function update(Request $request, PageModel $pageModel)
     {
-        //
+        $validated = $request->validate([
+            'type' => 'required|in:html,pdf',
+            'content' => 'required_if:type,html',
+            'pdf_file' => 'required_if:type,pdf|file|mimes:pdf|max:2048'
+        ]);
+        
+        if ($request->type == 'pdf') {
+            // Handle PDF upload
+            $filename = $request->file('pdf_file')->store('public/pdfs');
+            $pageModel->update([
+                'type' => 'pdf',
+                'content' => basename($filename)
+            ]);
+        } else {
+            // Handle HTML content
+            $pageModel->update([
+                'type' => 'html',
+                'content' => $request->content
+            ]);
+        }
+        
+        return redirect()->route('page.show', $pageModel)->with('success', 'Page updated!');
     }
 
     /**
