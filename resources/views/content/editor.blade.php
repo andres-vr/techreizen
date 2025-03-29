@@ -15,7 +15,7 @@
         .editor-container {
             display: flex;
             min-height: 100vh;
-            margin: 0 300px;
+            margin: 50px 300px;
         }
         
         .left-sidebar {
