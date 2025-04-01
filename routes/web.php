@@ -7,6 +7,9 @@ use App\Http\Controllers\GuestRegistrationController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+//route for AJAX request
+Route::get('/majors/{educationId}', [GuestRegistrationController::class, 'getMajorsByEducation'])->name('majors.byEducation');
+
 Auth::routes();
 /*------------------------------------------
 --------------------------------------------

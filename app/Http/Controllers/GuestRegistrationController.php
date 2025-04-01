@@ -24,6 +24,14 @@ class GuestRegistrationController extends Controller
         $this->middleware('user-access:guest');
     }
 
+    //function to fetch majors based on selected education
+    // This function is called via AJAX when the user selects an education
+    public function getMajorsByEducation($educationId)
+    {
+    $majors = Major::where('education_id', $educationId)->get();
+    return response()->json($majors);
+    }
+
     // Show Basic Info Form
     public function showBasicInfoForm(Request $request)
     {
