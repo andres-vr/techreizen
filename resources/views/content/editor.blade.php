@@ -126,6 +126,17 @@
             width: 300px;
         }
 
+        #pdf-container {
+            display: flex;
+            min-height: 100vh;
+            margin: 50px 535px;
+        }
+        #pdf-main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -138,11 +149,11 @@
             <option value="PDF">PDF</option>
         </select>
     </div>
-    <div class="editor-container">
-        <div class="left-sidebar">
-            <!-- Space for future buttons -->
-        </div>
-        <div id="html-editor" style="display: {{ $option == 'HTML' ? 'block' : 'none' }};">
+    <div id="html-editor" style="display: {{ $option == 'HTML' ? 'block' : 'none' }};">
+        <div class="editor-container">
+            <div class="left-sidebar">
+                <!-- Space for future buttons -->
+            </div>
             <div class="editor-main">
                 <div class="toolbar-container">
                     <div class="toolbar-group">
@@ -235,26 +246,31 @@
                 
                 <div class="document-container">
                     <div class="document-editor" id="editor" contenteditable="true">
-                        <h1 style="font-size:24px; font-family:'Roboto'; margin-bottom:12px;">My Document</h1>
-                        <p style="font-size:11px; font-family:'Roboto'; line-height:1.5; margin-bottom:12px;">
-                            This is a clean document editor with all working features.
-                        </p>
-                        <p style="font-size:11px; font-family:'Roboto'; line-height:1.5;">
-                            Select text and use the toolbar to format your content.
-                        </p>
+                            <h1 style="font-size:24px; font-family:'Roboto'; margin-bottom:12px;">My Document</h1>
+                            <p style="font-size:11px; font-family:'Roboto'; line-height:1.5; margin-bottom:12px;">
+                                This is a clean document editor with all working features.
+                            </p>
+                            <p style="font-size:11px; font-family:'Roboto'; line-height:1.5;">
+                                Select text and use the toolbar to format your content.
+                            </p>
                     </div>
                 </div>
             </div>
-            
+                
             <div class="right-sidebar">
-                <!-- Space for future elements -->
+                    <!-- Space for future elements -->
             </div>
         </div>
-        </div>
+    </div>
         
-        <div id="pdf-chooser" style="display: {{ $option == 'HTML' ? 'none' : 'block' }};">
-            
+    <div id="pdf-chooser" style="display: {{ $option == 'HTML' ? 'none' : 'block' }};">
+        <div id=pdf-container>
+            <div id="pdf-main">
+                    <h1>Choose a PDF file to upload:</h1>
+                    <input type="file" id="pdf-select" name="pdf-select" accept=".pdf" />
+            </div>
         </div>
+    </div>
 
     <script>
         // Formatting functions
@@ -389,11 +405,9 @@
         if (this.value === 'HTML') {
             htmlEditor.style.display = 'block';
             pdfChooser.style.display = 'none';
-            console.log("HTML");
         } else {
             htmlEditor.style.display = 'none';
             pdfChooser.style.display = 'block';
-            console.log("pdf");
         }
     });
     </script>
