@@ -27,10 +27,11 @@
                                 <select id="trip" class="form-control @error('trip') is-invalid @enderror" 
                                        name="trip" required>
                                     <option value="">-- Selecteer Reis --</option>
-                                    <option value="london" {{ old('trip', $registration->trip) == 'london' ? 'selected' : '' }}>London</option>
-                                    <option value="paris" {{ old('trip', $registration->trip) == 'paris' ? 'selected' : '' }}>Paris</option>
-                                    <option value="berlin" {{ old('trip', $registration->trip) == 'berlin' ? 'selected' : '' }}>Berlin</option>
-                                    <option value="rome" {{ old('trip', $registration->trip) == 'rome' ? 'selected' : '' }}>Rome</option>
+                                    @foreach($trips as $trip)
+                                        <option value="{{ $trip->name }}" {{ old('trip', $registration->trip) == $trip->name ? 'selected' : '' }}>
+                                            {{ $trip->name }}
+                                        </option>
+                                    @endforeach
                                 </select>
                                 @error('trip')
                                     <span class="invalid-feedback" role="alert">

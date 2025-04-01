@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Trip;
 use App\Models\User;
 use App\Models\Traveller;
 use Illuminate\Http\Request;
@@ -32,7 +33,10 @@ class GuestRegistrationController extends Controller
             'major' => '',
         ]);
 
-        return view('guest.registration.basic-info', ['registration' => (object) $registration]);
+        // Get all trips from the database
+        $trips = Trip::all(); // Fetch all trips from the database
+
+        return view('guest.registration.basic-info', ['registration' => (object) $registration, 'trips' => $trips]);
     }
 
     // Submit Basic Info Form
