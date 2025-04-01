@@ -117,123 +117,144 @@
         #imageUpload {
             display: none;
         }
+        #content-type {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            margin-left: auto;
+            margin-right: auto;
+            width: 300px;
+        }
+
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
+    <div id="content-type">
+        <p>Select the content type:</p>
+        <select id="content-select" name="content_type">
+            <option value="HTML">HTML</option>
+            <option value="PDF">PDF</option>
+        </select>
+    </div>
     <div class="editor-container">
         <div class="left-sidebar">
             <!-- Space for future buttons -->
         </div>
-        
-        <div class="editor-main">
-            <div class="toolbar-container">
-                <div class="toolbar-group">
-                    <select class="toolbar-select font-dropdown" id="fontFamily">
-                        <option value="Arial">Arial</option>
-                        <option value="Calibri">Calibri</option>
-                        <option value="Courier New">Courier New</option>
-                        <option value="Georgia">Georgia</option>
-                        <option value="Roboto" selected>Roboto</option>
-                        <option value="Times New Roman">Times New Roman</option>
-                        <option value="Verdana">Verdana</option>
-                    </select>
+        <div id="html-editor" style="display: {{ $option == 'HTML' ? 'block' : 'none' }};">
+            <div class="editor-main">
+                <div class="toolbar-container">
+                    <div class="toolbar-group">
+                        <select class="toolbar-select font-dropdown" id="fontFamily">
+                            <option value="Arial">Arial</option>
+                            <option value="Calibri">Calibri</option>
+                            <option value="Courier New">Courier New</option>
+                            <option value="Georgia">Georgia</option>
+                            <option value="Roboto" selected>Roboto</option>
+                            <option value="Times New Roman">Times New Roman</option>
+                            <option value="Verdana">Verdana</option>
+                        </select>
+                        
+                        <select class="toolbar-select font-size-dropdown" id="fontSize">
+                            <option>8</option>
+                            <option>9</option>
+                            <option>10</option>
+                            <option selected>11</option>
+                            <option>12</option>
+                            <option>14</option>
+                            <option>16</option>
+                            <option>18</option>
+                            <option>20</option>
+                            <option>22</option>
+                            <option>24</option>
+                            <option>26</option>
+                            <option>28</option>
+                            <option>36</option>
+                            <option>48</option>
+                            <option>72</option>
+                        </select>
+                    </div>
                     
-                    <select class="toolbar-select font-size-dropdown" id="fontSize">
-                        <option>8</option>
-                        <option>9</option>
-                        <option>10</option>
-                        <option selected>11</option>
-                        <option>12</option>
-                        <option>14</option>
-                        <option>16</option>
-                        <option>18</option>
-                        <option>20</option>
-                        <option>22</option>
-                        <option>24</option>
-                        <option>26</option>
-                        <option>28</option>
-                        <option>36</option>
-                        <option>48</option>
-                        <option>72</option>
-                    </select>
+                    <div class="toolbar-group">
+                        <button type="button" class="toolbar-button" id="boldBtn" title="Bold">
+                            <i class="material-icons">format_bold</i>
+                        </button>
+                        <button type="button" class="toolbar-button" id="italicBtn" title="Italic">
+                            <i class="material-icons">format_italic</i>
+                        </button>
+                        <button type="button" class="toolbar-button" id="underlineBtn" title="Underline">
+                            <i class="material-icons">format_underlined</i>
+                        </button>
+                        <button type="button" class="toolbar-button" id="strikeBtn" title="Strikethrough">
+                            <i class="material-icons">format_strikethrough</i>
+                        </button>
+                    </div>
+                    
+                    <div class="toolbar-group">
+                        <button type="button" class="toolbar-button" id="linkBtn" title="Link">
+                            <i class="material-icons">insert_link</i>
+                        </button>
+                        <button type="button" class="toolbar-button" id="imageBtn" title="Insert Image">
+                            <i class="material-icons">insert_photo</i>
+                        </button>
+                        <input type="file" id="imageUpload" accept=".jpg,.jpeg,.png,.gif">
+                    </div>
+                    
+                    <div class="toolbar-group">
+                        <button type="button" class="toolbar-button" id="alignLeftBtn" title="Align left">
+                            <i class="material-icons">format_align_left</i>
+                        </button>
+                        <button type="button" class="toolbar-button" id="alignCenterBtn" title="Align center">
+                            <i class="material-icons">format_align_center</i>
+                        </button>
+                        <button type="button" class="toolbar-button" id="alignRightBtn" title="Align right">
+                            <i class="material-icons">format_align_right</i>
+                        </button>
+                        <button type="button" class="toolbar-button" id="justifyBtn" title="Justify">
+                            <i class="material-icons">format_align_justify</i>
+                        </button>
+                    </div>
+                    
+                    <div class="toolbar-group">
+                        <button type="button" class="toolbar-button" id="numberedListBtn" title="Numbered list">
+                            <i class="material-icons">format_list_numbered</i>
+                        </button>
+                        <button type="button" class="toolbar-button" id="bulletedListBtn" title="Bulleted list">
+                            <i class="material-icons">format_list_bulleted</i>
+                        </button>
+                        <button type="button" class="toolbar-button" id="decreaseIndentBtn" title="Decrease indent">
+                            <i class="material-icons">format_indent_decrease</i>
+                        </button>
+                        <button type="button" class="toolbar-button" id="increaseIndentBtn" title="Increase indent">
+                            <i class="material-icons">format_indent_increase</i>
+                        </button>
+                    </div>
+                    
                 </div>
                 
-                <div class="toolbar-group">
-                    <button type="button" class="toolbar-button" id="boldBtn" title="Bold">
-                        <i class="material-icons">format_bold</i>
-                    </button>
-                    <button type="button" class="toolbar-button" id="italicBtn" title="Italic">
-                        <i class="material-icons">format_italic</i>
-                    </button>
-                    <button type="button" class="toolbar-button" id="underlineBtn" title="Underline">
-                        <i class="material-icons">format_underlined</i>
-                    </button>
-                    <button type="button" class="toolbar-button" id="strikeBtn" title="Strikethrough">
-                        <i class="material-icons">format_strikethrough</i>
-                    </button>
+                <div class="document-container">
+                    <div class="document-editor" id="editor" contenteditable="true">
+                        <h1 style="font-size:24px; font-family:'Roboto'; margin-bottom:12px;">My Document</h1>
+                        <p style="font-size:11px; font-family:'Roboto'; line-height:1.5; margin-bottom:12px;">
+                            This is a clean document editor with all working features.
+                        </p>
+                        <p style="font-size:11px; font-family:'Roboto'; line-height:1.5;">
+                            Select text and use the toolbar to format your content.
+                        </p>
+                    </div>
                 </div>
-                
-                <div class="toolbar-group">
-                    <button type="button" class="toolbar-button" id="linkBtn" title="Link">
-                        <i class="material-icons">insert_link</i>
-                    </button>
-                    <button type="button" class="toolbar-button" id="imageBtn" title="Insert Image">
-                        <i class="material-icons">insert_photo</i>
-                    </button>
-                    <input type="file" id="imageUpload" accept=".jpg,.jpeg,.png,.gif">
-                </div>
-                
-                <div class="toolbar-group">
-                    <button type="button" class="toolbar-button" id="alignLeftBtn" title="Align left">
-                        <i class="material-icons">format_align_left</i>
-                    </button>
-                    <button type="button" class="toolbar-button" id="alignCenterBtn" title="Align center">
-                        <i class="material-icons">format_align_center</i>
-                    </button>
-                    <button type="button" class="toolbar-button" id="alignRightBtn" title="Align right">
-                        <i class="material-icons">format_align_right</i>
-                    </button>
-                    <button type="button" class="toolbar-button" id="justifyBtn" title="Justify">
-                        <i class="material-icons">format_align_justify</i>
-                    </button>
-                </div>
-                
-                <div class="toolbar-group">
-                    <button type="button" class="toolbar-button" id="numberedListBtn" title="Numbered list">
-                        <i class="material-icons">format_list_numbered</i>
-                    </button>
-                    <button type="button" class="toolbar-button" id="bulletedListBtn" title="Bulleted list">
-                        <i class="material-icons">format_list_bulleted</i>
-                    </button>
-                    <button type="button" class="toolbar-button" id="decreaseIndentBtn" title="Decrease indent">
-                        <i class="material-icons">format_indent_decrease</i>
-                    </button>
-                    <button type="button" class="toolbar-button" id="increaseIndentBtn" title="Increase indent">
-                        <i class="material-icons">format_indent_increase</i>
-                    </button>
-                </div>
-                
             </div>
             
-            <div class="document-container">
-                <div class="document-editor" id="editor" contenteditable="true">
-                    <h1 style="font-size:24px; font-family:'Roboto'; margin-bottom:12px;">My Document</h1>
-                    <p style="font-size:11px; font-family:'Roboto'; line-height:1.5; margin-bottom:12px;">
-                        This is a clean document editor with all working features.
-                    </p>
-                    <p style="font-size:11px; font-family:'Roboto'; line-height:1.5;">
-                        Select text and use the toolbar to format your content.
-                    </p>
-                </div>
+            <div class="right-sidebar">
+                <!-- Space for future elements -->
             </div>
         </div>
-        
-        <div class="right-sidebar">
-            <!-- Space for future elements -->
         </div>
-    </div>
+        
+        <div id="pdf-chooser" style="display: {{ $option == 'HTML' ? 'none' : 'block' }};">
+            
+        </div>
 
     <script>
         // Formatting functions
@@ -359,6 +380,22 @@
         
         // Focus the editor on load
         document.getElementById('editor').focus();
+
+        // Select HTML or PDF
+        document.getElementById('content-select').addEventListener('change', function() {
+        const htmlEditor = document.getElementById('html-editor');
+        const pdfChooser = document.getElementById('pdf-chooser');
+        
+        if (this.value === 'HTML') {
+            htmlEditor.style.display = 'block';
+            pdfChooser.style.display = 'none';
+            console.log("HTML");
+        } else {
+            htmlEditor.style.display = 'none';
+            pdfChooser.style.display = 'block';
+            console.log("pdf");
+        }
+    });
     </script>
 </body>
 </html>
