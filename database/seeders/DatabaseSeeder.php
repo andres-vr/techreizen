@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
             CreateTripsSeeder::class,
             CreateUsersSeeder::class,
             CreateEducationsSeeder::class,
-            CreateMajorsSeeder::class,
+            CreateMajorsSeeder::class
             // Add other seeders here if needed
         ]);
 
