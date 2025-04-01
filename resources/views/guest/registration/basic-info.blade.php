@@ -65,7 +65,7 @@
                                        name="education" required>
                                        <option value="">-- Selecteer Opleiding --</option>
                                     @foreach($educations as $education)
-                                       <option value="{{ $education->name }}" {{ old('trip', $registration->education) == $education->name ? 'selected' : '' }}>
+                                       <option value="{{ $education->name }}" {{ old('education', $registration->education) == $education->name ? 'selected' : '' }}>
                                            {{ $education->name }}
                                        </option>
                                    @endforeach
@@ -85,7 +85,11 @@
                                 <select id="major" class="form-control @error('major') is-invalid @enderror" 
                                        name="major" required>
                                     <option value="">-- Selecteer Afstudeerrichting --</option>
-                                    <option value="ict" {{ old('major', $registration->major) == 'ict' ? 'selected' : '' }}>ICT</option>
+                                    @foreach($majors as $major)
+                                       <option value="{{ $major->name }}" {{ old('major', $registration->major) == $major->name ? 'selected' : '' }}>
+                                           {{ $major->name }}
+                                       </option>
+                                   @endforeach
                                 </select>
                                 @error('major')
                                     <span class="invalid-feedback" role="alert">

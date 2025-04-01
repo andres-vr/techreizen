@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Education;
+use App\Models\Major;
 use App\Models\Trip;
 use App\Models\User;
 use App\Models\Traveller;
@@ -38,7 +39,9 @@ class GuestRegistrationController extends Controller
 
         $educations = Education::all(); // Fetch all educations from the database
 
-        return view('guest.registration.basic-info', ['registration' => (object) $registration, 'trips' => $trips, 'educations' => $educations]);
+        $majors = Major::all(); // Fetch all majors from the database
+
+        return view('guest.registration.basic-info', ['registration' => (object) $registration, 'trips' => $trips, 'educations' => $educations, 'majors' => $majors]);
     }
 
     // Submit Basic Info Form
