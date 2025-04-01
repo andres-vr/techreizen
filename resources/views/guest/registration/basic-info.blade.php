@@ -63,8 +63,12 @@
                             <div class="col-md-6">
                                 <select id="education" class="form-control @error('education') is-invalid @enderror" 
                                        name="education" required>
-                                    <option value="">-- Selecteer Opleiding --</option>
-                                    <option value="elo_ict" {{ old('education', $registration->education) == 'elo_ict' ? 'selected' : '' }}>ELO-ICT</option>
+                                       <option value="">-- Selecteer Opleiding --</option>
+                                    @foreach($educations as $education)
+                                       <option value="{{ $education->name }}" {{ old('trip', $registration->education) == $education->name ? 'selected' : '' }}>
+                                           {{ $education->name }}
+                                       </option>
+                                   @endforeach
                                 </select>
                                 @error('education')
                                     <span class="invalid-feedback" role="alert">
