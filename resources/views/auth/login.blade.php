@@ -4,18 +4,27 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+                    <strong><i class="fas fa-check-circle me-2"></i>Succes!</strong> {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+            
             <div class="card">
-                <div class="card-header">{{ __('Inloggen') }}</div>
+                <div class="card-header">{{ __('Login') }}</div>
 
                 <div class="card-body">
+                    
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
                         <div class="row mb-3">
-                            <label for="login" class="col-md-4 col-form-label text-md-end">{{ __('Gebruiker') }}</label>
+                            <label for="login" class="col-md-4 col-form-label text-md-end">{{ __('Gebruikersnaam') }}</label>
 
                             <div class="col-md-6">
-                                <input id="login" type="text" class="form-control @error('login') is-invalid @enderror" name="login" value="{{ old('login') }}" required autocomplete="login" autofocus>
+                                <input id="login" type="text" class="form-control @error('login') is-invalid @enderror" 
+                                       name="login" value="{{ session('login') ?? old('login') }}" required autofocus>
 
                                 @error('login')
                                     <span class="invalid-feedback" role="alert">
@@ -29,7 +38,8 @@
                             <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Wachtwoord') }}</label>
 
                             <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" 
+                                       name="password" required>
 
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
@@ -45,7 +55,7 @@
                                     <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
 
                                     <label class="form-check-label" for="remember">
-                                        {{ __('Ingelogd blijven') }}
+                                        {{ __('Onthoud mij') }}
                                     </label>
                                 </div>
                             </div>
@@ -54,7 +64,7 @@
                         <div class="row mb-0">
                             <div class="col-md-8 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
-                                    {{ __('Inloggen') }}
+                                    {{ __('Login') }}
                                 </button>
 
                                 @if (Route::has('password.request'))
