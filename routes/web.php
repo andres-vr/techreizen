@@ -11,16 +11,15 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/majors/{educationId}', [GuestRegistrationController::class, 'getMajorsByEducation'])->name('majors.byEducation');
 
 Auth::routes();
+
 /*------------------------------------------
 --------------------------------------------
 All guest Routes List
 --------------------------------------------
 --------------------------------------------*/
 Route::middleware(['auth', 'user-access:guest'])->group(function () {
-    // Disclaimer page
+    // Disclaimer page - make sure both GET and POST routes are defined
     Route::get('/disclaimerPage', [HomeController::class, 'disclaimerPage'])->name('guest.disclaimer');
-
-    //TODO: This function has not been implemented yet in the controller class !!!
     Route::post('/disclaimerPage', [HomeController::class, 'acceptDisclaimer'])->name('guest.disclaimer.accept');
 
     // Guest Registration Routes 
@@ -37,17 +36,24 @@ Route::middleware(['auth', 'user-access:guest'])->group(function () {
         Route::post('/personal-info', [GuestRegistrationController::class, 'submitPersonalInfo'])
             ->name('guest.registration.personal-info.submit');
 
-        // TODO: Step 3: Contact Info and Account Creation
+        // Step 3: Contact Info and Account Creation
         Route::get('/contact-info', [GuestRegistrationController::class, 'showContactInfoForm'])
             ->name('guest.registration.contact-info');
         Route::post('/contact-info', [GuestRegistrationController::class, 'submitContactInfo'])
             ->name('guest.registration.contact-info.submit');
+            
+        // Step 4: Confirmation page
+        Route::get('/confirmation', [GuestRegistrationController::class, 'showConfirmationPage'])
+            ->name('guest.registration.confirmation');
+        Route::post('/confirmation', [GuestRegistrationController::class, 'submitConfirmation'])
+            ->name('guest.registration.confirmation.submit');
     });
 
     Route::get('/register', function () {
         return redirect()->route('guest.disclaimer');
     })->name('register');
 });
+
 /*------------------------------------------
 --------------------------------------------
 All traveller Routes List

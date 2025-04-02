@@ -28,8 +28,8 @@ class GuestRegistrationController extends Controller
     // This function is called via AJAX when the user selects an education
     public function getMajorsByEducation($educationId)
     {
-    $majors = Major::where('education_id', $educationId)->get();
-    return response()->json($majors);
+        $majors = Major::where('education_id', $educationId)->get();
+        return response()->json($majors);
     }
 
     // Show Basic Info Form
@@ -145,7 +145,6 @@ class GuestRegistrationController extends Controller
         return redirect()->route('guest.registration.contact-info');
     }
 
-
     // Show Contact Info Form
     public function showContactInfoForm(Request $request)
     {
@@ -190,37 +189,55 @@ class GuestRegistrationController extends Controller
         // Save updated data back to session
         $request->session()->put(self::SESSION_KEY, $registration);
 
-        // Check if the user already exists
-        if (User::where('login', $registration['email'])->exists()) {
-            return back()->withErrors(['email' => 'Een gebruiker met dit e-mailadres bestaat al.'])->withInput();
+        // Redirect to the confirmation page
+        return redirect()->route('guest.registration.confirmation');
+    }
+    
+    // Show Confirmation Page
+    public function showConfirmationPage(Request $request)
+    {
+        $registration = $request->session()->get(self::SESSION_KEY, ['step' => 1]);
+
+        if ($registration['step'] < 4) {
+            return redirect()->route('guest.registration.contact-info')
+                ->with('error', 'U moet eerst alle voorgaande stappen voltooien.');
         }
 
-        // Create a new user with the role 'traveller' using all collected data
-        User::create([
-            'login' => $registration['email'], // Ensure the login field is provided
-            'role' => 'traveller',
-            'password' => bcrypt('default_password'), // Vervang met het ingevoerde wachtwoord
-            'phone' => $registration['phone'],
-            'emergency_contact' => $registration['emergency_contact'],
-            'optional_emergency_contact' => $registration['optional_emergency_contact'] ?? null,
-            'medical_info' => $registration['medical_info'],
-            'medical_details' => $registration['medical_info'] === 'yes' ? $registration['medical_details'] : null,
-            'first_name' => $registration['first_name'],
-            'last_name' => $registration['last_name'],
-            'gender' => $registration['gender'],
-            'nationality' => $registration['nationality'] ?? null,
-            'date_of_birth' => $registration['date_of_birth'],
-            'place_of_birth' => $registration['place_of_birth'],
-            'address' => $registration['address'],
-            'city' => $registration['city'],
-            'country' => $registration['country'],
-            'trip' => $registration['trip'],
-            'student_number' => $registration['student_number'],
-            'education' => $registration['education'],
-            'major' => $registration['major'],
-        ]);
-
-        return redirect()->route('home')->with('success', 'Registratie voltooid en gebruiker aangemaakt.');
+        return view('guest.registration.confirmation', ['registration' => (object) $registration]);
     }
 
+    // Final submit to create account
+    public function submitConfirmation(Request $request)
+    {
+        $validated = $request->validate([
+            'terms_accepted' => 'required|accepted',
+        ], [
+            'terms_accepted.required' => 'U moet de algemene voorwaarden accepteren.',
+            'terms_accepted.accepted' => 'U moet de algemene voorwaarden accepteren.',
+        ]);
+
+        // Get the complete registration data
+        $registration = $request->session()->get(self::SESSION_KEY, []);
+        
+        // Generate a secure random password
+        $password = Str::random(10);
+        
+        // Clear the registration data from session
+        $request->session()->forget(self::SESSION_KEY);
+        
+        // Store the student number in the session for pre-filling on the register page
+        // This approach allows the user to be properly redirected to the registration page
+        // with their student number already filled in
+        
+        // Log out the current user first
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        
+        // Redirect to register page with success message and pre-filled data
+        return redirect()->route('login')
+            ->with('registration_complete', true)
+            ->with('login', $registration['student_number'])
+            ->with('success', 'Uw registratie is succesvol verwerkt! Een e-mail met uw inloggegevens is verzonden naar ' . $registration['email'] . '. Controleer uw inbox om uw account te activeren.');
+    }
 }
