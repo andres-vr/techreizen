@@ -114,7 +114,7 @@ class GuestRegistrationController extends Controller
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'gender' => 'required|string|in:male,female,other',
+            'gender' => 'required|string|in:Man,Vrouw,Anders',
             'nationality' => 'nullable|string|max:255',
             'date_of_birth' => 'required|date|before:today',
             'place_of_birth' => 'required|string|max:255',

@@ -16,7 +16,7 @@
     <ul>
         <li><strong>Reis:</strong> {{ $registration->trip ?? 'Niet ingevuld' }}</li>
         <li><strong>Studentnummer:</strong> {{ $registration->student_number ?? 'Niet ingevuld' }}</li>
-        <li><strong>Opleiding:</strong> {{ $registration->education ?? 'Niet ingevuld' }}</li>
+        <li><strong>Opleiding:</strong> {{ $registration->education->name ?? 'Niet ingevuld' }}</li>
         <li><strong>Afstudeerrichting:</strong> {{ $registration->major ?? 'Niet ingevuld' }}</li>
     </ul>
 
@@ -40,9 +40,23 @@
         <li><strong>Noodnummer 2:</strong> {{ $registration->optional_emergency_contact ?? 'Niet ingevuld' }}</li>
     </ul>
 
+    <h3>Medische Gegevens</h3>
+    <ul>
+        <li><strong>Medische informatie:</strong>
+            @if(isset($registration->medical_info) && $registration->medical_info == 'yes')
+                Ja
+            @else
+                Nee
+            @endif
+        </li>
+        @if(isset($registration->medical_info) && $registration->medical_info == 'yes')
+            <li><strong>Details:</strong> {{ $registration->medical_details ?? 'Geen details opgegeven' }}</li>
+        @endif
+    </ul>
+    
     <p>Als u vragen heeft, neem dan contact met ons op.</p>
     <p>Met vriendelijke groet,</p>
-    <p>Het TechReizen Team</p>
+    <p>Het Techreizen Team</p>
 </body>
 
 </html>

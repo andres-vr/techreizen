@@ -59,9 +59,9 @@
                                         <select id="gender" class="form-control @error('gender') is-invalid @enderror"
                                             name="gender" required>
                                             <option value="">{{ __('-- Selecteer Geslacht --') }}</option>
-                                            <option value="male" {{ (old('gender', $registration->gender ?? '') == 'male') ? 'selected' : '' }}>Man</option>
-                                            <option value="female" {{ (old('gender', $registration->gender ?? '') == 'female') ? 'selected' : '' }}>Vrouw</option>
-                                            <option value="other" {{ (old('gender', $registration->gender ?? '') == 'other') ? 'selected' : '' }}>Anders</option>
+                                            <option value="Man" {{ (old('gender', $registration->gender ?? '') == 'Man') ? 'selected' : '' }}>Man</option>
+                                            <option value="Vrouw" {{ (old('gender', $registration->gender ?? '') == 'Vrouw') ? 'selected' : '' }}>Vrouw</option>
+                                            <option value="Anders" {{ (old('gender', $registration->gender ?? '') == 'Anders') ? 'selected' : '' }}>Anders</option>
                                         </select>
                                         @error('gender')
                                             <span class="invalid-feedback" role="alert">
