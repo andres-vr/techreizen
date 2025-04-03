@@ -21,8 +21,6 @@ class PageController extends Controller
      */
     public function show(PageModel $page)
     {
-
-        
         $routeName = Route::currentRouteName();
 
         if ($routeName == "home") {
@@ -41,7 +39,6 @@ class PageController extends Controller
             $pageData = $page->find(1);
             return view('content.editor', ['page' => $pageData]);
         }
-    
         }
     
 
