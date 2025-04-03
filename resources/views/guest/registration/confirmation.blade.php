@@ -149,7 +149,7 @@
                                 <div class="col-md-4 text-md-end fw-bold">{{ __('Medische informatie:') }}</div>
                                 <div class="col-md-8">
                                     @if(isset($registration->medical_info) && $registration->medical_info == 'yes')
-                                        Ja: {{ $registration->medical_details ?? 'Geen details opgegeven' }}
+                                        {{ $registration->medical_details ?? 'Geen details opgegeven' }}
                                     @else
                                         Nee
                                     @endif
