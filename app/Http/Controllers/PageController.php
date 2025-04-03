@@ -21,21 +21,28 @@ class PageController extends Controller
      */
     public function show(PageModel $page)
     {
+        
         $routeName = Route::currentRouteName();
+
         if ($routeName == "home") {
             $pageData = $page->find(1); // Fetch the entire page data
             return view('content.show', ['page' => $pageData]);
         }
-        if ($routeName == "voorbeeldreizen") {
+        elseif ($routeName == "voorbeeldreizen") {
             $pageData = $page->find(2); // Fetch the entire page data
             return view('content.show', ['page' => $pageData]);
-        }
-        if ($routeName == "editor") {
-            $pageData = $page->find(2); // Fetch the entire page data
+        }/*
+        elseif ($routeName == "editor") {
+            $pageData = $page->find(1); // Fetch the entire page data
             return view('content.editor', ['option' => 'HTML', 'page' => $page]);
+        }*/
+        elseif ($routeName == "editor") {
+            $pageData = $page->find(1);
+            return view('content.editor', ['page' => $pageData]);
         }
-
-    }
+    
+        }
+    
 
     /**
      * Show the form for creating a new resource.
@@ -58,7 +65,10 @@ class PageController extends Controller
      */
     public function edit(PageModel $pageModel)
     {
-        //
+        return view('editor', [
+            'page' => $pageModel,
+            'content' => $pageModel->content
+        ]);
     }
 
     /**
@@ -85,6 +95,17 @@ class PageController extends Controller
                 'type' => 'html',
                 'content' => $request->content
             ]);
+
+            $validated = $request->validate([
+                'content' => 'required'
+            ]);
+
+            //toegevoegd Inas
+        
+            $pageModel->update(['content' => $validated['content']]);
+        
+            return redirect()->route('pages.show', $pageModel)
+                ->with('success', 'Pagina succesvol bijgewerkt');
         }
 
         return redirect()->route('page.show', $pageModel)->with('success', 'Page updated!');
