@@ -49,7 +49,11 @@ class GuestRegistrationController extends Controller
 
         $educations = Education::all(); // Fetch all educations from the database
 
-        $majors = Major::all(); // Fetch all majors from the database
+        // Fetch majors based on the selected education instead of all of them, this is so that when redirecting back to the basicinfo page, you can see the majors instantly in the dropdown
+        $majors = [];
+        if (!empty($registration['education'])) {
+            $majors = Major::where('education_id', $registration['education'])->get();
+        }
 
         return view('guest.registration.basic-info', ['registration' => (object) $registration, 'trips' => $trips, 'educations' => $educations, 'majors' => $majors]);
     }
