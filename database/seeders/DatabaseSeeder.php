@@ -20,12 +20,10 @@ class DatabaseSeeder extends Seeder
             CreateEducationsSeeder::class,
             CreateMajorsSeeder::class,
             CreateCitiesSeeder::class,
+            TravellerSeeder::class, // Add the new TravellerSeeder
             // Add other seeders here if needed
         ]);
 
-
         // User::factory(10)->create();
-
-
     }
 }

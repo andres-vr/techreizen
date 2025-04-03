@@ -201,7 +201,7 @@ class GuestRegistrationController extends Controller
         // Redirect to the confirmation page
         return redirect()->route('guest.registration.confirmation');
     }
-    
+
     // Show Confirmation Page
     public function showConfirmationPage(Request $request)
     {
@@ -227,24 +227,78 @@ class GuestRegistrationController extends Controller
 
         // Get the complete registration data
         $registration = $request->session()->get(self::SESSION_KEY, []);
-        
-        // Generate a secure random password
-        $password = Str::random(10);
-        
+
+        // Check if user already exists
+        $existingUser = User::where('email', $registration['email'])->first();
+
+        if (!$existingUser) {
+            try {
+                // Generate a secure random password
+                $password = Str::random(10);
+
+                // Create user with the fields that exist in the users table
+                $userData = [
+                    'login' => $registration['student_number'],
+                    'password' => Hash::make($password),
+                    'role' => 'traveller',
+                ];
+
+                $user = User::create($userData);
+
+                // Get the major ID based on name and education
+                $major = Major::where('name', $registration['major'])
+                    ->where('education_id', $registration['education'])
+                    ->first();
+                $majorId = $major ? $major->id : 1; // Default to 1 if not found
+
+                // Create the traveller record matching the database schema
+                $travellerData = [
+                    'user_id' => $user->id,
+                    'zip_id' => 3000, // Default value
+                    'major_id' => $majorId,
+                    'first_name' => $registration['first_name'],
+                    'last_name' => $registration['last_name'],
+                    'email' => $registration['email'],
+                    'country' => $registration['country'],
+                    'address' => $registration['address'],
+                    'gender' => $registration['gender'],
+                    'phone' => $registration['phone'],
+                    'emergency_phone_1' => $registration['emergency_contact'],
+                    'emergency_phone_2' => $registration['optional_emergency_contact'] ?? '',
+                    'nationality' => $registration['nationality'] ?? 'Belg',
+                    'birthdate' => $registration['date_of_birth'],
+                    'birthplace' => $registration['place_of_birth'],
+                    'iban' => 'BE00000000000000', // Default placeholder
+                    'bic' => 'GEBABEBB', // Default placeholder
+                    'medical_issue' => $registration['medical_info'] === 'yes' ? 1 : 0,
+                    'medical_info' => $registration['medical_info'] === 'yes' ? $registration['medical_details'] : '',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+
+                // Use direct DB insertion to avoid model validation issues
+                DB::table('travellers')->insert($travellerData);
+
+                // Send the confirmation email with login credentials
+                Mail::to($registration['email'])->send(new RegistrationConfirmationMail(
+                    (object) array_merge($registration, ['password' => $password])
+                ));
+            } catch (\Exception $e) {
+                // Log the error and show a generic message
+                \Log::error("Registration error: " . $e->getMessage());
+                return redirect()->route('login')
+                    ->with('error', 'Er is een fout opgetreden bij uw registratie. Neem contact op met de beheerder.');
+            }
+        }
+
         // Clear the registration data from session
         $request->session()->forget(self::SESSION_KEY);
-        
-        // Store the student number in the session for pre-filling on the register page
-        // This approach allows the user to be properly redirected to the registration page
-        // with their student number already filled in
-        // Stuur de bevestigingsmail
-        Mail::to($registration['email'])->send(new RegistrationConfirmationMail((object) $registration));
 
         // Log out the current user first
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        
+
         // Redirect to register page with success message and pre-filled data
         return redirect()->route('login')
             ->with('registration_complete', true)

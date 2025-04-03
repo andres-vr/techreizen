@@ -18,18 +18,19 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
+        'login',
         'name',
         'email',
         'password',
         'role',
-        'login',
+        'first_name',
+        'last_name',
+        // Additional fields
         'phone',
         'emergency_contact',
         'optional_emergency_contact',
         'medical_info',
         'medical_details',
-        'first_name',
-        'last_name',
         'gender',
         'nationality',
         'date_of_birth',
@@ -64,5 +65,13 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Get the traveller associated with the user.
+     */
+    public function traveller()
+    {
+        return $this->hasOne(Traveller::class);
     }
 }
