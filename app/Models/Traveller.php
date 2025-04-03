@@ -69,46 +69,4 @@ class Traveller extends Model
             'medical_issue' => 'boolean',
         ];
     }
-
-    /**
-     * Get the user associated with this traveller.
-     */
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    /**
-     * Get the trip associated with the traveller.
-     */
-    public function trip()
-    {
-        return $this->belongsTo(Trip::class);
-    }
-
-    /**
-     * Get the education related to this traveller.
-     */
-    public function education()
-    {
-        return $this->belongsTo(Education::class, 'education_id', 'id');
-    }
-
-    /**
-     * Get the major related to this traveller.
-     */
-    public function major()
-    {
-        return $this->belongsTo(Major::class, 'major_id', 'id');
-    }
-
-    /**
-     * Route notifications for the mail channel.
-     *
-     * @return string
-     */
-    public function routeNotificationForMail()
-    {
-        return $this->email;
-    }
 }

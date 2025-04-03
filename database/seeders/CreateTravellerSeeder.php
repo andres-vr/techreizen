@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 
-class TravellerSeeder extends Seeder
+class CreateTravellerSeeder extends Seeder
 {
     /**
      * Run the database seeds.
