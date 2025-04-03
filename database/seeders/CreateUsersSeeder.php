@@ -14,26 +14,10 @@ class CreateUsersSeeder extends Seeder
     public function run(): void
     {
         $users = [
-            [
-                'login' => 'Admin',
-                'role' => 'admin',
-                'password' => bcrypt('admin'),
-            ],
-            [
-                'login' => 'Traveller',
-                'role' => 'traveller',
-                'password' => bcrypt('traveller'),
-            ],
-            [
-                'login' => 'Guide',
-                'role' => 'guide',
-                'password' => bcrypt('guide'),
-            ],
-            [
-                'login' => 'Guest',
-                'role' => 'guest',
-                'password' => bcrypt('guest'),
-            ],
+            ['login' => 'Admin', 'role' => 'admin', 'password' => bcrypt('admin'),],
+            ['login' => 'Traveller', 'role' => 'traveller', 'password' => bcrypt('traveller'),],
+            ['login' => 'Guide', 'role' => 'guide', 'password' => bcrypt('guide'),],
+            ['login' => 'Guest', 'role' => 'guest', 'password' => bcrypt('guest'),],
         ];
 
         foreach ($users as $user) {
