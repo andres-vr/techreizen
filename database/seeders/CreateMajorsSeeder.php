@@ -14,14 +14,17 @@ class CreateMajorsSeeder extends Seeder
     public function run(): void
     {
         $majors = [
-            [
-                'name' => 'ELO',
-                'education_id' => '1',
-            ],
-            [
-                'name' => 'ICT',
-                'education_id' => '1',
-            ],
+            ['name' => 'Elektronica', 'education_id' => '1',],
+            ['name' => 'ICT', 'education_id' => '1',],
+            ['name' => 'Elektromechanica', 'education_id' => '2',],
+            ['name' => 'Automatisering', 'education_id' => '2',],
+            ['name' => 'Klimatisering', 'education_id' => '2',],
+            ['name' => 'Onderhoudstechnologie', 'education_id' => '2',],
+            ['name' => 'Energietechnologie', 'education_id' => '3',],
+            ['name' => 'Chemie', 'education_id' => '4',],
+            ['name' => 'Biochemie', 'education_id' => '4',],
+            ['name' => 'Milieutechnologie', 'education_id' => '4',],
+            ['name' => 'Procestechnologie', 'education_id' => '4',],
         ];
 
         foreach ($majors as $major) {

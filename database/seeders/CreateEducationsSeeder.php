@@ -14,18 +14,10 @@ class CreateEducationsSeeder extends Seeder
     public function run(): void
     {
         $educations = [
-            [
-                'name' => 'ELO-ICT',
-            ],
-            [
-                'name' => 'EM',
-            ],
-            [
-                'name' => 'ENT',
-            ],
-            [
-                'name' => 'CHEMIE',
-            ],
+            ['name' => 'Elektronica - ICT'],
+            ['name' => 'Elektromechanica'],
+            ['name' => 'Energietechnologie'],
+            ['name' => 'Chemie'],
         ];
 
         foreach ($educations as $education) {
