@@ -16,6 +16,7 @@ use Illuminate\View\View;
 use Illuminate\Support\Str;
 use App\Mail\RegistrationConfirmationMail;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Schema;
 
 class GuestRegistrationController extends Controller
 {
@@ -204,6 +205,11 @@ class GuestRegistrationController extends Controller
                     // Clear the registration data from session
                     $request->session()->forget(self::SESSION_KEY);
 
+                    // Log out the current user to prevent session related issues
+                    Auth::logout();
+                    $request->session()->invalidate();
+                    $request->session()->regenerateToken();
+
                     // Redirect with a different message for existing users
                     return redirect()->route('login')
                         ->with('success', 'U bent reeds geregistreerd. U kunt nu inloggen met uw studentnummer en wachtwoord.');
@@ -234,6 +240,7 @@ class GuestRegistrationController extends Controller
                 ->where('education_id', $registration['education'])
                 ->first();
             $majorId = $major ? $major->id : 1; // Default to 1 if not found
+
             // Create the traveller record matching the database schema
             $travellerData = [
                 'user_id' => $user->id,
@@ -257,8 +264,17 @@ class GuestRegistrationController extends Controller
                 'medical_info' => $registration['medical_info'] === 'yes' ? $registration['medical_details'] : '',
                 'created_at' => now(),
                 'updated_at' => now(),
-                'trip_id' => $registration['trip'], // from basic-info form
             ];
+
+            // Only add trip_id if it's available in the database schema
+            try {
+                // Check if the column exists in the database schema
+                if (Schema::hasColumn('travellers', 'trip_id')) {
+                    $travellerData['trip_id'] = $registration['trip'];
+                }
+            } catch (\Exception $e) {
+                \Log::warning("trip_id column not found in database. Skipping...");
+            }
 
             // Use direct DB insertion to avoid model validation issues
             DB::table('travellers')->insert($travellerData);
@@ -266,11 +282,21 @@ class GuestRegistrationController extends Controller
 
             // Send the confirmation email with login credentials if this is a new user
             if (isset($shouldSendEmail)) {
-                Mail::to($registration['email'])->send(new RegistrationConfirmationMail(
-                    (object) array_merge($registration, ['password' => $password])
-                ));
-                \Log::info("Sent registration confirmation email to: {$registration['email']}");
+                // Make a copy of registration data that includes the password
+                $emailData = (object) array_merge((array) $registration, ['password' => $password]);
+
+                try {
+                    Mail::to($registration['email'])->send(new RegistrationConfirmationMail($emailData));
+                    \Log::info("Sent registration confirmation email to: {$registration['email']}");
+                } catch (\Exception $e) {
+                    \Log::error("Failed to send registration email: " . $e->getMessage());
+                    // Continue with the registration process even if email fails
+                }
             }
+
+            // Store the student number and email temporarily for display in success message
+            $studentNumber = $registration['student_number'];
+            $email = $registration['email'];
 
             // Clear the registration data from session
             $request->session()->forget(self::SESSION_KEY);
@@ -280,18 +306,23 @@ class GuestRegistrationController extends Controller
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
+            // Create a fresh session to store the success message
+            $request->session()->regenerate();
+
             // Redirect to login page with success message and pre-filled data
-            // Flash these variables to the session with redirect
-            return redirect()->route('login')
-                ->with([
-                    'success' => 'Uw registratie is succesvol verwerkt! Een e-mail met uw inloggegevens is verzonden naar ' . $registration['email'] . '. Controleer uw inbox om uw account te activeren.',
-                    'login' => $registration['student_number'],
-                    'registration_complete' => true
-                ]);
+            return redirect()->route('login')->with([
+                'success' => 'Uw registratie is succesvol verwerkt! Een bevestigingsmail is verzonden naar ' . $email . '.',
+                'login' => $studentNumber,
+            ]);
         } catch (\Exception $e) {
             // Log the error and show a generic message
             \Log::error("Registration error: " . $e->getMessage());
             \Log::error("Stack trace: " . $e->getTraceAsString());
+
+            // Make sure to log out the user in case of error as well
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
 
             return redirect()->route('login')
                 ->with('error', 'Er is een fout opgetreden bij uw registratie. Neem contact op met de beheerder.');
