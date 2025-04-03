@@ -45,11 +45,11 @@
                             <div class="col-md-6">
                                 <input id="secondary_email" type="text" class="form-control @error('secondary_email') is-invalid @enderror" 
                                        name="secondary_email" value="{{ old('secondary_email', $registration->secondary_email ?? '') }}">
-                                @error('secondary_email')
+                                @if ($errors->has('secondary_email'))
                                     <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
+                                        <strong>{{ $errors->first('secondary_email') }}</strong>
                                     </span>
-                                @enderror
+                                @endif
                             </div>
                         </div>
                         @endif
