@@ -53,29 +53,48 @@
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/home') }}" 
                    style="padding: 5px; color: black; white-space: nowrap; display: inline-block;">
-                   Home
+                    @php
+                        $page = DB::table("pages")->find(1);
+                        echo $page->name;
+                    @endphp
                 </a>
                 <a class="navbar-brand" href="{{ url('/voorbeeldreizen') }}" 
                    style="padding: 5px; color: black; white-space: nowrap; display: inline-block;">
-                   Voorbeeldreis
+                   @php
+                        $page = DB::table("pages")->find(2);
+                        echo $page->name;
+                    @endphp
                 </a>
                 <a class="navbar-brand" href="{{ url('/home') }}" 
                    style="padding: 5px; color: black; white-space: nowrap; display: inline-block;">
-                   Contact
+                    @php
+                        $page = DB::table("pages")->find(3);
+                        echo $page->name;
+                    @endphp
+                </a>
+                <a class="navbar-brand" href="{{ url('/home') }}" 
+                   style="padding: 5px; color: black; white-space: nowrap; display: inline-block;">
+                   @php
+                   if(Auth::user()){
+                        echo Auth::user()->name;
+                   }
+                   @endphp
                 </a>
                 
+
+
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
-                </button>
+                </button> 
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto">
                         @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                    <a class="nav-link" href="{{ route('login') }}">{{ __('inloggen') }}</a>
                                 </li>
                             @endif
                         @else
