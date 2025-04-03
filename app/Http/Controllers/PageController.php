@@ -37,6 +37,8 @@ class PageController extends Controller
             return view('content.editor', ['option' => 'HTML', 'page' => $page]);
         }
 
+      
+        
     }
 
     /**
@@ -60,7 +62,10 @@ class PageController extends Controller
      */
     public function edit(PageModel $pageModel)
     {
-        //
+        return view('editor', [
+            'page' => $pageModel,
+            'content' => $pageModel->content
+        ]);
     }
 
     /**
@@ -87,6 +92,17 @@ class PageController extends Controller
                 'type' => 'html',
                 'content' => $request->content
             ]);
+
+            $validated = $request->validate([
+                'content' => 'required'
+            ]);
+
+            //toegevoegd Inas
+        
+            $pageModel->update(['content' => $validated['content']]);
+        
+            return redirect()->route('pages.show', $pageModel)
+                ->with('success', 'Pagina succesvol bijgewerkt');
         }
 
         return redirect()->route('page.show', $pageModel)->with('success', 'Page updated!');

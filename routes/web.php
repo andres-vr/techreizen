@@ -90,3 +90,4 @@ Route::get('/home', [PageController::class, 'show'])->name('home');
 Route::get('/voorbeeldreizen', [PageController::class, 'show'])->name('voorbeeldreizen');
 
 Route::get('/editor', [PageController::class, 'show'])->name('editor');
+
