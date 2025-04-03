@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Education;
 use App\Models\Major;
+use App\Models\Cities;
 use App\Models\Trip;
 use App\Models\User;
 use App\Models\Traveller;
@@ -102,7 +103,9 @@ class GuestRegistrationController extends Controller
             return redirect()->route('guest.registration.basic-info');
         }
 
-        return view('guest.registration.personal-info', ['registration' => (object) $registration]);
+        $cities = Cities::all();
+
+        return view('guest.registration.personal-info', ['registration' => (object) $registration, 'cities' => $cities]);
     }
 
     // Submit Personal Info Form
@@ -237,7 +240,7 @@ class GuestRegistrationController extends Controller
             // Create the traveller record matching the database schema
             $travellerData = [
                 'user_id' => $user->id,
-                'trip_id' => Trip::where('name', $registration['trip'])->value('id'), // Default to 1 if not found
+                'trip_id' => Trip::where('name', $registration['trip'])->value('id'), // set trip_id based on trip name
                 'zip_id' => 3000, // Default value
                 'major_id' => $majorId,
                 'first_name' => $registration['first_name'],

@@ -131,10 +131,15 @@
 
                                 <div class="row mb-3">
                                     <label for="city" class="col-md-4 col-form-label text-md-end">{{ __('Gemeente*') }}</label>
-                                    <div class="col-md-6 d-flex">
-                                        <input id="city" type="text" class="form-control @error('city') is-invalid @enderror"
-                                            name="city" value="{{ old('city', $registration->city ?? '') }}" required>
-                                        <button type="button" class="btn btn-primary ms-2"><strong>{{ __('+') }}</strong></button>
+                                    <div class="col-md-6">
+                                        <select id="city" class="form-control select2 @error('city') is-invalid @enderror" name="city" required>
+                                            <option value="">{{ __('-- Selecteer Gemeente --') }}</option>
+                                            @foreach ($cities as $city)
+                                                <option value="{{ $city->plaatsnaam }}" {{ (old('city', $registration->city ?? '') == $city->plaatsnaam) ? 'selected' : '' }}>
+                                                    {{ $city->plaatsnaam }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                         @error('city')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -142,6 +147,17 @@
                                         @enderror
                                     </div>
                                 </div>
+
+                                @push('scripts')
+                                    <script>
+                                        $(document).ready(function() {
+                                            $('#city').select2({
+                                                placeholder: "{{ __('-- Selecteer Gemeente --') }}",
+                                                allowClear: true
+                                            });
+                                        });
+                                    </script>
+                                @endpush
 
                                 <div class="row mb-3">
                                     <label for="country" class="col-md-4 col-form-label text-md-end">{{ __('Land*') }}</label>
