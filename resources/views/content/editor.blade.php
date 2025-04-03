@@ -117,6 +117,26 @@
         #imageUpload {
             display: none;
         }
+        #content-type {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            margin-left: auto;
+            margin-right: auto;
+            width: 300px;
+        }
+
+        #pdf-container {
+            display: flex;
+            min-height: 100vh;
+            margin: 50px 535px;
+        }
+        #pdf-main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -217,12 +237,18 @@
                 
             </div>
             
-             <div class="document-container">
-                    <div class="document-editor" id="editor" contenteditable="true">
-                        {!! $content !!}
-                    </div>
-                    <textarea name="content" id="hiddenContent" style="display:none;"></textarea>
+            <div class="document-container">
+                <div class="document-editor" id="editor" contenteditable="true">
+                    <h1 style="font-size:24px; font-family:'Roboto'; margin-bottom:12px;">My Document</h1>
+                    <p style="font-size:11px; font-family:'Roboto'; line-height:1.5; margin-bottom:12px;">
+                        This is a clean document editor with all working features.
+                    </p>
+                    <p style="font-size:11px; font-family:'Roboto'; line-height:1.5;">
+                        Select text and use the toolbar to format your content.
+                    </p>
                 </div>
+            </div>
+        </div>
         
         <div class="right-sidebar">
             <!-- Space for future elements -->
@@ -353,6 +379,20 @@
         
         // Focus the editor on load
         document.getElementById('editor').focus();
+
+        // Select HTML or PDF
+        document.getElementById('content-select').addEventListener('change', function() {
+        const htmlEditor = document.getElementById('html-editor');
+        const pdfChooser = document.getElementById('pdf-chooser');
+        
+        if (this.value === 'HTML') {
+            htmlEditor.style.display = 'block';
+            pdfChooser.style.display = 'none';
+        } else {
+            htmlEditor.style.display = 'none';
+            pdfChooser.style.display = 'block';
+        }
+    });
     </script>
 </body>
 </html>

@@ -13,7 +13,7 @@ class PageController extends Controller
      */
     public function index()
     {
-     
+
     }
 
     /**
@@ -32,9 +32,8 @@ class PageController extends Controller
         }
         if ($routeName == "editor") {
             $pageData = $page->find(2); // Fetch the entire page data
-            return view('content.editor', compact('page'));
+            return view('content.editor', ['option' => 'HTML', 'page' => $page]);
         }
-      
         
     }
 
@@ -75,7 +74,7 @@ class PageController extends Controller
             'content' => 'required_if:type,html',
             'pdf_file' => 'required_if:type,pdf|file|mimes:pdf|max:2048'
         ]);
-        
+
         if ($request->type == 'pdf') {
             // Handle PDF upload
             $filename = $request->file('pdf_file')->store('public/pdfs');
@@ -101,7 +100,7 @@ class PageController extends Controller
             return redirect()->route('pages.show', $pageModel)
                 ->with('success', 'Pagina succesvol bijgewerkt');
         }
-        
+
         return redirect()->route('page.show', $pageModel)->with('success', 'Page updated!');
     }
 
