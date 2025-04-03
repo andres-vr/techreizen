@@ -43,31 +43,6 @@ class TravellerSeeder extends Seeder
                 'iban' => 'BE68539007547034',
                 'bic' => 'GEBABEBB',
             ],
-            [
-                
-                'login' => 'r0900000',
-                'trip_id' => 1,
-                'first_name' => 'Marie',
-                'last_name' => 'Dupont',
-                'email' => 'bierenssander@gmail.com',
-                'gender' => 'Vrouw',
-                'nationality' => 'Belg',
-                'birthdate' => '1999-08-23',
-                'birthplace' => 'Brussel',
-                'address' => 'Tiensestraat 45',
-                'city' => 'Leuven',
-                'country' => 'België',
-                'phone' => '+32478901234',
-                'emergency_phone_1' => '+32455678901',
-                'emergency_phone_2' => '+32466543210',
-                'education_id' => 2,
-                'major_id' => 4,
-                'medical_info' => 'Lactose-intolerant',
-                'medical_issue' => 1,
-                'zip_id' => '3000',
-                'iban' => 'BE71096123456769',
-                'bic' => 'GEBABEBB',
-            ],
         ];
 
         foreach ($data as $travellerData) {
@@ -83,7 +58,6 @@ class TravellerSeeder extends Seeder
                 ['login' => $travellerData['login']],
                 $userData
             );
-
 
             // Use direct DB insertion with only the fields that exist in the table
             $insertData = [
