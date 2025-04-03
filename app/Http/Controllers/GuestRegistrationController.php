@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 use Illuminate\Support\Str;
+use App\Mail\RegistrationConfirmationMail;
+use Illuminate\Support\Facades\Mail;
 
 class GuestRegistrationController extends Controller
 {
@@ -228,7 +230,9 @@ class GuestRegistrationController extends Controller
         // Store the student number in the session for pre-filling on the register page
         // This approach allows the user to be properly redirected to the registration page
         // with their student number already filled in
-        
+        // Stuur de bevestigingsmail
+        Mail::to($registration['email'])->send(new RegistrationConfirmationMail((object) $registration));
+
         // Log out the current user first
         Auth::logout();
         $request->session()->invalidate();

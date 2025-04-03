@@ -1,5 +1,4 @@
-{{-- filepath:
-c:\Users\lucas\Downloads\Laragon\www\techreizen\resources\views\guest\registration\personal-info.blade.php --}}
+
 @extends('layouts.app')
 
 @section('content')
