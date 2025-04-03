@@ -4,9 +4,9 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            @if (session('status'))
+            @if (session('success'))
                 <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
-                    <strong><i class="fas fa-check-circle me-2"></i>Succes!</strong> {{ session('status') }}
+                    <strong><i class="fas fa-check-circle me-2"></i>Succes!</strong> {{ session('success') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
@@ -15,6 +15,7 @@
                 <div class="card-header">{{ __('Login') }}</div>
 
                 <div class="card-body">
+                    
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
@@ -23,7 +24,7 @@
 
                             <div class="col-md-6">
                                 <input id="login" type="text" class="form-control @error('login') is-invalid @enderror" 
-                                       name="login" value="{{ old('login') }}" required autofocus>
+                                       name="login" value="{{ session('login') ?? old('login') }}" required autofocus>
 
                                 @error('login')
                                     <span class="invalid-feedback" role="alert">
@@ -54,7 +55,7 @@
                                     <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
 
                                     <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
+                                        {{ __('Onthoud mij') }}
                                     </label>
                                 </div>
                             </div>
@@ -68,15 +69,12 @@
 
                                 @if (Route::has('password.request'))
                                     <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
+                                        {{ __('Wachtwoord vergeten?') }}
                                     </a>
                                 @endif
                             </div>
                         </div>
                     </form>
-                    @if (Auth::check() && Auth::user()->role == 'guest')
-                        <a href="{{ route('register') }}" class="btn btn-primary">Register</a>
-                    @endif
                 </div>
             </div>
         </div>

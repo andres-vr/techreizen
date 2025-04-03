@@ -17,10 +17,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             CreateTripsSeeder::class,
             CreateUsersSeeder::class,
-            CreateTravellersSeeder::class,
             CreateEducationsSeeder::class,
             CreateMajorsSeeder::class,
             CreateCitiesSeeder::class,
+            // Add other seeders here if needed
         ]);
 
 

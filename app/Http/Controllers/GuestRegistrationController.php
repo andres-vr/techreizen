@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Education;
+use App\Models\Major;
+use App\Models\Trip;
 use App\Models\User;
 use App\Models\Traveller;
 use Illuminate\Http\Request;
@@ -10,6 +13,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 use Illuminate\Support\Str;
+use App\Mail\RegistrationConfirmationMail;
+use Illuminate\Support\Facades\Mail;
 
 class GuestRegistrationController extends Controller
 {
@@ -19,6 +24,14 @@ class GuestRegistrationController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('user-access:guest');
+    }
+
+    //function to fetch majors based on selected education
+    // This function is called via AJAX when the user selects an education
+    public function getMajorsByEducation($educationId)
+    {
+        $majors = Major::where('education_id', $educationId)->get();
+        return response()->json($majors);
     }
 
     // Show Basic Info Form
@@ -32,7 +45,13 @@ class GuestRegistrationController extends Controller
             'major' => '',
         ]);
 
-        return view('guest.registration.basic-info', ['registration' => (object) $registration]);
+        $trips = Trip::all(); // Fetch all trips from the database
+
+        $educations = Education::all(); // Fetch all educations from the database
+
+        $majors = Major::all(); // Fetch all majors from the database
+
+        return view('guest.registration.basic-info', ['registration' => (object) $registration, 'trips' => $trips, 'educations' => $educations, 'majors' => $majors]);
     }
 
     // Submit Basic Info Form
@@ -128,7 +147,6 @@ class GuestRegistrationController extends Controller
         return redirect()->route('guest.registration.contact-info');
     }
 
-
     // Show Contact Info Form
     public function showContactInfoForm(Request $request)
     {
@@ -145,29 +163,88 @@ class GuestRegistrationController extends Controller
     public function submitContactInfo(Request $request)
     {
         $validated = $request->validate([
-            'email' => 'required|email|max:255',
-            'phone' => 'required|string|max:255',
-            'emergency_contact' => 'required|string|max:255',
-            'optional_emergency_contact' => 'nullable|string|max:255',
+            'email' => 'required|email|max:255|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
+            'secondary_email' => 'nullable|email|max:255|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
+            'phone' => 'required|string|max:15|regex:/^\+?[0-9]{7,15}$/',
+            'emergency_contact' => 'required|string|max:15|regex:/^\+?[0-9]{7,15}$/',
+            'optional_emergency_contact' => 'nullable|string|max:15|regex:/^\+?[0-9]{7,15}$/',
             'medical_info' => 'required|in:yes,no',
             'medical_details' => 'required_if:medical_info,yes|nullable|string',
         ], [
             'email.required' => 'E-mailadres is verplicht.',
             'email.email' => 'Voer een geldig e-mailadres in.',
+            'email.regex' => 'Het e-mailadres moet een geldig formaat hebben.',
+            'secondary_email.email' => 'Voer een geldig tweede e-mailadres in.',
+            'secondary_email.regex' => 'Het tweede e-mailadres moet een geldig formaat hebben.',
             'phone.required' => 'Telefoonnummer is verplicht.',
+            'phone.regex' => 'Het telefoonnummer moet een geldig formaat hebben (bijv. +32412345678).',
             'emergency_contact.required' => 'Noodnummer 1 is verplicht.',
+            'emergency_contact.regex' => 'Het noodnummer moet een geldig formaat hebben (bijv. +32412345678).',
+            'optional_emergency_contact.regex' => 'Het optionele noodnummer moet een geldig formaat hebben (bijv. +32412345678).',
             'medical_info.required' => 'Geef aan of er medische informatie is.',
-            'medical_details.required_if' => 'Vul de medische details in als u "Ja" selecteert.'
+            'medical_details.required_if' => 'Vul de medische details in als u "Ja" selecteert.',
         ]);
 
-        // Get current session data and update it
+        // Get current session data
         $registration = $request->session()->get(self::SESSION_KEY, []);
+
+        // Merge the validated data from the current form
         $registration = array_merge($registration, $validated, ['step' => 4]);
 
         // Save updated data back to session
         $request->session()->put(self::SESSION_KEY, $registration);
 
+        // Redirect to the confirmation page
         return redirect()->route('guest.registration.confirmation');
     }
+    
+    // Show Confirmation Page
+    public function showConfirmationPage(Request $request)
+    {
+        $registration = $request->session()->get(self::SESSION_KEY, ['step' => 1]);
 
+        if ($registration['step'] < 4) {
+            return redirect()->route('guest.registration.contact-info')
+                ->with('error', 'U moet eerst alle voorgaande stappen voltooien.');
+        }
+
+        return view('guest.registration.confirmation', ['registration' => (object) $registration]);
+    }
+
+    // Final submit to create account
+    public function submitConfirmation(Request $request)
+    {
+        $validated = $request->validate([
+            'terms_accepted' => 'required|accepted',
+        ], [
+            'terms_accepted.required' => 'U moet de algemene voorwaarden accepteren.',
+            'terms_accepted.accepted' => 'U moet de algemene voorwaarden accepteren.',
+        ]);
+
+        // Get the complete registration data
+        $registration = $request->session()->get(self::SESSION_KEY, []);
+        
+        // Generate a secure random password
+        $password = Str::random(10);
+        
+        // Clear the registration data from session
+        $request->session()->forget(self::SESSION_KEY);
+        
+        // Store the student number in the session for pre-filling on the register page
+        // This approach allows the user to be properly redirected to the registration page
+        // with their student number already filled in
+        // Stuur de bevestigingsmail
+        Mail::to($registration['email'])->send(new RegistrationConfirmationMail((object) $registration));
+
+        // Log out the current user first
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        
+        // Redirect to register page with success message and pre-filled data
+        return redirect()->route('login')
+            ->with('registration_complete', true)
+            ->with('login', $registration['student_number'])
+            ->with('success', 'Uw registratie is succesvol verwerkt! Een e-mail met uw inloggegevens is verzonden naar ' . $registration['email'] . '. Controleer uw inbox om uw account te activeren.');
+    }
 }

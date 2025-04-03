@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
-
 class LoginController extends Controller
 {
     /*
@@ -39,19 +38,8 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
         $this->middleware('auth')->only('logout');
     }
-
     /**
-     * Get the login username to be used by the controller.
-     *
-     * @return string
-     */
-    public function username()
-    {
-        return 'login';  // Use 'login' column instead of 'email'
-    }
-
-    /**
-     * Handle a login request to the application.
+     * Create a new controller instance.
      *
      * @return RedirectResponse
      */
@@ -71,13 +59,14 @@ class LoginController extends Controller
             } else if (auth()->user()->role == 'admin') {
                 return redirect()->route('admin.home');
             } else if (auth()->user()->role == 'guest') {
-                return redirect()->route('guest.home');
+                return redirect()->route('guest.disclaimer');
             } else {
                 return redirect()->route('home');
             }
         } else {
             return redirect()->route('login')
-                ->with('error', 'Gebruikersnaam en wachtwoord komen niet overeen.');
+                ->with('error', 'Email-Address And Password Are Wrong.');
         }
+
     }
 }
