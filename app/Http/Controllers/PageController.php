@@ -21,11 +21,6 @@ class PageController extends Controller
      */
     public function show(PageModel $page)
     {
-<<<<<<<<< Temporary merge branch 1
-        
-=========
-
->>>>>>>>> Temporary merge branch 2
         $routeName = Route::currentRouteName();
 
         if ($routeName == "home") {
