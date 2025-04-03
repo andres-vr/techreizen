@@ -24,6 +24,7 @@ class Traveller extends Model
      */
     protected $fillable = [
         'user_id',
+        'trip_id',
         'zip_id',
         'major_id',
         'first_name',
