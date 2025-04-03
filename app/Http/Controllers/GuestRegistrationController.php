@@ -7,6 +7,7 @@ use App\Models\Major;
 use App\Models\Trip;
 use App\Models\User;
 use App\Models\Traveller;
+use App\Services\FormValidationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -19,11 +20,19 @@ use Illuminate\Support\Facades\Mail;
 class GuestRegistrationController extends Controller
 {
     const SESSION_KEY = 'guest_registration';
+    
+    /**
+     * The form validation service
+     *
+     * @var FormValidationService
+     */
+    protected $formValidator;
 
-    public function __construct()
+    public function __construct(FormValidationService $formValidator)
     {
         $this->middleware('auth');
         $this->middleware('user-access:guest');
+        $this->formValidator = $formValidator;
     }
 
     //function to fetch majors based on selected education
@@ -46,7 +55,6 @@ class GuestRegistrationController extends Controller
         ]);
 
         $trips = Trip::all(); // Fetch all trips from the database
-
         $educations = Education::all(); // Fetch all educations from the database
 
         // Fetch majors based on the selected education instead of all of them, this is so that when redirecting back to the basicinfo page, you can see the majors instantly in the dropdown
@@ -55,44 +63,29 @@ class GuestRegistrationController extends Controller
             $majors = Major::where('education_id', $registration['education'])->get();
         }
 
-        return view('guest.registration.basic-info', ['registration' => (object) $registration, 'trips' => $trips, 'educations' => $educations, 'majors' => $majors]);
+        return view('guest.registration.basic-info', [
+            'registration' => (object) $registration, 
+            'trips' => $trips, 
+            'educations' => $educations, 
+            'majors' => $majors
+        ]);
     }
 
     // Submit Basic Info Form
     public function submitBasicInfo(Request $request)
     {
-        // Create a validator with specific error messages for each field
-        $validator = validator($request->all(), [
-            'trip' => 'required|string|max:255',
-            'student_number' => [
-                'required',
-                'string',
-                'max:255',
-                'regex:/^[rub]\d{7}$/i'
-            ],
-            'education' => 'required|string|max:255',
-            'major' => 'required|string|max:255',
-        ], [
-            'trip.required' => 'Selecteer een reis.',
-            'student_number.required' => 'Studentnummer is verplicht.',
-            'student_number.regex' => 'Studentnummer moet beginnen met r, u of b en gevolgd worden door 7 cijfers.',
-            'education.required' => 'Selecteer een opleiding.',
-            'major.required' => 'Selecteer een afstudeerrichting.',
-        ]);
-
-        // If validation fails, redirect back with errors
-        if ($validator->fails()) {
+        // Use the validation service to validate the form
+        $validation = $this->formValidator->validate(request: $request, formType: 'basicInfo');
+        
+        if (!$validation['success']) {
             return back()
-                ->withErrors($validator)
+                ->withErrors($validation['validator'])
                 ->withInput();
         }
-
-        // Get the validated data
-        $validated = $validator->validated();
-
-        // Get current session data and update it
+        
+        // Get current session data and update it with validated data
         $registration = $request->session()->get(self::SESSION_KEY, []);
-        $registration = array_merge($registration, $validated, ['step' => 2]);
+        $registration = array_merge($registration, $validation['validated'], ['step' => 2]);
 
         // Save updated data back to session
         $request->session()->put(self::SESSION_KEY, $registration);
@@ -115,35 +108,18 @@ class GuestRegistrationController extends Controller
     // Submit Personal Info Form
     public function submitPersonalInfo(Request $request)
     {
-        $validated = $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'gender' => 'required|string|in:Man,Vrouw,Anders',
-            'nationality' => 'nullable|string|max:255',
-            'date_of_birth' => 'required|date|before:today',
-            'place_of_birth' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
-            'country' => 'required|string|max:255',
+        // Use the validation service to validate the form
+        $validation = $this->formValidator->validate(request: $request, formType: 'personalInfo');
+        
+        if (!$validation['success']) {
+            return back()
+                ->withErrors($validation['validator'])
+                ->withInput();
+        }
 
-        ], [
-            'first_name.required' => 'Voornaam is verplicht.',
-            'last_name.required' => 'Achternaam is verplicht.',
-            'gender.required' => 'Selecteer een geslacht.',
-            'gender.in' => 'Selecteer een geldig geslacht.',
-            'nationality.required' => 'Nationaliteit is verplicht.',
-            'date_of_birth.required' => 'Geboortedatum is verplicht.',
-            'date_of_birth.before' => 'Geboortedatum moet in het verleden zijn.',
-            'place_of_birth.required' => 'Geboorteplaats is verplicht.',
-            'address.required' => 'Adres is verplicht.',
-            'city.required' => 'Stad is verplicht.',
-            'country.required' => 'Land is verplicht.',
-
-        ]);
-
-        // Get current session data and update it
+        // Get current session data and update it with validated data
         $registration = $request->session()->get(self::SESSION_KEY, []);
-        $registration = array_merge($registration, $validated, ['step' => 3]);
+        $registration = array_merge($registration, $validation['validated'], ['step' => 3]);
 
         // Save updated data back to session
         $request->session()->put(self::SESSION_KEY, $registration);
@@ -166,34 +142,18 @@ class GuestRegistrationController extends Controller
     // Submit Contact Info Form
     public function submitContactInfo(Request $request)
     {
-        $validated = $request->validate([
-            'email' => 'required|email|max:255|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
-            'secondary_email' => 'nullable|email|max:255|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
-            'phone' => 'required|string|max:15|regex:/^\+?[0-9]{7,15}$/',
-            'emergency_contact' => 'required|string|max:15|regex:/^\+?[0-9]{7,15}$/',
-            'optional_emergency_contact' => 'nullable|string|max:15|regex:/^\+?[0-9]{7,15}$/',
-            'medical_info' => 'required|in:yes,no',
-            'medical_details' => 'required_if:medical_info,yes|nullable|string',
-        ], [
-            'email.required' => 'E-mailadres is verplicht.',
-            'email.email' => 'Voer een geldig e-mailadres in.',
-            'email.regex' => 'Het e-mailadres moet een geldig formaat hebben.',
-            'secondary_email.email' => 'Voer een geldig tweede e-mailadres in.',
-            'secondary_email.regex' => 'Het tweede e-mailadres moet een geldig formaat hebben.',
-            'phone.required' => 'Telefoonnummer is verplicht.',
-            'phone.regex' => 'Het telefoonnummer moet een geldig formaat hebben (bijv. +32412345678).',
-            'emergency_contact.required' => 'Noodnummer 1 is verplicht.',
-            'emergency_contact.regex' => 'Het noodnummer moet een geldig formaat hebben (bijv. +32412345678).',
-            'optional_emergency_contact.regex' => 'Het optionele noodnummer moet een geldig formaat hebben (bijv. +32412345678).',
-            'medical_info.required' => 'Geef aan of er medische informatie is.',
-            'medical_details.required_if' => 'Vul de medische details in als u "Ja" selecteert.',
-        ]);
+        // Use the validation service to validate the form
+        $validation = $this->formValidator->validate(request: $request, formType: 'contactInfo');
+        
+        if (!$validation['success']) {
+            return back()
+                ->withErrors($validation['validator'])
+                ->withInput();
+        }
 
-        // Get current session data
+        // Get current session data and update it with validated data
         $registration = $request->session()->get(self::SESSION_KEY, []);
-
-        // Merge the validated data from the current form
-        $registration = array_merge($registration, $validated, ['step' => 4]);
+        $registration = array_merge($registration, $validation['validated'], ['step' => 4]);
 
         // Save updated data back to session
         $request->session()->put(self::SESSION_KEY, $registration);
@@ -274,6 +234,7 @@ class GuestRegistrationController extends Controller
                     'medical_info' => $registration['medical_info'] === 'yes' ? $registration['medical_details'] : '',
                     'created_at' => now(),
                     'updated_at' => now(),
+                    'trip_id' => $registration['trip'], // from basic-info form
                 ];
 
                 // Use direct DB insertion to avoid model validation issues
