@@ -217,18 +217,12 @@
                 
             </div>
             
-            <div class="document-container">
-                <div class="document-editor" id="editor" contenteditable="true">
-                    <h1 style="font-size:24px; font-family:'Roboto'; margin-bottom:12px;">My Document</h1>
-                    <p style="font-size:11px; font-family:'Roboto'; line-height:1.5; margin-bottom:12px;">
-                        This is a clean document editor with all working features.
-                    </p>
-                    <p style="font-size:11px; font-family:'Roboto'; line-height:1.5;">
-                        Select text and use the toolbar to format your content.
-                    </p>
+             <div class="document-container">
+                    <div class="document-editor" id="editor" contenteditable="true">
+                        {!! $content !!}
+                    </div>
+                    <textarea name="content" id="hiddenContent" style="display:none;"></textarea>
                 </div>
-            </div>
-        </div>
         
         <div class="right-sidebar">
             <!-- Space for future elements -->
