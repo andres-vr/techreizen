@@ -228,11 +228,30 @@ class GuestRegistrationController extends Controller
         // Get the complete registration data
         $registration = $request->session()->get(self::SESSION_KEY, []);
 
-        // Check if user already exists
-        $existingUser = User::where('email', $registration['email'])->first();
+        try {
+            // Check if user already exists by student number (login) instead of email
+            $existingUser = User::where('login', $registration['student_number'])->first();
 
-        if (!$existingUser) {
-            try {
+            if ($existingUser) {
+                \Log::info("User with login {$registration['student_number']} already exists. Skipping user creation.");
+
+                // Check if the user already has a traveller record
+                $existingTraveller = Traveller::where('user_id', $existingUser->id)->first();
+
+                if ($existingTraveller) {
+                    \Log::info("Traveller record for {$registration['student_number']} already exists. Registration complete.");
+
+                    // Clear the registration data from session
+                    $request->session()->forget(self::SESSION_KEY);
+
+                    // Redirect with a different message for existing users
+                    return redirect()->route('login')
+                        ->with('success', 'U bent reeds geregistreerd. U kunt nu inloggen met uw studentnummer en wachtwoord.');
+                }
+
+                // User exists but traveller record doesn't, use existing user
+                $user = $existingUser;
+            } else {
                 // Generate a secure random password
                 $password = Str::random(10);
 
@@ -244,65 +263,75 @@ class GuestRegistrationController extends Controller
                 ];
 
                 $user = User::create($userData);
+                \Log::info("Created new user with login: {$registration['student_number']}");
 
-                // Get the major ID based on name and education
-                $major = Major::where('name', $registration['major'])
-                    ->where('education_id', $registration['education'])
-                    ->first();
-                $majorId = $major ? $major->id : 1; // Default to 1 if not found
+                // We'll need to send the password email after traveller creation
+                $shouldSendEmail = true;
+            }
 
-                // Create the traveller record matching the database schema
-                $travellerData = [
-                    'user_id' => $user->id,
-                    'zip_id' => 3000, // Default value
-                    'major_id' => $majorId,
-                    'first_name' => $registration['first_name'],
-                    'last_name' => $registration['last_name'],
-                    'email' => $registration['email'],
-                    'country' => $registration['country'],
-                    'address' => $registration['address'],
-                    'gender' => $registration['gender'],
-                    'phone' => $registration['phone'],
-                    'emergency_phone_1' => $registration['emergency_contact'],
-                    'emergency_phone_2' => $registration['optional_emergency_contact'] ?? '',
-                    'nationality' => $registration['nationality'] ?? 'Belg',
-                    'birthdate' => $registration['date_of_birth'],
-                    'birthplace' => $registration['place_of_birth'],
-                    'iban' => 'BE00000000000000', // Default placeholder
-                    'bic' => 'GEBABEBB', // Default placeholder
-                    'medical_issue' => $registration['medical_info'] === 'yes' ? 1 : 0,
-                    'medical_info' => $registration['medical_info'] === 'yes' ? $registration['medical_details'] : '',
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
+            // Get the major ID based on name and education
+            $major = Major::where('name', $registration['major'])
+                ->where('education_id', $registration['education'])
+                ->first();
+            $majorId = $major ? $major->id : 1; // Default to 1 if not found
 
-                // Use direct DB insertion to avoid model validation issues
-                DB::table('travellers')->insert($travellerData);
+            // Create the traveller record matching the database schema
+            $travellerData = [
+                'user_id' => $user->id,
+                'zip_id' => 3000, // Default value
+                'major_id' => $majorId,
+                'first_name' => $registration['first_name'],
+                'last_name' => $registration['last_name'],
+                'email' => $registration['email'],
+                'country' => $registration['country'],
+                'address' => $registration['address'],
+                'gender' => $registration['gender'],
+                'phone' => $registration['phone'],
+                'emergency_phone_1' => $registration['emergency_contact'],
+                'emergency_phone_2' => $registration['optional_emergency_contact'] ?? '',
+                'nationality' => $registration['nationality'] ?? 'Belg',
+                'birthdate' => $registration['date_of_birth'],
+                'birthplace' => $registration['place_of_birth'],
+                'iban' => 'BE00000000000000', // Default placeholder
+                'bic' => 'GEBABEBB', // Default placeholder
+                'medical_issue' => $registration['medical_info'] === 'yes' ? 1 : 0,
+                'medical_info' => $registration['medical_info'] === 'yes' ? $registration['medical_details'] : '',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
 
-                // Send the confirmation email with login credentials
+            // Use direct DB insertion to avoid model validation issues
+            DB::table('travellers')->insert($travellerData);
+            \Log::info("Created traveller record for: {$registration['first_name']} {$registration['last_name']}");
+
+            // Send the confirmation email with login credentials if this is a new user
+            if (isset($shouldSendEmail)) {
                 Mail::to($registration['email'])->send(new RegistrationConfirmationMail(
                     (object) array_merge($registration, ['password' => $password])
                 ));
-            } catch (\Exception $e) {
-                // Log the error and show a generic message
-                \Log::error("Registration error: " . $e->getMessage());
-                return redirect()->route('login')
-                    ->with('error', 'Er is een fout opgetreden bij uw registratie. Neem contact op met de beheerder.');
+                \Log::info("Sent registration confirmation email to: {$registration['email']}");
             }
+
+            // Clear the registration data from session
+            $request->session()->forget(self::SESSION_KEY);
+
+            // Log out the current user first
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            // Redirect to login page with success message and pre-filled data
+            return redirect()->route('login')
+                ->with('registration_complete', true)
+                ->with('login', $registration['student_number'])
+                ->with('success', 'Uw registratie is succesvol verwerkt! Een e-mail met uw inloggegevens is verzonden naar ' . $registration['email'] . '. Controleer uw inbox om uw account te activeren.');
+        } catch (\Exception $e) {
+            // Log the error and show a generic message
+            \Log::error("Registration error: " . $e->getMessage());
+            \Log::error("Stack trace: " . $e->getTraceAsString());
+
+            return redirect()->route('login')
+                ->with('error', 'Er is een fout opgetreden bij uw registratie. Neem contact op met de beheerder.');
         }
-
-        // Clear the registration data from session
-        $request->session()->forget(self::SESSION_KEY);
-
-        // Log out the current user first
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        // Redirect to register page with success message and pre-filled data
-        return redirect()->route('login')
-            ->with('registration_complete', true)
-            ->with('login', $registration['student_number'])
-            ->with('success', 'Uw registratie is succesvol verwerkt! Een e-mail met uw inloggegevens is verzonden naar ' . $registration['email'] . '. Controleer uw inbox om uw account te activeren.');
     }
 }

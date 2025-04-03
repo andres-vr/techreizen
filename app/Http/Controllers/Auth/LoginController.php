@@ -38,6 +38,23 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
         $this->middleware('auth')->only('logout');
     }
+
+    /**
+     * Show the application's login form.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function showLoginForm(Request $request)
+    {
+        // Keep status message if coming from password reset
+        if ($request->session()->has('status')) {
+            $status = $request->session()->get('status');
+            return view('auth.login')->with('status', $status);
+        }
+
+        return view('auth.login');
+    }
+
     /**
      * Create a new controller instance.
      *
@@ -65,7 +82,7 @@ class LoginController extends Controller
             }
         } else {
             return redirect()->route('login')
-                ->with('error', 'Email-Address And Password Are Wrong.');
+                ->with('error', 'Studentnummer of wachtwoord is onjuist.');
         }
 
     }
