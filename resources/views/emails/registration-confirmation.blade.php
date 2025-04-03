@@ -16,7 +16,7 @@
     <ul>
         <li><strong>Reis:</strong> {{ $registration->trip ?? 'Niet ingevuld' }}</li>
         <li><strong>Studentnummer:</strong> {{ $registration->student_number ?? 'Niet ingevuld' }}</li>
-        <li><strong>Opleiding:</strong> {{ $registration->education->name ?? 'Niet ingevuld' }}</li>
+        <li><strong>Opleiding:</strong> {{ App\Models\Education::find($registration->education)->name ?? 'Niet ingevuld' }}</li>
         <li><strong>Afstudeerrichting:</strong> {{ $registration->major ?? 'Niet ingevuld' }}</li>
     </ul>
 
