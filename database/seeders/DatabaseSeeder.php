@@ -18,16 +18,14 @@ class DatabaseSeeder extends Seeder
             CreateTripsSeeder::class,
             CreateUsersSeeder::class,
             CreateEducationsSeeder::class,
-            CreateMajorsSeeder::class
+            CreateMajorsSeeder::class,
+            CreateCitiesSeeder::class,
             // Add other seeders here if needed
         ]);
 
 
         // User::factory(10)->create();
 
-        // User::factory()->create([
-        //     'login' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+
     }
 }
