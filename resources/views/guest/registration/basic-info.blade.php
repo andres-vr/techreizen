@@ -83,6 +83,11 @@
                                 <select id="major" class="form-control @error('major') is-invalid @enderror" 
                                        name="major" required>
                                     <option value="">-- Selecteer Afstudeerrichting --</option>
+                                    @foreach($majors as $major)
+                                        <option value="{{ $major->name }}" {{ old('major', $registration->major) == $major->name ? 'selected' : '' }}>
+                                            {{ $major->name }}
+                                        </option>
+                                    @endforeach
                                 </select>
                                 @error('major')
                                     <span class="invalid-feedback" role="alert">
