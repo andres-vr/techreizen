@@ -29,7 +29,6 @@
                 <div class="card-header">{{ __('Login') }}</div>
 
                 <div class="card-body">
-                    
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
@@ -94,4 +93,16 @@
         </div>
     </div>
 </div>
+
+@if(isset($registration_complete) && $registration_complete)
+<script>
+    // Auto-focus the password field when coming from registration
+    document.addEventListener('DOMContentLoaded', function() {
+        const passwordField = document.getElementById('password');
+        if (passwordField) {
+            passwordField.focus();
+        }
+    });
+</script>
+@endif
 @endsection

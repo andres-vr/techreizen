@@ -46,13 +46,20 @@ class LoginController extends Controller
      */
     public function showLoginForm(Request $request)
     {
-        // Keep status message if coming from password reset
-        if ($request->session()->has('status')) {
-            $status = $request->session()->get('status');
-            return view('auth.login')->with('status', $status);
+        // Create a data array to hold all session variables we want to pass to the view
+        $data = [];
+
+        // Check for all possible session variables we might need
+        $sessionVars = ['status', 'error', 'success', 'login', 'registration_complete'];
+
+        foreach ($sessionVars as $var) {
+            if ($request->session()->has($var)) {
+                $data[$var] = $request->session()->get($var);
+            }
         }
 
-        return view('auth.login');
+        // Pass all session data to the view
+        return view('auth.login', $data);
     }
 
     /**

@@ -281,10 +281,13 @@ class GuestRegistrationController extends Controller
             $request->session()->regenerateToken();
 
             // Redirect to login page with success message and pre-filled data
+            // Flash these variables to the session with redirect
             return redirect()->route('login')
-                ->with('registration_complete', true)
-                ->with('login', $registration['student_number'])
-                ->with('success', 'Uw registratie is succesvol verwerkt! Een e-mail met uw inloggegevens is verzonden naar ' . $registration['email'] . '. Controleer uw inbox om uw account te activeren.');
+                ->with([
+                    'success' => 'Uw registratie is succesvol verwerkt! Een e-mail met uw inloggegevens is verzonden naar ' . $registration['email'] . '. Controleer uw inbox om uw account te activeren.',
+                    'login' => $registration['student_number'],
+                    'registration_complete' => true
+                ]);
         } catch (\Exception $e) {
             // Log the error and show a generic message
             \Log::error("Registration error: " . $e->getMessage());
