@@ -164,6 +164,7 @@ class GuestRegistrationController extends Controller
     {
         $validated = $request->validate([
             'email' => 'required|email|max:255|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
+            'secondary_email' => 'nullable|email|max:255|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
             'phone' => 'required|string|max:15|regex:/^\+?[0-9]{7,15}$/',
             'emergency_contact' => 'required|string|max:15|regex:/^\+?[0-9]{7,15}$/',
             'optional_emergency_contact' => 'nullable|string|max:15|regex:/^\+?[0-9]{7,15}$/',
@@ -173,6 +174,8 @@ class GuestRegistrationController extends Controller
             'email.required' => 'E-mailadres is verplicht.',
             'email.email' => 'Voer een geldig e-mailadres in.',
             'email.regex' => 'Het e-mailadres moet een geldig formaat hebben.',
+            'secondary_email.email' => 'Voer een geldig tweede e-mailadres in.',
+            'secondary_email.regex' => 'Het tweede e-mailadres moet een geldig formaat hebben.',
             'phone.required' => 'Telefoonnummer is verplicht.',
             'phone.regex' => 'Het telefoonnummer moet een geldig formaat hebben (bijv. +32412345678).',
             'emergency_contact.required' => 'Noodnummer 1 is verplicht.',
