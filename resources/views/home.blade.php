@@ -33,6 +33,9 @@
                     <h2>
                         {{ __('You are a visitor!') }}
                     </h2>
+                    @if (Auth::check() && Auth::user()->role == 'guest')
+                        <a href="{{ route('register') }}" class="btn btn-primary">Register</a>
+                    @endif
                 </div>
             </div>
         </div>

@@ -18,6 +18,8 @@ class CreateUsersSeeder extends Seeder
             ['login' => 'Traveller', 'role' => 'traveller', 'password' => bcrypt('traveller'),],
             ['login' => 'Guide', 'role' => 'guide', 'password' => bcrypt('guide'),],
             ['login' => 'Guest', 'role' => 'guest', 'password' => bcrypt('guest'),],
+            ['login' => 'r0933332', 'role' => 'traveller', 'password' => bcrypt('r0933332'),],
+
         ];
 
         foreach ($users as $user) {

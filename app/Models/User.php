@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -22,25 +23,6 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
-        'login',
-        'phone',
-        'emergency_contact',
-        'optional_emergency_contact',
-        'medical_info',
-        'medical_details',
-        'first_name',
-        'last_name',
-        'gender',
-        'nationality',
-        'date_of_birth',
-        'place_of_birth',
-        'address',
-        'city',
-        'country',
-        'trip',
-        'student_number',
-        'education',
-        'major',
     ];
 
     /**
@@ -64,5 +46,47 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Get the email address for password reset.
+     *
+     * @return string
+     */
+    public function getEmailForPasswordReset()
+    {
+        // Check if this user is associated with a traveller that has an email
+        $traveller = DB::table('travellers')->where('user_id', $this->id)->first();
+
+        if ($traveller && !empty($traveller->email) && strpos($this->login, 'b') === 0) {
+            return $traveller->email;
+        }
+
+        // Default case - use the login field as email
+        return $this->login;
+    }
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        // Create a custom notification instance with the token
+        $notification = new \Illuminate\Auth\Notifications\ResetPassword($token);
+
+        // Set the URL generation callback to use 'login' instead of 'email'
+        $notification->createUrlUsing(function ($notifiable, $token) {
+            $clientUrl = config('app.url'); // Get the app URL
+
+            return url(route('password.reset', [
+                'token' => $token,
+                'login' => $notifiable->getKey(), // Use the user ID instead
+            ], false));
+        });
+
+        $this->notify($notification);
     }
 }
