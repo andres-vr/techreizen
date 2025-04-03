@@ -13,7 +13,7 @@ class PageController extends Controller
      */
     public function index()
     {
-     
+
     }
 
     /**
@@ -21,23 +21,19 @@ class PageController extends Controller
      */
     public function show(PageModel $page)
     {
-
         $routeName = Route::currentRouteName();
 
         if ($routeName == "home") {
             $pageData = $page->find(1); // Fetch the entire page data
             return view('content.show', ['page' => $pageData]);
-        }
-        elseif ($routeName == "voorbeeldreizen") {
+        } elseif ($routeName == "voorbeeldreizen") {
             $pageData = $page->find(2); // Fetch the entire page data
             return view('content.show', ['page' => $pageData]);
+        } elseif ($routeName == "editor") {
+            $pageData = $page->find(1); // Fetch the entire page data
+            return view('content.editor', ['option' => 'HTML', 'page' => $pageData]);
         }
-        elseif ($routeName == "editor") {
-            $pageData = $page->find(1);
-            return view('content.editor', ['page' => $pageData]);
-        }
-
-        }
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -60,7 +56,10 @@ class PageController extends Controller
      */
     public function edit(PageModel $pageModel)
     {
-        //
+        return view('editor', [
+            'page' => $pageModel,
+            'content' => $pageModel->content
+        ]);
     }
 
     /**
@@ -73,7 +72,7 @@ class PageController extends Controller
             'content' => 'required_if:type,html',
             'pdf_file' => 'required_if:type,pdf|file|mimes:pdf|max:2048'
         ]);
-        
+
         if ($request->type == 'pdf') {
             // Handle PDF upload
             $filename = $request->file('pdf_file')->store('public/pdfs');
@@ -87,8 +86,19 @@ class PageController extends Controller
                 'type' => 'html',
                 'content' => $request->content
             ]);
+
+            $validated = $request->validate([
+                'content' => 'required'
+            ]);
+
+            //toegevoegd Inas
+
+            $pageModel->update(['content' => $validated['content']]);
+
+            return redirect()->route('pages.show', $pageModel)
+                ->with('success', 'Pagina succesvol bijgewerkt');
         }
-        
+
         return redirect()->route('page.show', $pageModel)->with('success', 'Page updated!');
     }
 
