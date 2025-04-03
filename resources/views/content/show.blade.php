@@ -15,7 +15,7 @@
                         <iframe 
                             src="{{ asset('storage/' . $pdfPath) }}" 
                             width="100%"
-                            height="600"
+                            height="1250px"
                             style="border: 1px solid #ddd;"
                         ></iframe>
                     @else
