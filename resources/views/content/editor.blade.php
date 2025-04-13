@@ -43,24 +43,32 @@
 
         <script src="ckeditor/ckeditor.js"></script>
         <script>
-            // Focus the editor on load
+        const select = document.getElementById('content-select');
+        const htmlEditor = document.getElementById('html-editor');
+        const pdfChooser = document.getElementById('pdf-chooser');
+
+        function updateEditorView() {
+            const value = select.value;
+            if (value === "HTML") {
+                htmlEditor.style.display = "block";
+                pdfChooser.style.display = "none";
+                console.log("HTML");
+            }
+
+            if (value === "PDF") {
+                htmlEditor.style.display = "none";
+                pdfChooser.style.display = "block";
+                console.log("PDF");
+            }
+        }
+
+        select.addEventListener('change', updateEditorView);
+
+        updateEditorView();
+
+        if (select.value === "HTML") {
             document.getElementById('editor').focus();
-
-            // Select HTML or PDF
-            document.getElementById('content-select').addEventListener('change', function() {
-                const htmlEditor = document.getElementById('html-editor');
-                const pdfChooser = document.getElementById('pdf-chooser');
-
-                if ('option' === 'HTML') {
-                    htmlEditor.style.display = 'block';
-                    pdfChooser.style.display = 'none';
-                    console.log('HTML selected');
-                } else {
-                    htmlEditor.style.display = 'none';
-                    pdfChooser.style.display = 'block';
-                    console.log('PDF selected');
-                }
-            });
+        }
         </script>
 </body>
 

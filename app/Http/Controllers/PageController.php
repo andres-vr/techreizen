@@ -31,7 +31,7 @@ class PageController extends Controller
             return view('content.show', ['page' => $pageData]);
         } elseif ($routeName == "editor") {
             $pageData = $page->find(1); // Fetch the entire page data
-            return view('content.editor', ['option' => 'HTML', 'page' => $pageData]);
+            return view('content.editor', ['page' => $pageData]);
         }
     }
 
