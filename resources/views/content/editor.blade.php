@@ -19,6 +19,49 @@
     </textarea>
     
     <script src="ckeditor/ckeditor.js"></script>
+        <button id="save-button" class="btn btn-primary"
+            style="background-color: blue; color: white; padding: 5px; margin: 10px;">Opslaan</button>
+
+        <div id="pdf-chooser">
+            <div id=pdf-container>
+                <div id="pdf-main">
+                    <h1>Choose a PDF file to upload:</h1>
+                    <input type="file" id="pdf-select" name="pdf-select" accept=".pdf" />
+                    <br>
+                    <label><input type="checkbox" name="pdf_Visable">Maak pdf zichtbaar</label>
+                </div>
+            </div>
+        </div>
+
+        <script src="ckeditor/ckeditor.js"></script>
+        <script>
+        const select = document.getElementById('content-select');
+        const htmlEditor = document.getElementById('html-editor');
+        const pdfChooser = document.getElementById('pdf-chooser');
+
+        function updateEditorView() {
+            const value = select.value;
+            if (value === "HTML") {
+                htmlEditor.style.display = "block";
+                pdfChooser.style.display = "none";
+                console.log("HTML");
+            }
+
+            if (value === "PDF") {
+                htmlEditor.style.display = "none";
+                pdfChooser.style.display = "block";
+                console.log("PDF");
+            }
+        }
+
+        select.addEventListener('change', updateEditorView);
+
+        updateEditorView();
+
+        if (select.value === "HTML") {
+            document.getElementById('editor').focus();
+        }
+        </script>
 </body>
 
 </html>
