@@ -21,12 +21,22 @@
     <script src="ckeditor/ckeditor.js"></script>
         <button id="save-button" class="btn btn-primary"
             style="background-color: blue; color: white; padding: 5px; margin: 10px;">Opslaan</button>
+    <div id="content-type" style="display: flex; gap: 10px; margin-bottom: 20px; margin-left: 200px;">
+        <p>Select the content type:</p>
+        <select id="content-select" name="content_type">
+            <option value="HTML">HTML</option>
+            <option value="PDF">PDF</option>
+        </select>
+    </div>
 
         <div id="pdf-chooser">
             <div id=pdf-container>
                 <div id="pdf-main">
                     <h1>Choose a PDF file to upload:</h1>
-                    <input type="file" id="pdf-select" name="pdf-select" accept=".pdf" />
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <button type="button" id="lfm-btn" class="btn btn-secondary">Choose PDF</button>
+                        <input id="pdf-path" name="pdf_path" type="text" readonly style="width: 300px;" />
+                    </div>
                     <br>
                     <label><input type="checkbox" name="pdf_Visable">Maak pdf zichtbaar</label>
                 </div>
@@ -42,13 +52,13 @@
         function updateEditorView() {
             const value = select.value;
             if (value === "HTML") {
-                htmlEditor.style.display = "block";
+                //htmlEditor.style.display = "block";
                 pdfChooser.style.display = "none";
                 console.log("HTML");
             }
 
             if (value === "PDF") {
-                htmlEditor.style.display = "none";
+                //htmlEditor.style.display = "none";
                 pdfChooser.style.display = "block";
                 console.log("PDF");
             }
@@ -59,8 +69,16 @@
         updateEditorView();
 
         if (select.value === "HTML") {
-            document.getElementById('editor').focus();
+            //document.getElementById('editor').focus();
         }
+
+        // UniSharp file manager
+        document.getElementById('lfm-btn').addEventListener('click', function () {
+            window.open('/laravel-filemanager?type=file', 'FileManager', 'width=900,height=600');
+            window.SetUrl = function (url) {
+                document.getElementById('pdf-path').value = url;
+            };
+        });
         </script>
 </body>
 
