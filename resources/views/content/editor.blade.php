@@ -25,8 +25,9 @@
             </div>
             
         </div>
+        </textarea>
     </div>    
-    </textarea>
+    
         <button id="save-button" class="btn btn-primary"
             style="background-color: blue; color: white; padding: 5px; margin: 10px;">Opslaan</button>
 
