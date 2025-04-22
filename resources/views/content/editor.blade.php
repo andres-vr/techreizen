@@ -45,8 +45,11 @@
         const select = document.getElementById('content-select');
         const htmlEditor = document.getElementById('html-editor');
         const pdfChooser = document.getElementById('pdf-chooser');
- 
-        select.addEventListener('change', function () {
+
+        htmlEditor.style.display = "block";
+        pdfChooser.style.display = "none";
+
+        select.addEventListener('change', function() {
             updateEditorView();
         });
 
@@ -75,36 +78,34 @@
             window.SetUrl = function(url) {
                 document.getElementById('pdf-path').value = url;
             };
-            });
+        });
 
-            document.getElementById('save-button').addEventListener('click', function () {
-    const content = CKEDITOR.instances.editor.getData(); // gebruik CKEditor API!
+        document.getElementById('save-button').addEventListener('click', function() {
+            const content = CKEDITOR.instances.editor.getData(); // gebruik CKEditor API!
 
-    fetch("{{ route('editor.save') }}", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-TOKEN": "{{ csrf_token() }}"
-        },
-        body: JSON.stringify({
-            content: content,
-            page_id: {{ $page->id }}
-        })
-    })
-    .then(response => {
-        if (!response.ok) throw new Error("Failed to save");
-        return response.json();
-    })
-    .then(data => {
-        alert(data.message);
-    })
-    .catch(error => {
-        alert("Error: " + error.message);
-    });
-});
-
-            
-        </script>
+            fetch("{{ route('editor.save') }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    },
+                    body: JSON.stringify({
+                        content: content,
+                        page_id: {{ $page->id }}
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error("Failed to save");
+                    return response.json();
+                })
+                .then(data => {
+                    alert(data.message);
+                })
+                .catch(error => {
+                    alert("Error: " + error.message);
+                });
+        });
+    </script>
 </body>
 
 </html>
