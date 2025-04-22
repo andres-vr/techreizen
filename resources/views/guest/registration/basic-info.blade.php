@@ -27,10 +27,11 @@
                                 <select id="trip" class="form-control @error('trip') is-invalid @enderror" 
                                        name="trip" required>
                                     <option value="">-- Selecteer Reis --</option>
-                                    <option value="london" {{ old('trip', $registration->trip) == 'london' ? 'selected' : '' }}>London</option>
-                                    <option value="paris" {{ old('trip', $registration->trip) == 'paris' ? 'selected' : '' }}>Paris</option>
-                                    <option value="berlin" {{ old('trip', $registration->trip) == 'berlin' ? 'selected' : '' }}>Berlin</option>
-                                    <option value="rome" {{ old('trip', $registration->trip) == 'rome' ? 'selected' : '' }}>Rome</option>
+                                    @foreach($trips as $trip)
+                                        <option value="{{ $trip->name }}" {{ old('trip', $registration->trip) == $trip->name ? 'selected' : '' }}>
+                                            {{ $trip->name }}
+                                        </option>
+                                    @endforeach
                                 </select>
                                 @error('trip')
                                     <span class="invalid-feedback" role="alert">
@@ -56,14 +57,17 @@
                             </div>
                         </div>
 
-                        <!-- HIER LATER EEN DROPDOWN MENU VAN MAKEN DIE GEGEVENS UIT DE DATABASE HAALT -->
                         <div class="row mb-3">
                             <label for="education" class="col-md-4 col-form-label text-md-end">{{ __('Opleiding*') }}</label>
                             <div class="col-md-6">
                                 <select id="education" class="form-control @error('education') is-invalid @enderror" 
                                        name="education" required>
                                     <option value="">-- Selecteer Opleiding --</option>
-                                    <option value="elo_ict" {{ old('education', $registration->education) == 'elo_ict' ? 'selected' : '' }}>ELO-ICT</option>
+                                    @foreach($educations as $education)
+                                        <option value="{{ $education->id }}" {{ old('education', $registration->education) == $education->id ? 'selected' : '' }}>
+                                            {{ $education->name }}
+                                        </option>
+                                    @endforeach
                                 </select>
                                 @error('education')
                                     <span class="invalid-feedback" role="alert">
@@ -73,14 +77,17 @@
                             </div>
                         </div>
 
-                        <!-- HIER LATER EEN DROPDOWN MENU VAN MAKEN DIE GEGEVENS UIT DE DATABASE HAALT -->
                         <div class="row mb-3">
                             <label for="major" class="col-md-4 col-form-label text-md-end">{{ __('Afstudeerrichting*') }}</label>
                             <div class="col-md-6">
                                 <select id="major" class="form-control @error('major') is-invalid @enderror" 
                                        name="major" required>
                                     <option value="">-- Selecteer Afstudeerrichting --</option>
-                                    <option value="ict" {{ old('major', $registration->major) == 'ict' ? 'selected' : '' }}>ICT</option>
+                                    @foreach($majors as $major)
+                                        <option value="{{ $major->name }}" {{ old('major', $registration->major) == $major->name ? 'selected' : '' }}>
+                                            {{ $major->name }}
+                                        </option>
+                                    @endforeach
                                 </select>
                                 @error('major')
                                     <span class="invalid-feedback" role="alert">
@@ -132,6 +139,31 @@
             const pattern = /^[rub]\d{7}$/;
             if (pattern.test(studentNumberInput.value)) {
                 studentNumberInput.classList.remove('is-invalid');
+            }
+        });
+
+        const educationSelect = document.getElementById('education');
+        const majorSelect = document.getElementById('major');
+
+        educationSelect.addEventListener('change', function () {
+            const educationId = this.value;
+
+            // Clear the majors dropdown
+            majorSelect.innerHTML = '<option value="">-- Selecteer Afstudeerrichting --</option>';
+
+            if (educationId) {
+                // Fetch majors for the selected education
+                fetch(`/majors/${educationId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(major => {
+                            const option = document.createElement('option');
+                            option.value = major.name;
+                            option.textContent = major.name;
+                            majorSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching majors:', error));
             }
         });
     });

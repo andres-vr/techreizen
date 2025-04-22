@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id'); // Changed to unsignedBigInteger
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('trip_id'); // New field for trip_id
+            $table->foreign('trip_id')->references('id')->on('trips')->onDelete('cascade'); // Foreign key constraint
             $table->integer('zip_id')->length(10);
             $table->integer('major_id')->length(10);
             $table->string('first_name');

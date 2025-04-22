@@ -1,5 +1,4 @@
-{{-- filepath:
-c:\Users\lucas\Downloads\Laragon\www\techreizen\resources\views\guest\registration\personal-info.blade.php --}}
+
 @extends('layouts.app')
 
 @section('content')
@@ -60,9 +59,9 @@ c:\Users\lucas\Downloads\Laragon\www\techreizen\resources\views\guest\registrati
                                         <select id="gender" class="form-control @error('gender') is-invalid @enderror"
                                             name="gender" required>
                                             <option value="">{{ __('-- Selecteer Geslacht --') }}</option>
-                                            <option value="male" {{ (old('gender', $registration->gender ?? '') == 'male') ? 'selected' : '' }}>Man</option>
-                                            <option value="female" {{ (old('gender', $registration->gender ?? '') == 'female') ? 'selected' : '' }}>Vrouw</option>
-                                            <option value="other" {{ (old('gender', $registration->gender ?? '') == 'other') ? 'selected' : '' }}>Anders</option>
+                                            <option value="Man" {{ (old('gender', $registration->gender ?? '') == 'Man') ? 'selected' : '' }}>Man</option>
+                                            <option value="Vrouw" {{ (old('gender', $registration->gender ?? '') == 'Vrouw') ? 'selected' : '' }}>Vrouw</option>
+                                            <option value="Anders" {{ (old('gender', $registration->gender ?? '') == 'Anders') ? 'selected' : '' }}>Anders</option>
                                         </select>
                                         @error('gender')
                                             <span class="invalid-feedback" role="alert">
@@ -131,11 +130,16 @@ c:\Users\lucas\Downloads\Laragon\www\techreizen\resources\views\guest\registrati
                                 </div>
 
                                 <div class="row mb-3">
-                                    <label for="city" class="col-md-4 col-form-label text-md-end">{{ __('Stad*') }}</label>
-                                    <div class="col-md-6 d-flex">
-                                        <input id="city" type="text" class="form-control @error('city') is-invalid @enderror"
-                                            name="city" value="{{ old('city', $registration->city ?? '') }}" required>
-                                        <button type="button" class="btn btn-primary ms-2"><strong>{{ __('+') }}</strong></button>
+                                    <label for="city" class="col-md-4 col-form-label text-md-end">{{ __('Gemeente*') }}</label>
+                                    <div class="col-md-6">
+                                        <select id="city" class="form-control select2 @error('city') is-invalid @enderror" name="city" required>
+                                            <option value="">{{ __('-- Selecteer Gemeente --') }}</option>
+                                            @foreach ($cities as $city)
+                                                <option value="{{ $city->plaatsnaam }}" {{ (old('city', $registration->city ?? '') == $city->plaatsnaam) ? 'selected' : '' }}>
+                                                    {{ $city->plaatsnaam }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                         @error('city')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -143,6 +147,17 @@ c:\Users\lucas\Downloads\Laragon\www\techreizen\resources\views\guest\registrati
                                         @enderror
                                     </div>
                                 </div>
+
+                                @push('scripts')
+                                    <script>
+                                        $(document).ready(function() {
+                                            $('#city').select2({
+                                                placeholder: "{{ __('-- Selecteer Gemeente --') }}",
+                                                allowClear: true
+                                            });
+                                        });
+                                    </script>
+                                @endpush
 
                                 <div class="row mb-3">
                                     <label for="country" class="col-md-4 col-form-label text-md-end">{{ __('Land*') }}</label>
@@ -160,7 +175,7 @@ c:\Users\lucas\Downloads\Laragon\www\techreizen\resources\views\guest\registrati
 
                                 <div class="row mb-0">
                                     <div class="col-md-6 offset-md-4">
-                                        <a href="{{ route('guest.registration.basic-info') }}" class="btn btn-secondary me-2">
+                                        <a type="submit" href="{{ route('guest.registration.basic-info') }}" class="btn btn-secondary me-2">
                                             {{ __('Vorige') }}
                                         </a>
                                         <button type="submit" class="btn btn-primary">

@@ -38,6 +38,30 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
         $this->middleware('auth')->only('logout');
     }
+
+    /**
+     * Show the application's login form.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function showLoginForm(Request $request)
+    {
+        // Create a data array to hold all session variables we want to pass to the view
+        $data = [];
+
+        // Check for all possible session variables we might need
+        $sessionVars = ['status', 'error', 'success', 'login', 'registration_complete'];
+
+        foreach ($sessionVars as $var) {
+            if ($request->session()->has($var)) {
+                $data[$var] = $request->session()->get($var);
+            }
+        }
+
+        // Pass all session data to the view
+        return view('auth.login', $data);
+    }
+
     /**
      * Create a new controller instance.
      *
@@ -65,7 +89,7 @@ class LoginController extends Controller
             }
         } else {
             return redirect()->route('login')
-                ->with('error', 'Email-Address And Password Are Wrong.');
+                ->with('error', 'Studentnummer of wachtwoord is onjuist.');
         }
 
     }
