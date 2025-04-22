@@ -11,15 +11,26 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
     <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    @php
+        $viteManifestExists = file_exists(public_path('build/manifest.json'));
+    @endphp
+    
+    @if($viteManifestExists)
+        @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    @else
+        <!-- Fallback when Vite is not built -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    @endif
 </head>
 
 <body>
-    <div class= "fixed-top" style="z-index: 100">
+    <div style="z-index: 100; position: relative;"> <!-- Changed from fixed-top to relative -->
         <div class="d-flex flex-row bg-light">
             <div class="p-2"> <img src="{{ asset('images/ucll_logo.png') }}" class="rounded" alt="logo ucll"></div>
             <div class="d-flex flex-column">
@@ -31,6 +42,8 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div> <!-- Removed margin-top to allow natural scrolling -->
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
@@ -57,17 +70,17 @@
                                     <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                                 </li>
                             @endif
-
-                            @if (Route::has('register'))
+                        @else
+                            @if (Auth::user()->role === 'guest' && Route::has('register'))
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 </li>
                             @endif
-                        @else
+
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
+                                    {{ Auth::user()->name ?? Auth::user()->login }}
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
