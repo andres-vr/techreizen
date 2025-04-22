@@ -20,7 +20,7 @@
         <textarea name="content" id="editor" cols="30" rows="10" class="ckeditor form-control">
             {!! $page->content !!}
         </textarea>
-    </div>    
+    </div>
     <div id="pdf-chooser">
         <div id=pdf-container>
             <div id="pdf-main">
@@ -33,11 +33,14 @@
         </div>
     </div>
     <button id="save-button" class="btn btn-primary"
-            style="background-color: blue; color: white; padding: 5px; margin: 10px;">Opslaan
+        style="background-color: blue; color: white; padding: 5px; margin: 10px;">Opslaan
     </button>
-    
-        <script src="ckeditor/ckeditor.js"></script>
-        <script>
+    <button id="cancel-button" class="btn btn-primary"
+        style="background-color: lightgray; color: black; padding: 5px; margin: 10px;">Annuleer
+    </button>
+
+    <script src="ckeditor/ckeditor.js"></script>
+    <script>
         // Select HTML or PDF
         const select = document.getElementById('content-select');
         const htmlEditor = document.getElementById('html-editor');
@@ -46,6 +49,7 @@
         select.addEventListener('change', function () {
             updateEditorView();
         });
+
         function updateEditorView() {
             const value = select.value;
             if (value === "HTML") {
@@ -53,7 +57,7 @@
                 pdfChooser.style.display = "none";
                 console.log("HTML");
             }
- 
+
             if (value === "PDF") {
                 htmlEditor.style.display = "none";
                 pdfChooser.style.display = "block";
@@ -61,15 +65,15 @@
             }
         }
 
-            // Focus the editor on load
-            document.getElementById('html-editor').focus();
+        // Focus the editor on load
+        document.getElementById('html-editor').focus();
 
-            // UniSharp file manager
-            document.getElementById('lfm-btn').addEventListener('click', function () {
+        // UniSharp file manager
+        document.getElementById('lfm-btn').addEventListener('click', function() {
             console.log("hi");
             window.open('/laravel-filemanager?type=file', 'FileManager', 'width=900,height=600');
-            window.SetUrl = function (url) {
-            document.getElementById('pdf-path').value = url;
+            window.SetUrl = function(url) {
+                document.getElementById('pdf-path').value = url;
             };
             });
 

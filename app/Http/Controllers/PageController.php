@@ -111,6 +111,7 @@ class PageController extends Controller
     }
 
     public function saveEditorContent(Request $request)
+<<<<<<< HEAD
 {
     $request->validate([
         'content' => 'required',
@@ -125,5 +126,24 @@ class PageController extends Controller
 
     return response()->json(['message' => 'Content saved successfully!']);
 }
+=======
+    {
+        $request->validate([
+            'content' => 'required',
+            'page_id' => 'required|exists:pages,id'
+        ]);
+
+        $page = PageModel::find($request->page_id);
+        $page->update([
+            'type' => 'html',
+            'content' => $request->input('content')
+        ]);
+
+        return response()->json(['message' => 'Content saved successfully!']);
+    }
+
+
+
+>>>>>>> ce360cf35e26e43e04aeb08ecd11821cb7f3175e
 
 }
