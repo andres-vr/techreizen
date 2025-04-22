@@ -25,11 +25,13 @@
                     @endif
                 @endif
                 
-                <div class="mt-4">
+                @if(Auth::check() && Auth::user()->role === 'admin')
+                 <div class="mt-4">
                     <a href="{{ route('editor') }}" class="btn btn-primary">
                         Edit Content
                     </a>
                 </div>
+                @endif
             </div>
         </div>
     </div>
