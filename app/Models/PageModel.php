@@ -15,4 +15,6 @@ class PageModel extends Model
     protected $fillable = ['name', 'content', 'access_level', 'description'];
 
     public $timestamps = true; // Ensures created_at & updated_at are used
+
+
 }
