@@ -36,11 +36,13 @@
                     <?php endif; ?>
                 <?php endif; ?>
                 
-                <div class="mt-4">
+                <?php if(Auth::check() && Auth::user()->role === 'admin'): ?>
+                 <div class="mt-4">
                     <a href="<?php echo e(route('editor')); ?>" class="btn btn-primary">
                         Edit Content
                     </a>
                 </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
