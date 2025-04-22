@@ -29,14 +29,8 @@
         </select>
     </div>
     <div id="html-editor">
-        <textarea name="content" id="content" cols="30" rows="10" class="ckeditor form-control "
-            placeholder="Enter post content here...">
-        <div class="document-container">
-            <div class="document-editor" id="editor" contenteditable="true" >
-                {!! $page->content !!}  <!-- Hier wordt de database content geladen -->
-            </div>
-            
-        </div>
+        <textarea name="content" id="editor" cols="30" rows="10" class="ckeditor form-control">
+            {!! $page->content !!}
         </textarea>
     </div>    
     <div id="pdf-chooser">
@@ -90,6 +84,34 @@
             document.getElementById('pdf-path').value = url;
             };
             });
+
+            document.getElementById('save-button').addEventListener('click', function () {
+    const content = CKEDITOR.instances.editor.getData(); // gebruik CKEditor API!
+
+    fetch("{{ route('editor.save') }}", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": "{{ csrf_token() }}"
+        },
+        body: JSON.stringify({
+            content: content,
+            page_id: {{ $page->id }}
+        })
+    })
+    .then(response => {
+        if (!response.ok) throw new Error("Failed to save");
+        return response.json();
+    })
+    .then(data => {
+        alert(data.message);
+    })
+    .catch(error => {
+        alert("Error: " + error.message);
+    });
+});
+
+            
         </script>
 </body>
 
