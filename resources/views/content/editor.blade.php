@@ -27,22 +27,21 @@
         </div>
         </textarea>
     </div>    
-    
-        <button id="save-button" class="btn btn-primary"
-            style="background-color: blue; color: white; padding: 5px; margin: 10px;">Opslaan</button>
-
-        <div id="pdf-chooser">
-            <div id=pdf-container>
-                <div id="pdf-main">
-                    <h1>Choose a PDF file to upload:</h1>
-                    <button type="button" id="lfm-btn" class="btn btn-secondary">Choose PDF</button>
-                    <input id="pdf-path" name="pdf_path" type="text" readonly style="width: 300px;" />
-                    <br>
-                    <label><input type="checkbox" name="pdf_Visable">Maak pdf zichtbaar</label>
-                </div>
+    <div id="pdf-chooser">
+        <div id=pdf-container>
+            <div id="pdf-main">
+                <h1>Choose a PDF file to upload:</h1>
+                <button type="button" id="lfm-btn" class="btn btn-secondary">Choose PDF</button>
+                <input id="pdf-path" name="pdf_path" type="text" readonly style="width: 300px;" />
+                <br>
+                <label><input type="checkbox" name="pdf_Visable">Maak pdf zichtbaar</label>
             </div>
         </div>
-
+    </div>
+    <button id="save-button" class="btn btn-primary"
+            style="background-color: blue; color: white; padding: 5px; margin: 10px;">Opslaan
+    </button>
+    
         <script src="ckeditor/ckeditor.js"></script>
         <script>
         // Select HTML or PDF
@@ -50,6 +49,9 @@
         const htmlEditor = document.getElementById('html-editor');
         const pdfChooser = document.getElementById('pdf-chooser');
  
+        select.addEventListener('change', function () {
+            updateEditorView();
+        });
         function updateEditorView() {
             const value = select.value;
             if (value === "HTML") {
