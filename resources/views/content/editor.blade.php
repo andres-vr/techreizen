@@ -46,6 +46,9 @@
         const htmlEditor = document.getElementById('html-editor');
         const pdfChooser = document.getElementById('pdf-chooser');
 
+        htmlEditor.style.display = "block";
+        pdfChooser.style.display = "none";
+
         select.addEventListener('change', function() {
             updateEditorView();
         });
