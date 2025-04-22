@@ -226,6 +226,9 @@ class GuestRegistrationController extends Controller
                     'role' => 'traveller',
                 ];
 
+                // Reset AUTO_INCREMENT value for users table to avoid id gaps
+                DB::statement("ALTER TABLE users AUTO_INCREMENT = 1");
+                // Create the user record
                 $user = User::create($userData);
                 \Log::info("Created new user with login: {$registration['student_number']}");
 
@@ -265,6 +268,9 @@ class GuestRegistrationController extends Controller
                  // from basic-info form
             ];
 
+            //this is for when u delete a user in the database, the id will be reset to 1
+            // Reset AUTO_INCREMENT value for users table to avoid id gaps
+            DB::statement("ALTER TABLE travellers AUTO_INCREMENT = 1");
             // Use direct DB insertion to avoid model validation issues
             DB::table('travellers')->insert($travellerData);
             \Log::info("Created traveller record for: {$registration['first_name']} {$registration['last_name']}");
