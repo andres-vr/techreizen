@@ -27,40 +27,59 @@
         </div>
         </textarea>
     </div>    
-    
-        <button id="save-button" class="btn btn-primary"
-            style="background-color: blue; color: white; padding: 5px; margin: 10px;">Opslaan</button>
-
-        <div id="pdf-chooser">
-            <div id=pdf-container>
-                <div id="pdf-main">
-                    <h1>Choose a PDF file to upload:</h1>
-                    <input type="file" id="pdf-select" name="pdf-select" accept=".pdf" />
-                    <br>
-                    <label><input type="checkbox" name="pdf_Visable">Maak pdf zichtbaar</label>
-                </div>
+    <div id="pdf-chooser">
+        <div id=pdf-container>
+            <div id="pdf-main">
+                <h1>Choose a PDF file to upload:</h1>
+                <button type="button" id="lfm-btn" class="btn btn-secondary">Choose PDF</button>
+                <input id="pdf-path" name="pdf_path" type="text" readonly style="width: 300px;" />
+                <br>
+                <label><input type="checkbox" name="pdf_Visable">Maak pdf zichtbaar</label>
             </div>
         </div>
-
+    </div>
+    <button id="save-button" class="btn btn-primary"
+            style="background-color: blue; color: white; padding: 5px; margin: 10px;">Opslaan
+    </button>
+    
         <script src="ckeditor/ckeditor.js"></script>
         <script>
+        // Select HTML or PDF
+        const select = document.getElementById('content-select');
+        const htmlEditor = document.getElementById('html-editor');
+        const pdfChooser = document.getElementById('pdf-chooser');
+ 
+        htmlEditor.style.display = "block";
+        pdfChooser.style.display = "none";
+        
+        select.addEventListener('change', function () {
+            updateEditorView();
+        });
+        function updateEditorView() {
+            const value = select.value;
+            if (value === "HTML") {
+                htmlEditor.style.display = "block";
+                pdfChooser.style.display = "none";
+                console.log("HTML");
+            }
+ 
+            if (value === "PDF") {
+                htmlEditor.style.display = "none";
+                pdfChooser.style.display = "block";
+                console.log("PDF");
+            }
+        }
+
             // Focus the editor on load
-            document.getElementById('editor').focus();
+            document.getElementById('html-editor').focus();
 
-            // Select HTML or PDF
-            document.getElementById('content-select').addEventListener('change', function() {
-                const htmlEditor = document.getElementById('html-editor');
-                const pdfChooser = document.getElementById('pdf-chooser');
-
-                if ('option' === 'HTML') {
-                    htmlEditor.style.display = 'block';
-                    pdfChooser.style.display = 'none';
-                    console.log('HTML selected');
-                } else {
-                    htmlEditor.style.display = 'none';
-                    pdfChooser.style.display = 'block';
-                    console.log('PDF selected');
-                }
+            // UniSharp file manager
+            document.getElementById('lfm-btn').addEventListener('click', function () {
+            console.log("hi");
+            window.open('/laravel-filemanager?type=file', 'FileManager', 'width=900,height=600');
+            window.SetUrl = function (url) {
+            document.getElementById('pdf-path').value = url;
+            };
             });
         </script>
 </body>
