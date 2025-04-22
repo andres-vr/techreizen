@@ -11,6 +11,13 @@
                 </div>
             @endif
             
+            @if (session('failure'))
+                <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+                    <strong><i class="fas fa-exclamation-circle me-2"></i>Fout!</strong> {{ session('failure') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
             @if (session('status'))
                 <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
                     {{ session('status') }}

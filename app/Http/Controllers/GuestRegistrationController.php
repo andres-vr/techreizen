@@ -207,9 +207,10 @@ class GuestRegistrationController extends Controller
                     // Clear the registration data from session
                     $request->session()->forget(self::SESSION_KEY);
 
+                    Auth::logout();
                     // Redirect with a different message for existing users
                     return redirect()->route('login')
-                        ->with('success', 'U bent reeds geregistreerd. U kunt nu inloggen met uw studentnummer en wachtwoord.');
+                        ->with('failure', 'U bent reeds geregistreerd. U kunt inloggen met uw studentnummer en wachtwoord.');
                 }
 
                 // User exists but traveller record doesn't, use existing user
