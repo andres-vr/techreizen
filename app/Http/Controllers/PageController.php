@@ -32,7 +32,11 @@ class PageController extends Controller
         } elseif ($routeName == "editor") {
             $pageData = $page->find(1); // Fetch the entire page data
             return view('content.editor', ['page' => $pageData]);
+        } elseif ($routeName == "editor-all") {
+            $pageData = $page->find(1); // Fetch the entire page data
+            return view('content.editor-all', ['page' => $pageData]);
         }
+
     }
 
     /**
@@ -111,19 +115,19 @@ class PageController extends Controller
     }
 
     public function saveEditorContent(Request $request)
-{
-    $request->validate([
-        'content' => 'required',
-        'page_id' => 'required|exists:pages,id'
-    ]);
+    {
+        $request->validate([
+            'content' => 'required',
+            'page_id' => 'required|exists:pages,id'
+        ]);
 
-    $page = PageModel::find($request->page_id);
-    $page->update([
-        'type' => 'html',
-        'content' => $request->input('content')
-    ]);
+        $page = PageModel::find($request->page_id);
+        $page->update([
+            'type' => 'html',
+            'content' => $request->input('content')
+        ]);
 
-    return response()->json(['message' => 'Content saved successfully!']);
-}
+        return response()->json(['message' => 'Content saved successfully!']);
+    }
 
 }
