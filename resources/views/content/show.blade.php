@@ -42,4 +42,8 @@
             </div>
         </div>
     </div>
+
+
+       
+    </div>
 </x-layout.home>
