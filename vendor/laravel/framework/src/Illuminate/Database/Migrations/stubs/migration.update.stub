@@ -11,8 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
+<<<<<<<< HEAD:vendor/laravel/framework/src/Illuminate/Database/Migrations/stubs/migration.update.stub
         Schema::table('{{ table }}', function (Blueprint $table) {
             //
+========
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('role') ->nullable();
+>>>>>>>> 965394b279f2b4cdb892d1b7f165a48f1c55f20c:database/migrations/2025_02_17_145833_add_role_to_users_table.php
         });
     }
 
