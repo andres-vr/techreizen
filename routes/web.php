@@ -91,8 +91,6 @@ Route::get('/voorbeeldreizen', [PageController::class, 'show'])->name('voorbeeld
 
 Route::get('/editor', [PageController::class, 'show'])->name('editor');
 
-Route::get('/editor/all', [PageController::class, 'show'])->name('editor-all');
-
 Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
     \UniSharp\LaravelFilemanager\Lfm::routes();
 });

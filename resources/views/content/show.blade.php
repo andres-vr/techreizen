@@ -27,23 +27,11 @@
                 
                 @if(Auth::check() && Auth::user()->role === 'admin')
                  <div class="mt-4">
-                    @if (route('home') == url()->current())
                         <a href="{{ route('editor') }}" class="btn btn-primary">
                             Edit Content
                         </a>
-                    @else
-                    <a href="{{ route('editor-all') }}" class="btn btn-primary">
-                        Edit Content
-                    </a>    
-                    @endif
-                    </a>
                 </div>
                 @endif
             </div>
         </div>
-    </div>
-
-
-       
-    </div>
 </x-layout.home>
