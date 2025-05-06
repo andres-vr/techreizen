@@ -12,7 +12,7 @@ class PageModel extends Model
     protected $table = 'pages'; // Table name
     protected $primaryKey = 'id'; // Primary key
 
-    protected $fillable = ['name', 'content', 'access_level', 'description'];
+    protected $fillable = ['name', 'content', 'access_level', 'description','routename'];
 
     public $timestamps = true; // Ensures created_at & updated_at are used
 
