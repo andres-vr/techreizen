@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    @if ($name == 'home')
+    @if ($name == 'Home')
     <div id="html-editor">
         <textarea name="content" id="editor" cols="30" rows="10" class="ckeditor form-control">
             {!! $page->content !!}
