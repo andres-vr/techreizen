@@ -130,5 +130,15 @@ class PageController extends Controller
 
         return response()->json(['message' => 'Content saved successfully!']);
     }
+    public function showByName($name)
+    {
+        $page = \DB::table('pages')->where('routename', $name)->first();
+    
+        if (!$page) {
+            abort(404); // Page not found
+        }
+    
+        return view('content.show', ['page' => $page]);
+    }
 
 }

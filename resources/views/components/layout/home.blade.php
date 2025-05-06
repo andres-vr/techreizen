@@ -51,27 +51,16 @@
         </div>
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/home') }}" 
-                   style="padding: 5px; color: black; white-space: nowrap; display: inline-block;">
-                    @php
-                        $page = DB::table("pages")->find(1);
-                        echo $page->name;
-                    @endphp
+                @php
+                $pages = DB::table('pages')->get();
+            @endphp
+            
+            @foreach($pages as $page)
+                <a class="navbar-brand" href="{{ url('/' . $page->routename) }}"
+                   style="padding: 5px; color: black; white-space: nowrap;">
+                    {{ $page->name }}
                 </a>
-                <a class="navbar-brand" href="{{ url('/voorbeeldreizen') }}" 
-                   style="padding: 5px; color: black; white-space: nowrap; display: inline-block;">
-                   @php
-                        $page = DB::table("pages")->find(2);
-                        echo $page->name;
-                    @endphp
-                </a>
-                <a class="navbar-brand" href="{{ url('/home') }}" 
-                   style="padding: 5px; color: black; white-space: nowrap; display: inline-block;">
-                    @php
-                        $page = DB::table("pages")->find(3);
-                        echo $page->name;
-                    @endphp
-                </a>
+            @endforeach
                 {{-- <a class="navbar-brand" href="{{ url('/home') }}" 
                    style="padding: 5px; color: black; white-space: nowrap; display: inline-block;">
                    @php

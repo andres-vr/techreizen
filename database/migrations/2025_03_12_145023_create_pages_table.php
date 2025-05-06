@@ -19,6 +19,7 @@ return new class extends Migration
             $table->timestamp('created_at');
             $table->timestamp('updated_at');
             $table->enum('type', ["html", "pdf"]); //content veranderen naar HTML, PDF, ...
+            $table->string("routename",255);
         });
     }
 
