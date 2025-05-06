@@ -23,18 +23,20 @@ class PageController extends Controller
     {
 
         $routeName = Route::currentRouteName();
+        $previousRouteName = session('previous_route', null);
 
         if ($routeName == "home") {
             $pageData = $page->find(1); // Fetch the entire page data
+            session(['previous_route' => 'home']);
             return view('content.show', ['page' => $pageData]);
         } elseif ($routeName == "voorbeeldreizen") {
             $pageData = $page->find(2); // Fetch the entire page data
+            session(['previous_route' => 'voorbeeldreizen']);
             return view('content.show', ['page' => $pageData]);
         } elseif ($routeName == "editor") {
             $pageData = $page->find(1); // Fetch the entire page data
-            return view('content.editor', ['page' => $pageData, 'name' => $pageData->name]);
+            return view('content.editor', ['page' => $pageData, 'previousRoute' => $previousRouteName]);
         }
-
     }
 
     /**
