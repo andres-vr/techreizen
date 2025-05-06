@@ -7,6 +7,7 @@ use DateTime;
 use DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\PageModel;
 
 class PageSeeder extends Seeder
 {
@@ -44,28 +45,22 @@ class PageSeeder extends Seeder
                             </ul>
                         </div>',
             'access_level'=> 0,
-            'created_at' => '2025-03-20 10:33:53',
-            'updated_at' => '2025-03-20 10:33:53',
             'type' => 'html'
         ],
         [
             'name' => 'Voorbeeldreis',
             'content' => 'BeperktProgrammaDuitslandTsjechieWebsite.pdf',
             'access_level' => 0,
-            'created_at' => '2025-03-20 10:33:53',
-            'updated_at' => '2025-03-20 10:33:53',
             'type' => "pdf"
         ],
         [
             'name' => 'Contact',
             'content' => 'Hello',
             'access_level' =>0,
-            'created_at' => '2025-03-20 10:33:53',
-            'updated_at' => '2025-03-20 10:33:53',
             'type' => "html"
         ]];
-        foreach($pages as $key => $page){
-            DB::table("pages")->insert($page);
+        foreach($pages as $page){
+           PageModel::create($page);
         }
     }
 }

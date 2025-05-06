@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             CreateMajorsSeeder::class,
             CreateCitiesSeeder::class,
             PageSeeder::class,
+            HotelSeeder::class
             // Add other seeders here if needed
         ]);
 

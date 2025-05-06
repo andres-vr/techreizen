@@ -72,14 +72,14 @@
                         echo $page->name;
                     @endphp
                 </a>
-                <a class="navbar-brand" href="{{ url('/home') }}" 
+                {{-- <a class="navbar-brand" href="{{ url('/home') }}" 
                    style="padding: 5px; color: black; white-space: nowrap; display: inline-block;">
                    @php
                    if(Auth::user()){
-                        echo Auth::user()->name;
+                        echo Auth::user()->login;
                    }
                    @endphp
-                </a>
+                </a> --}}
                 
 
 
