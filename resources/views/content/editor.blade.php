@@ -22,6 +22,14 @@
         style="background-color: red; color: black; padding: 5px; margin: 10px;">Annuleer
     </button>
     @else
+    <div id="page-select" style="display: flex; gap: 10px; margin-bottom: 20px; margin-left: 200px;">
+        <p>Selecteer de pagina:</p>
+        <select id="page-select" name="page_id">
+            <option value="Home">Home</option>
+            <option value="Voorbeeldreis">Voorbeeldreis</option>
+            <option value = "Contact">Contact</option>
+        </select>
+    </div>
     <div id="content-type" style="display: flex; gap: 10px; margin-bottom: 20px; margin-left: 200px;">
         <p>Select the content type:</p>
         <select id="content-select" name="content_type">
