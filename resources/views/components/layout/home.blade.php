@@ -53,13 +53,25 @@
             <div class="container">
                 @php
                 $pages = DB::table('pages')->get();
-            @endphp
+                @endphp
             
             @foreach($pages as $page)
+                @php
+                    $acceslevelArray = explode(",",$page->access_level);
+                @endphp
+                @if (in_array('guest',$acceslevelArray) || Auth::check() && Auth::user()->role )
                 <a class="navbar-brand" href="{{ url('/' . $page->routename) }}"
-                   style="padding: 5px; color: black; white-space: nowrap;">
-                    {{ $page->name }}
-                </a>
+                    style="padding: 5px; color: black; white-space: nowrap;">
+                     {{ $page->name }}
+                 </a>
+                @elseif (Auth::check() && in_array(Auth::user()->role,$acceslevelArray))
+                <a class="navbar-brand" href="{{ url('/' . $page->routename) }}"
+                    style="padding: 5px; color: black; white-space: nowrap;">
+                     {{ $page->name }}
+                 </a>
+                @endif
+
+
             @endforeach
                 {{-- <a class="navbar-brand" href="{{ url('/home') }}" 
                    style="padding: 5px; color: black; white-space: nowrap; display: inline-block;">
