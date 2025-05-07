@@ -152,4 +152,28 @@ class PageController extends Controller
         return view('content.show', ['page' => $page]);
     }
 
+    public function getPage($id)
+{
+    $page = PageModel::findOrFail($id);
+    return response()->json([
+        'id' => $page->id,
+        'content' => $page->content
+    ]);
 }
+public function editor()
+{
+    $pages = PageModel::all();               // Haalt alle pagina's op
+    $page = $pages->first();                 // Neemt de eerste als standaard (bijv. Home)
+    $previousRouteName = session('previous_route', null);
+
+    return view('content.editor', [
+        'page' => $page,
+        'pages' => $pages,
+        'previousRoute' => $previousRouteName
+    ]);
+}
+
+
+
+}
+

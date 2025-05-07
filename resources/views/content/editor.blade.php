@@ -22,12 +22,12 @@
         style="background-color: red; color: black; padding: 5px; margin: 10px;">Annuleer
     </button>
     @else
-    <div id="page-select" style="display: flex; gap: 10px; margin-bottom: 20px; margin-left: 200px;">
+    <div id="page-dropdown" style="display: flex; gap: 10px; margin-bottom: 20px; margin-left: 200px;">
         <p>Selecteer de pagina:</p>
         <select id="page-select" name="page_id">
-            <option value="Home">Home</option>
-            <option value="Voorbeeldreis">Voorbeeldreis</option>
-            <option value = "Contact">Contact</option>
+            <option value="1">Home</option>
+            <option value="2">Voorbeeldreis</option>
+            <option value = "3">Contact</option>
         </select>
     </div>
     <div id="content-type" style="display: flex; gap: 10px; margin-bottom: 20px; margin-left: 200px;">
@@ -141,6 +141,25 @@
         .then(data => alert(data.message))
         .catch(error => alert("Error: " + error.message));
 });
+const pageSelect = document.getElementById('page-select');
+
+    if (pageSelect) {
+        pageSelect.addEventListener('change', function () {
+            const selectedPageId = this.value;
+
+            fetch(`/pages/${selectedPageId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.content !== undefined) {
+                        CKEDITOR.instances.editor.setData(data.content);
+                    }
+                })
+                .catch(error => {
+                    alert("Fout bij laden van pagina: " + error.message);
+                });
+        });
+    }
+
     </script>
 </body>
 

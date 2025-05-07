@@ -91,6 +91,8 @@ Route::get('/voorbeeldreizen', [PageController::class, 'show'])->name('voorbeeld
 
 Route::get('/editor', [PageController::class, 'show'])->name('editor');
 
+Route::get('/pages/{id}', [PageController::class, 'getPage']);
+
 
 Route::get('/{routename}', [PageController::class, 'showByName'])->name('dynamic.page');
 
