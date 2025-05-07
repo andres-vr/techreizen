@@ -53,6 +53,19 @@
             </div>
         </div>
     </div>
+    <div style="margin: 20px 0;">
+        <label style="display: block; margin-bottom: 8px; font-weight: bold;">
+            Wie mag deze PDF zien?
+        </label>
+        <select name="access_level[]" multiple 
+                style="width: 100px; height: 100px; padding: 8px; border: 1px solid #ddd;">
+            <option value="admin">Admin</option>
+            <option value="guide">Guide</option>
+            <option value="traveller">Traveller</option>
+            <option value="guest">Guest</option>
+        </select>
+        <small style="color: #666;">Hou Ctrl (Windows) of Cmd (Mac) ingedrukt om meerdere opties te selecteren</small>
+    </div>
     <button id="save-button" class="btn btn-primary"
         style="background-color: blue; color: white; padding: 5px; margin: 10px;">Opslaan
     </button>
@@ -101,30 +114,33 @@
         });
 
         document.getElementById('save-button').addEventListener('click', function() {
-            const content = CKEDITOR.instances.editor.getData(); // gebruik CKEditor API!
+    const content = CKEDITOR.instances.editor.getData();
+    
+    // Verzamel geselecteerde access levels
+    const accessLevels = [];
+    const accessSelect = document.querySelector('select[name="access_level[]"]');
+    for (const option of accessSelect.options) {
+        if (option.selected) {
+            accessLevels.push(option.value);
+        }
+    }
 
-            fetch("{{ route('editor.save') }}", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                    },
-                    body: JSON.stringify({
-                        content: content,
-                        page_id: {{ $page->id }}
-                    })
-                })
-                .then(response => {
-                    if (!response.ok) throw new Error("Failed to save");
-                    return response.json();
-                })
-                .then(data => {
-                    alert(data.message);
-                })
-                .catch(error => {
-                    alert("Error: " + error.message);
-                });
-        });
+    fetch("{{ route('editor.save') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+            },
+            body: JSON.stringify({
+                content: content,
+                page_id: {{ $page->id }},
+                access_level: accessLevels // Naam consistent met controller
+            })
+        })
+        .then(response => response.json())
+        .then(data => alert(data.message))
+        .catch(error => alert("Error: " + error.message));
+});
     </script>
 </body>
 
