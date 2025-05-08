@@ -103,3 +103,4 @@ Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']
 Route::post('/editor', [PageController::class, 'saveEditorContent'])->name('editor.save');
 
 
+Route
