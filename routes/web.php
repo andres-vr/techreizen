@@ -98,6 +98,15 @@ Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']
     \UniSharp\LaravelFilemanager\Lfm::routes();
 });
 
+Route::get('/view-pdf/{folder}/{filename}', function ($folder, $filename) {
+    $path = storage_path("app/public/files/{$folder}/{$filename}");
+
+    if (!file_exists($path)) {
+        abort(404, 'File not found');
+    }
+
+    return response()->file($path);
+});
 
 Route::post('/editor', [PageController::class, 'saveEditorContent'])->name('editor.save');
 

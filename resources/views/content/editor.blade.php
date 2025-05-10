@@ -43,10 +43,13 @@
         <div id=pdf-container>
             <div id="pdf-main">
                 <h1>Choose a PDF file to upload:</h1>
-                <button type="button" id="lfm-btn" class="btn btn-secondary">Choose PDF</button>
-                <input id="pdf-path" name="pdf_path" type="text" readonly style="width: 300px;" />
-                <br>
-                <label><input type="checkbox" name="pdf_Visable">Maak pdf zichtbaar</label>
+                <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" id="lfm-btn" data-input="pdf-path" data-preview="pdf-preview" class="btn btn-secondary">Choose PDF</button>
+                    </span>
+                    <input id="pdf-path" name="pdf_path" type="text" readonly class="form-control" />
+                </div>
+                <div id="pdf-preview" style="margin-top: 15px;"></div>
             </div>
         </div>
     </div>
@@ -101,14 +104,7 @@
         // Focus the editor on load
         document.getElementById('html-editor').focus();
 
-        // UniSharp file manager
-        document.getElementById('lfm-btn').addEventListener('click', function() {
-            console.log("hi");
-            window.open('/laravel-filemanager?type=file', 'FileManager', 'width=900,height=600');
-            window.SetUrl = function(url) {
-                document.getElementById('pdf-path').value = url;
-            };
-        });
+
 
         document.getElementById('save-button').addEventListener('click', function() {
     const content = CKEDITOR.instances.editor.getData();
@@ -158,4 +154,25 @@ const pageSelect = document.getElementById('page-select');
     }
 
     </script>
+    <script>
+    window.SetUrl = function(items) {
+        let fullUrl = Array.isArray(items) ? items[0]?.url : items?.url;
+        if (fullUrl) {
+            let fileName = fullUrl.split('/').pop();
+            document.getElementById('pdf-path').value = fileName;
+            console.log("Selected file name:", fileName);
+        }
+    };
+    </script>
+
+    <!-- Load jQuery and File Manager AFTER SetUrl -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/vendor/laravel-filemanager/js/stand-alone-button.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#lfm-btn').filemanager('file', {prefix: '/laravel-filemanager'});
+        });
+    </script>
+
 </x-layout.home>

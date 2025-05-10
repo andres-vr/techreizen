@@ -50,7 +50,7 @@ class PageSeeder extends Seeder
         ],
         [
             'name' => 'Voorbeeldreis',
-            'content' => 'BeperktProgrammaDuitslandTsjechieWebsite.pdf',
+            'content' => 'http://localhost/storage/files/1/BeperktProgrammaDuitslandTsjechieWebsite.pdf',
             'access_level' => "admin,guide,traveller,guest",
             'type' => "pdf",
             'routename' => "voorbeeldreizen"

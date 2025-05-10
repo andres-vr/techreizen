@@ -8,12 +8,13 @@
                     </div>
                 @elseif($page->type == 'pdf')
                     @php
-                        $pdfPath = 'pdfs/' . $page->content;
+                        $pdfPath = $page->content;
+                        $pdfName =  substr($pdfPath,33);
                     @endphp
                 
-                    @if(file_exists(storage_path('app/public/' . $pdfPath)))
+                    @if(file_exists(storage_path('app/public/files/1/' . $pdfName)))
                         <iframe 
-                            src="{{ asset('storage/' . $pdfPath) }}" 
+                            src="{{ url('/view-pdf/1/'.$pdfName) }}" 
                             width="100%"
                             height="1250px"
                             style="border: 1px solid #ddd;"
