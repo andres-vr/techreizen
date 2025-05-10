@@ -44,21 +44,21 @@ class PageSeeder extends Seeder
                             <ul>
                             </ul>
                         </div>',
-            'access_level'=> "guest",
+            'access_level'=> "admin,guide,traveller,guest",
             'type' => 'html',
             'routename' => 'home'
         ],
         [
             'name' => 'Voorbeeldreis',
             'content' => 'BeperktProgrammaDuitslandTsjechieWebsite.pdf',
-            'access_level' => "guest",
+            'access_level' => "admin,guide,traveller,guest",
             'type' => "pdf",
             'routename' => "voorbeeldreizen"
         ],
         [
             'name' => 'Contact',
             'content' => 'Hello',
-            'access_level' => "guest",
+            'access_level' => "admin,guide,traveller,guest",
             'type' => "html",
             'routename' => 'contact'
         ]];

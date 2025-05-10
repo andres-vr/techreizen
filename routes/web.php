@@ -94,13 +94,12 @@ Route::get('/editor', [PageController::class, 'show'])->name('editor');
 Route::get('/pages/{id}', [PageController::class, 'getPage']);
 
 
-Route::get('/{routename}', [PageController::class, 'showByName'])->name('dynamic.page');
-
 Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
     \UniSharp\LaravelFilemanager\Lfm::routes();
 });
 
+
 Route::post('/editor', [PageController::class, 'saveEditorContent'])->name('editor.save');
 
+Route::get('/{routename}', [PageController::class, 'showByName'])->name('dynamic.page');
 
-Route

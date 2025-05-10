@@ -15,9 +15,16 @@
     <div id="page-dropdown" style="display: flex; gap: 10px; margin-bottom: 20px; margin-left: 200px;">
         <p>Selecteer de pagina:</p>
         <select id="page-select" name="page_id">
-            <option value="1">Home</option>
+            @php
+                $pagen = DB::table('pages')->get();
+            @endphp
+            @foreach ($pagen as $pagek )
+                <option value="{{$pagek->id}}">{{$pagek->name}}</option>
+            @endforeach
+            <option value="newpage">Nieuwe Pagina</option>
+            {{-- <option value="1">Home</option>
             <option value="2">Voorbeeldreis</option>
-            <option value = "3">Contact</option>
+            <option value = "3">Contact</option> --}}
         </select>
     </div>
     <div id="content-type" style="display: flex; gap: 10px; margin-bottom: 20px; margin-left: 200px;">

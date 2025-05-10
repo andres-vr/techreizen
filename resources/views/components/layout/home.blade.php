@@ -59,7 +59,7 @@
                 @php
                     $acceslevelArray = explode(",",$page->access_level);
                 @endphp
-                @if (in_array('guest',$acceslevelArray) || Auth::check() && Auth::user()->role )
+                @if (in_array('guest',$acceslevelArray) || Auth::check() && Auth::user()->role == "admin" )
                 <a class="navbar-brand" href="{{ url('/' . $page->routename) }}"
                     style="padding: 5px; color: black; white-space: nowrap;">
                      {{ $page->name }}
