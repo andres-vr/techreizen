@@ -164,12 +164,12 @@ public function editor()
 {
     $pages = PageModel::all();               // Haalt alle pagina's op
     $page = $pages->first();                 // Neemt de eerste als standaard (bijv. Home)
-    $previousRouteName = session('previous_route', null);
+   // $previousRouteName = session('previous_route', null);
 
     return view('content.editor', [
         'page' => $page,
         'pages' => $pages,
-        'previousRoute' => $previousRouteName
+       // 'previousRoute' => $previousRouteName
     ]);
 }
 
