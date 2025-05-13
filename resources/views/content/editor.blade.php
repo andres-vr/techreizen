@@ -205,4 +205,35 @@
             }
         });
     </script>
+
+    <script>
+    document.querySelector('select[name="access_level[]"]').addEventListener('change', function () {
+        const levels = ['admin', 'guide', 'traveller', 'guest'];
+        const selectedValues = Array.from(this.selectedOptions).map(opt => opt.value);
+
+        // We maken alle opties eerst on-geselecteerd
+        for (const option of this.options) {
+            option.selected = false;
+        }
+
+        // Bepaal de hoogste prioriteit van de selectie
+        let maxIndex = -1;
+        for (const value of selectedValues) {
+            const index = levels.indexOf(value);
+            if (index > maxIndex) {
+                maxIndex = index;
+            }
+        }
+
+        // Selecteer alles tot aan de hoogste index
+        for (let i = 0; i <= maxIndex; i++) {
+            for (const option of this.options) {
+                if (option.value === levels[i]) {
+                    option.selected = true;
+                    break;
+                }
+            }
+        }
+    });
+</script>
 </x-layout.home>
