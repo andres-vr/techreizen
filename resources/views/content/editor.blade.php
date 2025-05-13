@@ -163,4 +163,14 @@
             $('#lfm-btn').filemanager('file', {prefix: '/laravel-filemanager'});
         });
     </script>
+
+    <script>
+    document.getElementById('cancel-button').addEventListener('click', function (e) {
+        e.preventDefault(); 
+        const bevestiging = confirm("Weet je zeker dat je wilt annuleren? Alle gewijzigde gegevens zullen verloren gaan!");
+        if (bevestiging) {
+            history.back(); // ga terug naar de vorige pagina
+        }
+    });
+</script>
 </x-layout.home>
