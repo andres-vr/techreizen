@@ -37,8 +37,10 @@ class PageController extends Controller
         } elseif ($routeName == "editor") {
             $pageData = $page->find(1); // Fetch the entire page data
             $test = "test";
-            //return view('content.edithotel',["hoteldata" => Hotel::find(1)]);
-            return view('content.editor', ['page' => $pageData, 'previousRoute' => $previousRouteName]);
+            // return view('content.editor', ['page' => $pageData, 'previousRoute' => $previousRouteName]);
+            return view('content.hotelListView');
+        } elseif ($routeName == "test") {
+            return view('content.hotelListView');
         }
     }
 
@@ -84,7 +86,7 @@ class PageController extends Controller
 
         $updateData = [
             'type' => $request->type,
-            'access_level' =>implode(',', $request->access_level)
+            'access_level' => implode(',', $request->access_level)
         ];
 
         if ($request->type == 'pdf') {
@@ -92,7 +94,7 @@ class PageController extends Controller
             $filename = $request->file('pdf_file')->store('public/pdfs');
             $updateData['content'] = basename($filename);
         } else {
-            
+
             $updateData['content'] = $request->content;
         }
         $pageModel->update($updateData);
@@ -109,71 +111,71 @@ class PageController extends Controller
     }
 
     public function saveEditorContent(Request $request)
-{
-    try {
-        $validated = $request->validate([
-            'content' => 'required',
-            'page_id' => 'required|exists:pages,id',
-            'access_level' => 'required|array',
-            'access_level.*' => 'in:admin,guide,traveller,guest'
-        ]);
+    {
+        try {
+            $validated = $request->validate([
+                'content' => 'required',
+                'page_id' => 'required|exists:pages,id',
+                'access_level' => 'required|array',
+                'access_level.*' => 'in:admin,guide,traveller,guest'
+            ]);
 
-        $page = PageModel::find($request->page_id);
-        $page->update([
-            'type' => 'html',
-            'content' => $request->input('content'),
-            'access_level' => implode(',', $request->input('access_level'))
-        ]);
+            $page = PageModel::find($request->page_id);
+            $page->update([
+                'type' => 'html',
+                'content' => $request->input('content'),
+                'access_level' => implode(',', $request->input('access_level'))
+            ]);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Content saved successfully!',
-            'access_level' => $page->access_level
-        ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Content saved successfully!',
+                'access_level' => $page->access_level
+            ]);
 
-    } catch (\Illuminate\Validation\ValidationException $e) {
-        return response()->json([
-            'success' => false,
-            'errors' => $e->errors()
-        ], 422);
-    } catch (\Exception $e) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Error: ' . $e->getMessage()
-        ], 500);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error: ' . $e->getMessage()
+            ], 500);
+        }
     }
-}
     public function showByName($name)
     {
         $page = \DB::table('pages')->where('routename', $name)->first();
-    
+
         if (!$page) {
             abort(404); // Page not found
         }
-    
+
         return view('content.show', ['page' => $page]);
     }
 
     public function getPage($id)
-{
-    $page = PageModel::findOrFail($id);
-    return response()->json([
-        'id' => $page->id,
-        'content' => $page->content
-    ]);
-}
-public function editor()
-{
-    $pages = PageModel::all();               // Haalt alle pagina's op
-    $page = $pages->first();                 // Neemt de eerste als standaard (bijv. Home)
-   // $previousRouteName = session('previous_route', null);
+    {
+        $page = PageModel::findOrFail($id);
+        return response()->json([
+            'id' => $page->id,
+            'content' => $page->content
+        ]);
+    }
+    public function editor()
+    {
+        $pages = PageModel::all();               // Haalt alle pagina's op
+        $page = $pages->first();                 // Neemt de eerste als standaard (bijv. Home)
+        // $previousRouteName = session('previous_route', null);
 
-    return view('content.editor', [
-        'page' => $page,
-        'pages' => $pages,
-       // 'previousRoute' => $previousRouteName
-    ]);
-}
+        return view('content.editor', [
+            'page' => $page,
+            'pages' => $pages,
+            // 'previousRoute' => $previousRouteName
+        ]);
+    }
 
 
 

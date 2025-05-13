@@ -33,7 +33,7 @@ class HotelController extends Controller
             'link' => $validated['addLinkSiteHotel'],
             'phone' => $validated['addPhoneNumber'],
             'image1' => $validated['pdf1_path'],
-            'image2' => $validated['pdf2_path'] ,
+            'image2' => $validated['pdf2_path'],
 
         ]);
         return redirect()->route('home')->with('success', 'Hotel succesvol toegevoegd!');
@@ -55,6 +55,18 @@ class HotelController extends Controller
         $hotel->save();
 
         return redirect()->route('home')->with('success', 'Hotel bijgewerkt!');
+    }
+
+    public function deleteHotel($id)
+    {
+        $hotel = Hotel::findOrFail($id);
+        $hotel->delete();
+        return view('content.hotelListView');
+    }
+
+    public function deletepopup($id)
+    {
+        return view('content.deleteHotelPopup', ['id' => $id]);
     }
 
 }

@@ -44,7 +44,7 @@ Route::middleware(['auth', 'user-access:guest'])->group(function () {
             ->name('guest.registration.contact-info');
         Route::post('/contact-info', [GuestRegistrationController::class, 'submitContactInfo'])
             ->name('guest.registration.contact-info.submit');
-            
+
         // Step 4: Confirmation page
         Route::get('/confirmation', [GuestRegistrationController::class, 'showConfirmationPage'])
             ->name('guest.registration.confirmation');
@@ -116,4 +116,11 @@ Route::put('/hotels/{id}', [HotelController::class, 'update'])->name('hotels.upd
 
 
 Route::get('/{routename}', [PageController::class, 'showByName'])->name('dynamic.page');
+
+
+Route::get('/test', [PageController::class, 'show'])->name('hotels.show');
+
+Route::post('/delete/{id}', [HotelController::class, 'deleteHotel'])->name('hotels.delete');
+
+Route::post('/deletepopup/{id}', [HotelController::class, 'deletepopup'])->name('hotels.deletepopup');
 

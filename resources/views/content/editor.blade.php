@@ -7,14 +7,13 @@
                 $pages = DB::table('pages')->get();
                 $currentPageId = $page->id ?? null;
             @endphp
-            
-            @foreach($pages as $pageItem)
-                <option value="{{ $pageItem->id }}" 
-                        @if($pageItem->id == $currentPageId) selected @endif>
+
+            @foreach ($pages as $pageItem)
+                <option value="{{ $pageItem->id }}" @if ($pageItem->id == $currentPageId) selected @endif>
                     {{ $pageItem->name }}
                 </option>
             @endforeach
-            
+
             <option value="newpage">Nieuwe Pagina</option>
         </select>
     </div>
@@ -42,7 +41,8 @@
                 <h1>Choose a PDF file to upload:</h1>
                 <div class="input-group">
                     <span class="input-group-btn">
-                        <button type="button" id="lfm-btn" data-input="pdf-path" data-preview="pdf-preview" class="btn btn-secondary">Choose PDF</button>
+                        <button type="button" id="lfm-btn" data-input="pdf-path" data-preview="pdf-preview"
+                            class="btn btn-secondary">Choose PDF</button>
                     </span>
                     <input id="pdf-path" name="pdf_path" type="text" readonly class="form-control" />
                 </div>
@@ -56,8 +56,8 @@
         <label style="display: block; margin-bottom: 8px; font-weight: bold;">
             Wie mag deze content zien?
         </label>
-        <select name="access_level[]" multiple 
-                style="width: 100px; height: 100px; padding: 8px; border: 1px solid #ddd;">
+        <select name="access_level[]" multiple
+            style="width: 100px; height: 100px; padding: 8px; border: 1px solid #ddd;">
             <option value="admin">Admin</option>
             <option value="guide">Guide</option>
             <option value="traveller">Traveller</option>
@@ -88,7 +88,7 @@
         const defaultType = initialContent.toLowerCase().endsWith('.pdf') ? 'PDF' : 'HTML';
 
         // Stel selectie en invoer correct in op basis van backend
-        window.addEventListener('DOMContentLoaded', function () {
+        window.addEventListener('DOMContentLoaded', function() {
             select.value = defaultType;
             updateEditorView();
 
@@ -131,21 +131,21 @@
             }
 
             fetch("{{ route('editor.save') }}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                },
-                body: JSON.stringify({
-                    content: content,
-                    page_id: {{ $page->id ?? 'null' }},
-                    access_level: accessLevels,
-                    type: contentType
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    },
+                    body: JSON.stringify({
+                        content: content,
+                        page_id: {{ $page->id ?? 'null' }},
+                        access_level: accessLevels,
+                        type: contentType
+                    })
                 })
-            })
-            .then(response => response.json())
-            .then(data => alert(data.message))
-            .catch(error => alert("Error: " + error.message));
+                .then(response => response.json())
+                .then(data => alert(data.message))
+                .catch(error => alert("Error: " + error.message));
         });
 
         const pageSelect = document.getElementById('page-select');
@@ -189,17 +189,20 @@
     <script src="/vendor/laravel-filemanager/js/stand-alone-button.js"></script>
     <script>
         $(document).ready(function() {
-            $('#lfm-btn').filemanager('file', {prefix: '/laravel-filemanager'});
+            $('#lfm-btn').filemanager('file', {
+                prefix: '/laravel-filemanager'
+            });
         });
     </script>
 
     <script>
-    document.getElementById('cancel-button').addEventListener('click', function (e) {
-        e.preventDefault(); 
-        const bevestiging = confirm("Weet je zeker dat je wilt annuleren? Alle gewijzigde gegevens zullen verloren gaan!");
-        if (bevestiging) {
-            history.back(); // ga terug naar de vorige pagina
-        }
-    });
-</script>
+        document.getElementById('cancel-button').addEventListener('click', function(e) {
+            e.preventDefault();
+            const bevestiging = confirm(
+                "Weet je zeker dat je wilt annuleren? Alle gewijzigde gegevens zullen verloren gaan!");
+            if (bevestiging) {
+                history.back(); // ga terug naar de vorige pagina
+            }
+        });
+    </script>
 </x-layout.home>
