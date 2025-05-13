@@ -1,4 +1,5 @@
 <x-layout.home>
+    {{-- Pagina dropdown --}}
     <div id="page-dropdown" style="display: flex; gap: 10px; margin-bottom: 20px; margin-left: 200px;">
         <p>Selecteer de pagina:</p>
         <select id="page-select" name="page_id">
@@ -18,6 +19,7 @@
         </select>
     </div>
 
+    {{-- Content type selectie --}}
     <div id="content-type" style="display: flex; gap: 10px; margin-bottom: 20px; margin-left: 200px;">
         <p>Select the content type:</p>
         <select id="content-select" name="content_type">
@@ -26,12 +28,14 @@
         </select>
     </div>
 
+    {{-- HTML editor --}}
     <div id="html-editor">
         <textarea name="content" id="editor" cols="30" rows="10" class="ckeditor form-control">
             {!! $page->content ?? '' !!}
         </textarea>
     </div>
 
+    {{-- PDF chooser --}}
     <div id="pdf-chooser">
         <div id="pdf-container">
             <div id="pdf-main">
@@ -47,6 +51,7 @@
         </div>
     </div>
 
+    {{-- Access level --}}
     <div style="margin: 20px 0;">
         <label style="display: block; margin-bottom: 8px; font-weight: bold;">
             Wie mag deze content zien?
@@ -61,6 +66,7 @@
         <small style="color: #666;">Hou Ctrl (Windows) of Cmd (Mac) ingedrukt om meerdere opties te selecteren</small>
     </div>
 
+    {{-- Buttons --}}
     <button id="save-button" class="btn btn-primary"
         style="background-color: blue; color: white; padding: 5px; margin: 10px;">Opslaan
     </button>
@@ -68,18 +74,30 @@
         style="background-color: red; color: black; padding: 5px; margin: 10px;">Annuleer
     </button>
 
+    {{-- CKEditor --}}
     <script src="ckeditor/ckeditor.js"></script>
+
     <script>
         const select = document.getElementById('content-select');
         const htmlEditor = document.getElementById('html-editor');
         const pdfChooser = document.getElementById('pdf-chooser');
+        const pdfPathInput = document.getElementById('pdf-path');
 
-        htmlEditor.style.display = "block";
-        pdfChooser.style.display = "none";
+        // Backend content ophalen
+        const initialContent = `{!! trim($page->content ?? '') !!}`;
+        const defaultType = initialContent.toLowerCase().endsWith('.pdf') ? 'PDF' : 'HTML';
 
-        select.addEventListener('change', function() {
+        // Stel selectie en invoer correct in op basis van backend
+        window.addEventListener('DOMContentLoaded', function () {
+            select.value = defaultType;
             updateEditorView();
+
+            if (defaultType === 'PDF') {
+                pdfPathInput.value = initialContent.split('/').pop(); // Alleen bestandsnaam
+            }
         });
+
+        select.addEventListener('change', updateEditorView);
 
         function updateEditorView() {
             const value = select.value;
@@ -87,20 +105,23 @@
                 htmlEditor.style.display = "block";
                 pdfChooser.style.display = "none";
                 console.log("HTML");
-            }
-
-            if (value === "PDF") {
+            } else if (value === "PDF") {
                 htmlEditor.style.display = "none";
                 pdfChooser.style.display = "block";
                 console.log("PDF");
             }
         }
 
-        document.getElementById('html-editor').focus();
-
         document.getElementById('save-button').addEventListener('click', function() {
-            const content = CKEDITOR.instances.editor.getData();
-            
+            const contentType = select.value;
+            let content = "";
+
+            if (contentType === "HTML") {
+                content = CKEDITOR.instances.editor.getData();
+            } else {
+                content = document.getElementById('pdf-path').value;
+            }
+
             const accessLevels = [];
             const accessSelect = document.querySelector('select[name="access_level[]"]');
             for (const option of accessSelect.options) {
@@ -118,7 +139,8 @@
                 body: JSON.stringify({
                     content: content,
                     page_id: {{ $page->id ?? 'null' }},
-                    access_level: accessLevels
+                    access_level: accessLevels,
+                    type: contentType
                 })
             })
             .then(response => response.json())
@@ -134,7 +156,14 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.content !== undefined) {
-                            CKEDITOR.instances.editor.setData(data.content);
+                            if (data.content.toLowerCase().endsWith('.pdf')) {
+                                select.value = 'PDF';
+                                pdfPathInput.value = data.content.split('/').pop();
+                            } else {
+                                select.value = 'HTML';
+                                CKEDITOR.instances.editor.setData(data.content);
+                            }
+                            updateEditorView();
                         }
                     })
                     .catch(error => {
@@ -144,6 +173,7 @@
         }
     </script>
 
+    {{-- File manager --}}
     <script>
         window.SetUrl = function(items) {
             let fullUrl = Array.isArray(items) ? items[0]?.url : items?.url;
@@ -157,7 +187,6 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/vendor/laravel-filemanager/js/stand-alone-button.js"></script>
-
     <script>
         $(document).ready(function() {
             $('#lfm-btn').filemanager('file', {prefix: '/laravel-filemanager'});
