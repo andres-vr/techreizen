@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\HotelController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\GuestRegistrationController;
@@ -109,6 +110,10 @@ Route::get('/view-pdf/{folder}/{filename}', function ($folder, $filename) {
 });
 
 Route::post('/editor', [PageController::class, 'saveEditorContent'])->name('editor.save');
+Route::post('/hotels/store', [HotelController::class, 'store'])->name('hotels.store');
+Route::put('/hotels/{id}', [HotelController::class, 'update'])->name('hotels.update');
+
+
 
 Route::get('/{routename}', [PageController::class, 'showByName'])->name('dynamic.page');
 

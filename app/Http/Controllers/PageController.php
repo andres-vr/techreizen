@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Hotel;
 use App\Models\PageModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -36,6 +37,7 @@ class PageController extends Controller
         } elseif ($routeName == "editor") {
             $pageData = $page->find(1); // Fetch the entire page data
             $test = "test";
+            //return view('content.edithotel',["hoteldata" => Hotel::find(1)]);
             return view('content.editor', ['page' => $pageData, 'previousRoute' => $previousRouteName]);
         }
     }
