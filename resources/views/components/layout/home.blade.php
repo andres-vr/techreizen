@@ -53,26 +53,85 @@
             <div class="container">
                 @php
                 $pages = DB::table('pages')->get();
+                $counter = 0;
                 @endphp
             
             @foreach($pages as $page)
                 @php
                     $acceslevelArray = explode(",",$page->access_level);
                 @endphp
-                @if (in_array('guest',$acceslevelArray) || Auth::check() && Auth::user()->role == "admin" )
-                <a class="navbar-brand" href="{{ url('/' . $page->routename) }}"
-                    style="padding: 5px; color: black; white-space: nowrap;">
-                     {{ $page->name }}
-                 </a>
-                @elseif (Auth::check() && in_array(Auth::user()->role,$acceslevelArray))
-                <a class="navbar-brand" href="{{ url('/' . $page->routename) }}"
-                    style="padding: 5px; color: black; white-space: nowrap;">
-                     {{ $page->name }}
-                 </a>
+                @if ($counter < 5)
+                    @if (in_array('guest',$acceslevelArray) || Auth::check() && Auth::user()->role == "admin" )
+                        @php
+                            $counter++;
+                        @endphp
+                    <a class="navbar-brand" href="{{ url('/' . $page->routename) }}"
+                        style="padding: 5px; color: black; white-space: nowrap;">
+                        {{ $page->name }}
+                    </a>
+                    @elseif (Auth::check() && in_array(Auth::user()->role,$acceslevelArray))
+                        @php
+                            $counter++;
+                        @endphp
+                    <a class="navbar-brand" href="{{ url('/' . $page->routename) }}"
+                        style="padding: 5px; color: black; white-space: nowrap;">
+                        {{ $page->name }}
+                    </a>
+                    @endif
+                @elseif ($counter == 5)
+                    @if (in_array('guest',$acceslevelArray) || Auth::check() && Auth::user()->role == "admin" )
+                        @php
+                            $counter++;
+                        @endphp
+                        <div class="dropdown">
+                             <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Extras
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <a class="dropdown-item" href="{{ url('/' . $page->routename) }}"
+                                    style="padding: 5px; color: black; white-space: nowrap;">
+                                    {{ $page->name }}
+                                    
+                                </a>
+                    @elseif (Auth::check() && in_array(Auth::user()->role,$acceslevelArray))
+                        @php
+                            $counter++;
+                        @endphp
+                        <div class="dropdown">
+                             <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Extras
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <a class="dropdown-item" href="{{ url('/' . $page->routename) }}"
+                                    style="padding: 5px; color: black; white-space: nowrap;">
+                                    {{ $page->name }}
+                                    
+                                </a>
+                    @endif
+                @else
+                    @if (in_array('guest',$acceslevelArray) || Auth::check() && Auth::user()->role == "admin" )
+                    @php
+                        $counter++;
+                    @endphp
+                            <a class="dropdown-item" href="{{ url('/' . $page->routename) }}"
+                                style="padding: 5px; color: black; white-space: nowrap;">
+                                {{ $page->name }}
+                            </a>
+                    @elseif (Auth::check() && in_array(Auth::user()->role,$acceslevelArray))
+                    @php
+                        $counter++;
+                    @endphp
+                                <a class="dropdown-item" href="{{ url('/' . $page->routename) }}"
+                                    style="padding: 5px; color: black; white-space: nowrap;">
+                                    {{ $page->name }}
+                              </a>
+                    @endif
                 @endif
-
-
             @endforeach
+            @if ($counter > 5)
+                    </div>
+                </div>
+            @endif
                 {{-- <a class="navbar-brand" href="{{ url('/home') }}" 
                    style="padding: 5px; color: black; white-space: nowrap; display: inline-block;">
                    @php
