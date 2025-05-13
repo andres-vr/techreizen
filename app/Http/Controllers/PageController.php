@@ -6,6 +6,7 @@ use App\Models\Hotel;
 use App\Models\PageModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
 
 class PageController extends Controller
 {
@@ -22,10 +23,9 @@ class PageController extends Controller
      */
     public function show(PageModel $page)
     {
-
         $routeName = Route::currentRouteName();
-        $previousRouteName = session('previous_route', null);
-
+        $previousUrl = url()->previous();
+        $previousRouteName = substr($previousUrl, 17);
         if ($routeName == "home") {
             $pageData = $page->find(1); // Fetch the entire page data
             session(['previous_route' => 'home']);
@@ -35,13 +35,31 @@ class PageController extends Controller
             session(['previous_route' => 'voorbeeldreizen']);
             return view('content.show', ['page' => $pageData]);
         } elseif ($routeName == "editor") {
+            $pageData = DB::table('pages')->where('routename', $previousRouteName)->first();
             $pageData = $page->find(1); // Fetch the entire page data
-            //$test = "test";
+            //return view('content.editHotel', ['hoteldata' => Hotel::find(1)]);
+            //return view('content.hotelinfo');
             return view('content.editor', ['page' => $pageData, 'previousRoute' => $previousRouteName]);
-            //return view('content.hotelListView');
-        } elseif ($routeName == "test") {
-            return view('content.hotelListView');
         }
+    }
+
+    public function createNewPage(Request $request)
+    {
+        $name = $request->input('name');
+
+        $page = new PageModel();
+        $page->name = $name;
+        $page->routename = $name;
+        $page->content = '';
+        $page->type = 'html';
+        $page->access_level = 'admin,guide,traveller,guest';
+        $page->created_at = now();
+        $page->updated_at = now();
+        $page->save();
+
+        $pageData = $page->find($page->id);
+
+        return view('content.editor', ['page' => $pageData, 'previousRoute' => $name]);
     }
 
     /**
@@ -122,16 +140,13 @@ class PageController extends Controller
 
             $page = PageModel::find($request->page_id);
             $page->update([
-                'type' => 'html',
+                'type' => $request->input('type'),
                 'content' => $request->input('content'),
                 'access_level' => implode(',', $request->input('access_level'))
             ]);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Content saved successfully!',
-                'access_level' => $page->access_level
-            ]);
+            $pageData = $page->find($request->page_id);
+            return view('content.show', ['page' => $pageData]);
 
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([

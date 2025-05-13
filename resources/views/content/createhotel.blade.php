@@ -9,78 +9,87 @@
 
             <form class="hotel-create" method="POST" action="{{ route('hotels.store') }}">
                 @csrf
-                <div class="row justify-content-center">
-                    <div class="col-2 align">
-                        <label for="hotelName" class="form-label">Hotel naam </label>
+                <div id="hotel-div" style="box-sizing: border-box; display: flex; flex-direction: row; justify-content: space-between; gap: 10px;">
+                    <div id="hotel-info">
+                        <div class="row justify-content-center">
+                            <div class="col-2 align">
+                                <label for="hotelName" class="form-label">Hotel naam </label>
+                            </div>
+                            <div class="col-3">
+                                <input type="text" class="form-control" id="hotelName" name="addHotelName">
+                            </div>
+                        </div>
+                        <div class="row my-3 justify-content-center">
+                            <div class="col-2">
+                                <label for="typeHotel" class="form-label">Type</label>
+                            </div>
+                             <div class="col-3">
+                               <select class="form-control" id="typeHotel" name="addTypeHotel" required>
+                                    <option value="hotel" {{ $hoteldata->type == 'hotel' ? 'selected' : '' }}>hotel</option>
+                                    <option value="jeugdherberg" {{ $hoteldata->type == 'jeugdherberg' ? 'selected' : '' }}>jeugdherberg</option>
+                                </select>
+                            </div>
+                        </div>
+                                            <div class="row my-3 justify-content-center">
+                            <div class="col-2">
+                                <label for="linkSiteHotel" class="form-label">Website link</label>
+                            </div>
+                            <div class="col-3">
+                                <input type="text" class="form-control" id="linkSiteHotel" name="addLinkSiteHotel" required>
+                            </div>
+                        </div>
+                        <div class="row my-3 justify-content-center">
+                            <div class="col-2">
+                                <label for="phoneNumber" class="form-label">telefoon nummer</label>
+                            </div>
+                            <div class="col-3">
+                                <input type="text" class="form-control" id="phoneNumber" name="addPhoneNumber" required>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-3">
-                        <input type="text" class="form-control" id="hotelName" name="addHotelName">
-                    </div>
-                </div>
-                <div class="row my-3 justify-content-center">
-                    <div class="col-2">
-                        <label for="typeHotel" class="form-label">Type</label>
-                    </div>
-                    <div class="col-3">
-                        <input type="text" class="form-control" id="typeHotel" name="addTypeHotel" required>
-                    </div>
-                </div>
-                <div class="row my-3 justify-content-center">
-                    <div class="col-2">
-                        <label for="streetHotel" class="form-label">Straat naam </label>
-                    </div>
-                    <div class="col-3">
-                        <input type="text" class="form-control" id="streetHotel" name="addStreetHotel" required>
-                    </div>
-                </div>
-                <div class="row my-3 justify-content-center">
-                    <div class="col-2">
-                        <label for="postcodeHotel" class="form-label">Postcode</label>
-                    </div>
-                    <div class="col-3">
-                        <input type="number" class="form-control" id="postcodeHotel" name="addPostcodeHotel" required>
-                    </div>
-                </div>
-                <div class="row my-3 justify-content-center">
-                    <div class="col-2">
-                        <label for="cityHotel" class="form-label">Stad</label>
-                    </div>
-                    <div class="col-3">
-                        <input type="text" class="form-control" id="cityHotel" name="addCityHotel" required>
-                    </div>
-                </div>
-                <div class="row my-3 justify-content-center">
-                    <div class="col-2">
-                        <label for="countryHotel" class="form-label">Land</label>
-                    </div>
-                    <div class="col-3">
-                        <input type="text" class="form-control" id="countryHotel" name="addCountryHotel" required>
-                    </div>
-                </div>
-                <div class="row my-3 justify-content-center">
-                    <div class="col-2">
-                        <label for="linkSiteHotel" class="form-label">Link site</label>
-                    </div>
-                    <div class="col-3">
-                        <input type="text" class="form-control" id="linkSiteHotel" name="addLinkSiteHotel" required>
-                    </div>
-                </div>
-                <div class="row my-3 justify-content-center">
-                    <div class="col-2">
-                        <label for="phoneNumber" class="form-label">telefoon nummer</label>
-                    </div>
-                    <div class="col-3">
-                        <input type="text" class="form-control" id="phoneNumber" name="addPhoneNumber" required>
+                    <div id="hotel-adress">
+                        <div class="row my-3 justify-content-center">
+                            <div class="col-2">
+                                <label for="streetHotel" class="form-label">Straat naam </label>
+                            </div>
+                            <div class="col-3">
+                                <input type="text" class="form-control" id="streetHotel" name="addStreetHotel" required>
+                            </div>
+                        </div>
+                        <div class="row my-3 justify-content-center">
+                            <div class="col-2">
+                                <label for="postcodeHotel" class="form-label">Postcode</label>
+                            </div>
+                            <div class="col-3">
+                                <input type="number" class="form-control" id="postcodeHotel" name="addPostcodeHotel" required>
+                            </div>
+                        </div>
+                        <div class="row my-3 justify-content-center">
+                            <div class="col-2">
+                                <label for="cityHotel" class="form-label">Stad</label>
+                            </div>
+                            <div class="col-3">
+                                <input type="text" class="form-control" id="cityHotel" name="addCityHotel" required>
+                            </div>
+                        </div>
+                        <div class="row my-3 justify-content-center">
+                            <div class="col-2">
+                                <label for="countryHotel" class="form-label">Land</label>
+                            </div>
+                            <div class="col-3">
+                                <input type="text" class="form-control" id="countryHotel" name="addCountryHotel" required>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div id="pdf-chooser">
                     <div id=pdf-container>
                         <div id="pdf-main">
-                            <h1>Kies een 2 images van het hotel</h1>
+                            <h1>Kies 2 foto's van het hotel</h1>
                             <!-- Eerste afbeelding -->
                             <div class="input-group">
                                 <span class="input-group-btn">
-                                    <button type="button" id="lfm-btn" data-input="pdf1-path" class="btn btn-secondary">Choose Image</button>
+                                    <button type="button" id="lfm-btn" data-input="pdf1-path" class="btn btn-secondary" style="background-color: blue">Choose Image</button>
                                 </span>
                                 <input id="pdf1-path" name="pdf1_path" type="text" readonly class="form-control" required />
                             </div>
@@ -88,7 +97,7 @@
                             <!-- Tweede afbeelding -->
                             <div class="input-group">
                                 <span class="input-group-btn">
-                                    <button type="button" id="lfm2-btn" data-input="pdf2-path" class="btn btn-secondary" >Choose Image</button>
+                                    <button type="button" id="lfm2-btn" data-input="pdf2-path" class="btn btn-secondary" style="background-color: blue">Choose Image</button>
                                 </span>
                                 <input id="pdf2-path" name="pdf2_path" type="text" readonly class="form-control" required/>
                             </div>
@@ -96,13 +105,17 @@
                     </div>
                 </div>
                 <br>
-                <button type="submit" class="btn btn-primary" name="createHotel">Maak</button>
+                <button type="submit" class="btn btn-primary" name="createHotel" style="background-color: #3498db">Maak</button>
             </form>
         </div>
     </div>
 
     <!-- CSS Styles -->
     <style>
+label {
+    color: #555;
+}
+
 .hotel-popup-overlay {
     display: flex;
     justify-content: center;
@@ -125,7 +138,7 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     overflow: hidden;
     max-width: 900px;
-    width: "100px";
+    width: "800px";
     height: "1000x";
     position: relative;
     animation: fadeIn 0.3s ease-out;

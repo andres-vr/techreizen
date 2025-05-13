@@ -108,7 +108,7 @@ Route::get('/view-pdf/{folder}/{filename}', function ($folder, $filename) {
 
     return response()->file($path);
 });
-
+Route::post('/new-page', [PageController::class, 'createNewPage'])->name('new.page');
 Route::post('/editor', [PageController::class, 'saveEditorContent'])->name('editor.save');
 Route::post('/hotels/store', [HotelController::class, 'store'])->name('hotels.store');
 Route::put('/hotels/{id}', [HotelController::class, 'update'])->name('hotels.update');

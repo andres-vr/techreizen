@@ -1,25 +1,36 @@
 <x-layout.home>
-    {{-- Pagina dropdown --}}
+     <div id="newPageDiv" style="display: flex; flex-direction: row; gap: 10px; margin-left: 165px; margin-bottom: 20px;">
+        <form method="POST" action="{{ route('new.page') }}" onsubmit="return handleBlur()">
+            @csrf
+            <label for="name">Page Name</label>
+            <input type="text" id="name" name="name" value="">
+            <button type="submit">Create</button>
+        </form>
+    </div>
+    <form method="POST" action="{{ route('editor.save') }}">
+    @csrf
     <div id="page-dropdown" style="display: flex; gap: 10px; margin-bottom: 20px; margin-left: 200px;">
         <p>Selecteer de pagina:</p>
         <select id="page-select" name="page_id">
             @php
-                $pages = DB::table('pages')->get();
+                $pagen = DB::table('pages')->get();
                 $currentPageId = $page->id ?? null;
-            @endphp
 
-            @foreach ($pages as $pageItem)
-                <option value="{{ $pageItem->id }}" @if ($pageItem->id == $currentPageId) selected @endif>
-                    {{ $pageItem->name }}
+                if (str_ends_with($page->content, ".pdf")) {
+                    $page->content = "";
+                }
+            @endphp
+            
+            @foreach ($pagen as $pagek)
+                <option value="{{ $pagek->id }}" {{ $previousRoute == $pagek->routename ? 'selected' : '' }}>
+                    {{ $pagek->name }}
                 </option>
             @endforeach
-
             <option value="newpage">Nieuwe Pagina</option>
         </select>
     </div>
 
-    {{-- Content type selectie --}}
-    <div id="content-type" style="display: flex; gap: 10px; margin-bottom: 20px; margin-left: 200px;">
+    <div id="content-type" style="display: flex; gap: 10px; margin-bottom: 20px; margin-left: 200px; margin-top: 5px;">
         <p>Select the content type:</p>
         <select id="content-select" name="content_type">
             <option value="HTML">HTML</option>
@@ -56,8 +67,8 @@
         <label style="display: block; margin-bottom: 8px; font-weight: bold;">
             Wie mag deze content zien?
         </label>
-        <select name="access_level[]" multiple
-            style="width: 100px; height: 100px; padding: 8px; border: 1px solid #ddd;">
+        <select name="access_level[]" multiple required
+                style="width: 100px; height: 100px; padding: 8px; border: 1px solid #ddd;">
             <option value="admin">Admin</option>
             <option value="guide">Guide</option>
             <option value="traveller">Traveller</option>
@@ -73,6 +84,7 @@
     <button id="cancel-button" class="btn btn-primary"
         style="background-color: red; color: black; padding: 5px; margin: 10px;">Annuleer
     </button>
+</form>
 
     {{-- CKEditor --}}
     <script src="ckeditor/ckeditor.js"></script>
@@ -112,16 +124,9 @@
             }
         }
 
-        document.getElementById('save-button').addEventListener('click', function() {
-            const contentType = select.value;
-            let content = "";
-
-            if (contentType === "HTML") {
-                content = CKEDITOR.instances.editor.getData();
-            } else {
-                content = document.getElementById('pdf-path').value;
-            }
-
+        /*document.getElementById('save-button').addEventListener('click', function() {
+            const content = CKEDITOR.instances.editor.getData();
+            
             const accessLevels = [];
             const accessSelect = document.querySelector('select[name="access_level[]"]');
             for (const option of accessSelect.options) {
@@ -131,24 +136,54 @@
             }
 
             fetch("{{ route('editor.save') }}", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                    },
-                    body: JSON.stringify({
-                        content: content,
-                        page_id: {{ $page->id ?? 'null' }},
-                        access_level: accessLevels,
-                        type: contentType
-                    })
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                body: JSON.stringify({
+                    content: content,
+                    page_id: {{ $page->id ?? 'null' }},
+                    access_level: accessLevels
                 })
-                .then(response => response.json())
-                .then(data => alert(data.message))
-                .catch(error => alert("Error: " + error.message));
+            })
+            .then(response => response.json())
+            .then(data => alert(data.message))
+            .catch(error => alert("Error: " + error.message));
+        });*/
+        
+        const pageSelect = document.getElementById('page-select');
+
+        function disablePDFifHome() {
+            const contentSelect = document.getElementById('content-select');
+            contentSelect.options[1].disabled = false;
+            if (pageSelect.value == 1) {
+                contentSelect.options[1].disabled = true;
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            disablePDFifHome();
         });
 
-        const pageSelect = document.getElementById('page-select');
+        const nameDiv = document.getElementById('newPageDiv');
+        nameDiv.style.display = "none";
+
+        pageSelect.onchange = function() {
+            disablePDFifHome();
+            nameDiv.style.display = "none";
+            if (this.value == "newpage") {
+                console.log("New page selected");
+                nameDiv.style.display = "block";
+            } 
+            else {
+                @php
+                    $page = DB::table('pages')->where('id', $currentPageId)->first();
+                @endphp
+            }
+        };
+
+        /*
         if (pageSelect) {
             pageSelect.addEventListener('change', function() {
                 const selectedPageId = this.value;
@@ -171,6 +206,7 @@
                     });
             });
         }
+            */
     </script>
 
     {{-- File manager --}}
