@@ -4,11 +4,37 @@ namespace App\Http\Controllers;
 
 use App\Models\Hotel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use DB;
 use function Laravel\Prompts\alert;
 
 class HotelController extends Controller
 {
+    public function show()
+    {
+        $hotels = DB::table('hotels')->get();
+
+        return view('components.layout.hotelListView', [
+            'selectedCountries' => [],
+            'hotels' => $hotels,
+        ]);
+    }
+
+    public function filter(Request $request)
+    {
+        $countries = $request->input('countries', []);
+
+        $hotels = DB::table('hotels')
+            ->when(!empty($countries), function ($query) use ($countries) {
+                $query->whereIn('country', $countries);
+            })
+            ->get();
+
+        return view('content.hotelListView', [
+            'selectedCountries' => $countries,
+            'hotels' => $hotels,
+        ]);
+    }
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -23,6 +49,7 @@ class HotelController extends Controller
             'pdf1_path' => 'required|string',
             'pdf2_path' => 'required|string',
         ]);
+
         DB::table('hotels')->insert([
             'name' => $validated['addHotelName'],
             'type' => $validated['addTypeHotel'],
@@ -34,9 +61,8 @@ class HotelController extends Controller
             'phone' => $validated['addPhoneNumber'],
             'image1' => $validated['pdf1_path'],
             'image2' => $validated['pdf2_path'],
-
         ]);
-        return redirect()->route('home')->with('success', 'Hotel succesvol toegevoegd!');
+        return redirect()->route('hotels.show')->with('success', 'Hotel succesvol toegevoegd!');
     }
     public function update(Request $request, $id)
     {
@@ -57,11 +83,28 @@ class HotelController extends Controller
         return redirect()->route('home')->with('success', 'Hotel bijgewerkt!');
     }
 
+    public function showInfo($id)
+    {
+        $hotels = DB::table('hotels')->get();
+
+        return view('components.layout.hotelListView', [
+            'selectedCountries' => [],
+            'hotels' => $hotels,
+            'x.layout.hotelInfo' => 'content.hotelinfo',
+        ]);
+    }
+
     public function deleteHotel($id)
     {
         $hotel = Hotel::findOrFail($id);
         $hotel->delete();
-        return view('content.hotelListView');
+
+        $hotels = DB::table('hotels')->get();
+
+        return view('content.hotelListView', [
+            'selectedCountries' => [],
+            'hotels' => $hotels,
+        ]);
     }
 
     public function deletepopup($id)

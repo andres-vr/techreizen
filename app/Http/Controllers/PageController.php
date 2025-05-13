@@ -40,7 +40,7 @@ class PageController extends Controller
             //return view('content.editHotel', ['hoteldata' => Hotel::find(1)]);
             //return view('content.hotelinfo');
             return view('content.editor', ['page' => $pageData, 'previousRoute' => $previousRouteName]);
-        }
+        } 
     }
 
     public function createNewPage(Request $request)

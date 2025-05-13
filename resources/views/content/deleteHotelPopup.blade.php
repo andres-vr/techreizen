@@ -1,8 +1,5 @@
 <x-layout.deleteHotelPopup>
-    <style>
-
-    </style>
-    <div style="text-align: center; padding: 20px; font-family: Arial, sans-serif;">
+    <div style="text-align: center; padding: 20px; font-family: Arial, sans-serif;" class="delete-hotel">
         <h1 style="color: #333; margin-bottom: 20px;">Hotel verwijderen</h1>
         <p style="color: #666; margin-bottom: 25px;">Weet u zeker dat u dit hotel wilt verwijderen?
             <br> alles gaat verloren!
@@ -22,7 +19,7 @@
             ">Verwijderen</button>
         </form>
 
-        <form method="GET" action="{{ route('editor') }}">
+        <form method="GET" action="{{ route('hotels.show') }}">
             <button
                 style="
             background-color: #95a5a6;
@@ -36,6 +33,4 @@
         ">Annuleren</button>
         </form>
     </div>
-
-
 </x-layout.deleteHotelPopup>

@@ -111,16 +111,16 @@ Route::get('/view-pdf/{folder}/{filename}', function ($folder, $filename) {
 Route::post('/new-page', [PageController::class, 'createNewPage'])->name('new.page');
 Route::post('/editor', [PageController::class, 'saveEditorContent'])->name('editor.save');
 Route::post('/hotels/store', [HotelController::class, 'store'])->name('hotels.store');
+
+Route::get('/hotels/{id}', [HotelController::class, 'showInfo'])->name('hotels.showinfo');
 Route::put('/hotels/{id}', [HotelController::class, 'update'])->name('hotels.update');
-
-
-
-Route::get('/{routename}', [PageController::class, 'showByName'])->name('dynamic.page');
-
-
-Route::get('/test', [PageController::class, 'show'])->name('hotels.show');
 
 Route::post('/delete/{id}', [HotelController::class, 'deleteHotel'])->name('hotels.delete');
 
 Route::post('/deletepopup/{id}', [HotelController::class, 'deletepopup'])->name('hotels.deletepopup');
 
+Route::get('/hotels', [HotelController::class, 'show'])->name('hotels.show');
+
+Route::get('/hotels/filter', [HotelController::class, 'filter'])->name('hotels.filter');
+
+Route::get('/{routename}', [PageController::class, 'showByName'])->name('dynamic.page');

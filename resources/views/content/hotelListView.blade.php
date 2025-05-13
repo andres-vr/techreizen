@@ -1,11 +1,27 @@
 <x-layout.hotelListView>
     <x-layout.home>
+    <form method="GET" action="{{ route('hotels.filter') }}">
+        @csrf
+        <div>
+            <p>Selecteer een Trip:</p>
+            @php
+                $selectedCountries = $selectedCountries ?? [];
+                $countries = DB::table('hotels')->select('country')->distinct()->get();
+            @endphp
+            <p>Filter op Trip:</p>
 
-        @php
-
-            $hotels = DB::table('hotels')->get();
-        @endphp
-
+            <select id="country-select" name="countries[]" multiple>
+                <option value="" disabled>--- Selecteer een Trip ---</option>
+                @foreach($countries as $country)
+                    <option value="{{ $country->country }}"
+                        @if(in_array($country->country, $selectedCountries)) selected @endif>
+                        {{ $country->country }}
+                    </option>
+                @endforeach
+            </select>
+            <button type="submit">Toon hotels</button>
+        </div>  
+    </form>
         <div>
             <!-- Hotel info -->
             <div class="p-4">
@@ -33,7 +49,7 @@
                         <tr>
                             <!-- Info button -->
                             <td style="padding: 10px; border: 2px black solid; text-align: center;">
-                                <a href="{{ route('hotels.show', $hotel->id) }}"
+                                <a href="{{ route('hotels.showinfo', $hotel->id) }}"
                                     class="inline-block bg-blue-500 hover:bg-blue-600 px-2 py-1 rounded text-white">
                                     ℹ️
                                 </a>
@@ -59,14 +75,10 @@
                                     <button type="submit" style="width: 100px; background-color: red;">Delete</button>
                                 </form>
                             </td>
-
-
                         </tr>
                     @endforeach
-
                 </table>
             </div>
         </div>
-
-    </x-layout.home>
+</x-layout.home>
 </x-layout.hotelListView>
