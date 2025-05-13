@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  
+
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
@@ -14,18 +14,20 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
-   
-    @vite(['resources/sass/app.scss', 'resources/js/app.js','resources/css/app.css'])
-    
+
+    @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css'])
+
     <style>
         body {
-            padding-top: 160px; 
+            padding-top: 160px;
         }
+
         .carousel-container {
             width: 100%;
             max-width: 1200px;
             margin: 0 auto;
         }
+
         .carousel-item img {
             width: 100%;
             height: auto;
@@ -52,86 +54,25 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 @php
-                $pages = DB::table('pages')->get();
-                $counter = 0;
+                    $pages = DB::table('pages')->get();
                 @endphp
-            
-            @foreach($pages as $page)
-                @php
-                    $acceslevelArray = explode(",",$page->access_level);
-                @endphp
-                @if ($counter < 5)
-                    @if (in_array('guest',$acceslevelArray) || Auth::check() && Auth::user()->role == "admin" )
-                        @php
-                            $counter++;
-                        @endphp
-                    <a class="navbar-brand" href="{{ url('/' . $page->routename) }}"
-                        style="padding: 5px; color: black; white-space: nowrap;">
-                        {{ $page->name }}
-                    </a>
-                    @elseif (Auth::check() && in_array(Auth::user()->role,$acceslevelArray))
-                        @php
-                            $counter++;
-                        @endphp
-                    <a class="navbar-brand" href="{{ url('/' . $page->routename) }}"
-                        style="padding: 5px; color: black; white-space: nowrap;">
-                        {{ $page->name }}
-                    </a>
-                    @endif
-                @elseif ($counter == 5)
-                    @if (in_array('guest',$acceslevelArray) || Auth::check() && Auth::user()->role == "admin" )
-                        @php
-                            $counter++;
-                        @endphp
-                        <div class="dropdown">
-                             <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Extras
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                <a class="dropdown-item" href="{{ url('/' . $page->routename) }}"
-                                    style="padding: 5px; color: black; white-space: nowrap;">
-                                    {{ $page->name }}
-                                    
-                                </a>
-                    @elseif (Auth::check() && in_array(Auth::user()->role,$acceslevelArray))
-                        @php
-                            $counter++;
-                        @endphp
-                        <div class="dropdown">
-                             <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Extras
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                <a class="dropdown-item" href="{{ url('/' . $page->routename) }}"
-                                    style="padding: 5px; color: black; white-space: nowrap;">
-                                    {{ $page->name }}
-                                    
-                                </a>
-                    @endif
-                @else
-                    @if (in_array('guest',$acceslevelArray) || Auth::check() && Auth::user()->role == "admin" )
+
+                @foreach ($pages as $page)
                     @php
-                        $counter++;
+                        $acceslevelArray = explode(',', $page->access_level);
                     @endphp
-                            <a class="dropdown-item" href="{{ url('/' . $page->routename) }}"
-                                style="padding: 5px; color: black; white-space: nowrap;">
-                                {{ $page->name }}
-                            </a>
-                    @elseif (Auth::check() && in_array(Auth::user()->role,$acceslevelArray))
-                    @php
-                        $counter++;
-                    @endphp
-                                <a class="dropdown-item" href="{{ url('/' . $page->routename) }}"
-                                    style="padding: 5px; color: black; white-space: nowrap;">
-                                    {{ $page->name }}
-                              </a>
+                    @if (in_array('guest', $acceslevelArray) || (Auth::check() && Auth::user()->role == 'admin'))
+                        <a class="navbar-brand" href="{{ url('/' . $page->routename) }}"
+                            style="padding: 5px; color: black; white-space: nowrap;">
+                            {{ $page->name }}
+                        </a>
+                    @elseif (Auth::check() && in_array(Auth::user()->role, $acceslevelArray))
+                        <a class="navbar-brand" href="{{ url('/' . $page->routename) }}"
+                            style="padding: 5px; color: black; white-space: nowrap;">
+                            {{ $page->name }}
+                        </a>
                     @endif
-                @endif
-            @endforeach
-            @if ($counter > 5)
-                    </div>
-                </div>
-            @endif
+                @endforeach
                 {{-- <a class="navbar-brand" href="{{ url('/home') }}" 
                    style="padding: 5px; color: black; white-space: nowrap; display: inline-block;">
                    @php
@@ -140,14 +81,14 @@
                    }
                    @endphp
                 </a> --}}
-                
+
 
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
-                </button> 
+                </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto">
@@ -160,12 +101,12 @@
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                                   data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->login }}
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
+                                        onclick="event.preventDefault();
                                                 document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
@@ -181,28 +122,30 @@
         </nav>
     </div>
 
-<!-- Carrousel -->
-@if(request()->routeIs('home')) <!-- Carrousel alleen op de homepagina -->
-    <div class="carousel-container mt-3">
-        <div id="images" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img src="{{ asset('images/header1.jpg') }}" alt="header 1" class="img-fluid">
-                </div>
-                <div class="carousel-item">
-                    <img src="{{ asset('images/header2.jpg') }}" alt="header 2" class="img-fluid">
-                </div>
-                <div class="carousel-item">
-                    <img src="{{ asset('images/header3.jpg') }}" alt="header 3" class="img-fluid">
+    <!-- Carrousel -->
+    @if (request()->routeIs('home'))
+        <!-- Carrousel alleen op de homepagina -->
+        <div class="carousel-container mt-3">
+            <div id="images" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="{{ asset('images/header1.jpg') }}" alt="header 1" class="img-fluid">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{ asset('images/header2.jpg') }}" alt="header 2" class="img-fluid">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{ asset('images/header3.jpg') }}" alt="header 3" class="img-fluid">
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-@endif
+    @endif
 
     <!-- Main content -->
     <main class="container py-4" style="margin-top: 20px;">
         {{ $slot }}
     </main>
 </body>
+
 </html>
