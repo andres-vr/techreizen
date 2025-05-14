@@ -27,13 +27,6 @@ class PageController extends Controller
         $previousUrl = url()->previous();
         $previousRouteName = substr($previousUrl, 17);
 
-        if ($previousRouteName == "editor") {
-            $previousId = 1; // de id van de aangepaste pagina
-        } elseif ($previousRouteName == null) {
-            $previousId = 1;
-        } else {
-            $previousId = DB::table('pages')->where('routename', $previousRouteName)->first()->id;
-        }
 
         if ($routeName == "home") {
             $pageData = $page->find(1); // Fetch the entire page data
@@ -44,6 +37,14 @@ class PageController extends Controller
             session(['previous_route' => 'voorbeeldreizen']);
             return view('content.show', ['page' => $pageData]);
         } elseif ($routeName == "editor") {
+            if ($previousRouteName == "editor") {
+                $previousId = 1; // de id van de aangepaste pagina
+            } elseif ($previousRouteName == null) {
+                $previousId = 1;
+            } else {
+                    $previousId = DB::table('pages')->where('routename', $previousRouteName)->first()->id;
+                
+            }
             $pageData = DB::table('pages')->where('routename', $previousRouteName)->first();
             $pageData = $page->find(1); // Fetch the entire page data
             //return view('content.editHotel', ['hoteldata' => Hotel::find(1)]);
