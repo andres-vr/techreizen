@@ -178,7 +178,29 @@
 
         const nameDiv = document.getElementById('newPageDiv');
         nameDiv.style.display = "none";
-
+        function changeSelect() {
+            disablePDFifHome();
+                nameDiv.style.display = "none";
+                if (this.value == "newpage") {
+                    console.log("New page selected");
+                    nameDiv.style.display = "block";
+                } 
+                const selectedPageId = this.value;
+                fetch(`/pages/${selectedPageId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.content !== undefined) {
+                            if (data.content.toLowerCase().endsWith('.pdf')) {
+                                select.value = 'PDF';
+                                pdfPathInput.value = data.content.split('/').pop();
+                            } else {
+                                select.value = 'HTML';
+                                CKEDITOR.instances.editor.setData(data.content);
+                            }
+                            updateEditorView();
+                        }
+                    })
+            };
         if (pageSelect) {
             pageSelect.addEventListener('change', function() {
                 disablePDFifHome();
