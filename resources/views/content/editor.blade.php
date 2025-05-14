@@ -124,6 +124,16 @@
             }
         }
 
+        document.getElementById('save-button').addEventListener('click', function() {
+            const contentType = select.value;
+            let content = "";
+
+            if (contentType === "HTML") {
+                content = CKEDITOR.instances.editor.getData();
+            } else {
+                content = document.getElementById('pdf-path').value;
+            }});
+            
         /*document.getElementById('save-button').addEventListener('click', function() {
             const content = CKEDITOR.instances.editor.getData();
             
