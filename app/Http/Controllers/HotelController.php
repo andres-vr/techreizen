@@ -24,9 +24,17 @@ class HotelController extends Controller
     {
         $countries = $request->input('countries', []);
 
+        // Make sure countries is always an array (even if it's empty)
+        if (!is_array($countries)) {
+            $countries = $countries ? [$countries] : [];
+        }
+
         $hotels = DB::table('hotels')
             ->when(!empty($countries), function ($query) use ($countries) {
-                $query->whereIn('country', $countries);
+                return $query->whereIn('country', $countries);
+            }, function ($query) {
+                // Return all hotels if no countries are selected
+                return $query;
             })
             ->get();
 

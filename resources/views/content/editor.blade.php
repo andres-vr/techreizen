@@ -133,7 +133,7 @@
             } else {
                 content = document.getElementById('pdf-path').value;
             }});
-            
+
         /*document.getElementById('save-button').addEventListener('click', function() {
             const content = CKEDITOR.instances.editor.getData();
             
@@ -179,23 +179,14 @@
         const nameDiv = document.getElementById('newPageDiv');
         nameDiv.style.display = "none";
 
-        pageSelect.onchange = function() {
-            disablePDFifHome();
-            nameDiv.style.display = "none";
-            if (this.value == "newpage") {
-                console.log("New page selected");
-                nameDiv.style.display = "block";
-            } 
-            else {
-                @php
-                    $page = DB::table('pages')->where('id', $currentPageId)->first();
-                @endphp
-            }
-        };
-
-        /*
         if (pageSelect) {
             pageSelect.addEventListener('change', function() {
+                disablePDFifHome();
+                nameDiv.style.display = "none";
+                if (this.value == "newpage") {
+                    console.log("New page selected");
+                    nameDiv.style.display = "block";
+                } 
                 const selectedPageId = this.value;
                 fetch(`/pages/${selectedPageId}`)
                     .then(response => response.json())
@@ -211,12 +202,8 @@
                             updateEditorView();
                         }
                     })
-                    .catch(error => {
-                        alert("Fout bij laden van pagina: " + error.message);
-                    });
             });
         }
-            */
     </script>
 
     {{-- File manager --}}

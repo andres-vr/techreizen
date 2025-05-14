@@ -9,7 +9,6 @@
 <body>
     <x-layout.home>
     <form method="GET" action="{{ route('hotels.filter') }}">
-        @csrf
         <div>
             <p>Selecteer een Trip:</p>
             @php
