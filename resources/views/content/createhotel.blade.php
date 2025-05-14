@@ -253,6 +253,7 @@
         const popup = document.getElementById('create-hotel-popup-container');
         popup.style.display = 'flex';
         popup.style.animation = "fadeIn 0.3s ease";
+        console.log("create popup");
     }
 
     // Function to close the create hotel popup

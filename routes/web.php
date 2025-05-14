@@ -113,7 +113,7 @@ Route::post('/editor', [PageController::class, 'saveEditorContent'])->name('edit
 Route::post('/hotels/store', [HotelController::class, 'store'])->name('hotels.store');
 
 Route::get('/hotels/{id}', [HotelController::class, 'showInfo'])->name('hotels.showinfo');
-Route::put('/hotels/{id}', [HotelController::class, 'update'])->name('hotels.update');
+Route::put('/hotels/updates', [HotelController::class, 'update'])->name('hotels.update');
 
 Route::post('/delete/{id}', [HotelController::class, 'deleteHotel'])->name('hotels.delete');
 

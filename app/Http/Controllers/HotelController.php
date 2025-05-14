@@ -64,9 +64,9 @@ class HotelController extends Controller
         ]);
         return redirect()->route('hotels.show')->with('success', 'Hotel succesvol toegevoegd!');
     }
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        $hotel = Hotel::findOrFail($id);
+        $hotel = Hotel::where('name', $request->input('addHotelName'))->first();
 
         $hotel->type = $request->input('addTypeHotel');
         $hotel->street = $request->input('addStreetHotel');
@@ -76,11 +76,11 @@ class HotelController extends Controller
         $hotel->link = $request->input('addLinkSiteHotel');
         $hotel->phone = $request->input('addPhoneNumber');
         $hotel->image1 = $request->input('pdf1_path');
-        $hotel->image2 = $request->input('pdf2_path');
+        $hotel->image2 = $request->input('pdf2_path0');
 
         $hotel->save();
 
-        return redirect()->route('home')->with('success', 'Hotel bijgewerkt!');
+        return redirect()->route('hotels.show')->with('success', 'Hotel bijgewerkt!');
     }
 
     public function showInfo($id)
