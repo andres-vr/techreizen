@@ -93,21 +93,13 @@
         const pdfChooser = document.getElementById('pdf-chooser');
         const pdfPathInput = document.getElementById('pdf-path');
 
+        const nameDiv = document.getElementById('newPageDiv');
+        nameDiv.style.display = "none";
+
         // Backend content ophalen
         const initialContent = `{!! trim($page->content ?? '') !!}`;
         const defaultType = initialContent.toLowerCase().endsWith('.pdf') ? 'PDF' : 'HTML';
 
-        // Stel selectie en invoer correct in op basis van backend
-        window.addEventListener('DOMContentLoaded', function() {
-            select.value = defaultType;
-            updateEditorView();
-
-            if (defaultType === 'PDF') {
-                pdfPathInput.value = initialContent.split('/').pop(); // Alleen bestandsnaam
-            }
-        });
-
-        select.addEventListener('change', updateEditorView);
 
         function updateEditorView() {
             const value = select.value;
@@ -115,12 +107,43 @@
                 htmlEditor.style.display = "block";
                 pdfChooser.style.display = "none";
                 console.log("HTML");
-            } else if (value === "PDF") {
+                } else if (value === "PDF") {
                 htmlEditor.style.display = "none";
                 pdfChooser.style.display = "block";
                 console.log("PDF");
-            }
+                }
+            };
+        // Stel selectie en invoer correct in op basis van backend
+       
+    window.addEventListener('DOMContentLoaded', function() {
+        select.value = defaultType;
+        disablePDFifHome();
+
+        nameDiv.style.display = "none";
+        
+        const previousPageId = {{ $previousId ?? 'null' }};
+        console.log("Previous page ID:", previousPageId);
+        fetch(`/pages/${previousPageId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.content !== undefined) {
+                    if (data.content.toLowerCase().endsWith('.pdf')) {
+                        select.value = 'PDF';
+                        pdfPathInput.value = data.content.split('/').pop();
+                    } else {
+                        select.value = 'HTML';
+                        CKEDITOR.instances.editor.setData(data.content);
+                    }
+                    updateEditorView();
+                }
+            })
+
+        if (defaultType === 'PDF') {
+            pdfPathInput.value = initialContent.split('/').pop(); // Alleen bestandsnaam
         }
+    });
+
+        select.addEventListener('change', updateEditorView);
 
         document.getElementById('save-button').addEventListener('click', function() {
             const contentType = select.value;
@@ -174,8 +197,6 @@
             disablePDFifHome();
         });
 
-        const nameDiv = document.getElementById('newPageDiv');
-        nameDiv.style.display = "none";
         function changeSelect() {
             disablePDFifHome();
                 nameDiv.style.display = "none";
@@ -199,7 +220,7 @@
                         }
                     })
             };
-        if (pageSelect) {
+
             pageSelect.addEventListener('change', function() {
                 disablePDFifHome();
                 nameDiv.style.display = "none";
@@ -223,7 +244,6 @@
                         }
                     })
             });
-        }
     </script>
 
     {{-- File manager --}}
