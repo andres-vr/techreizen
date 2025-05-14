@@ -1,7 +1,7 @@
 <x-layout.hotelinfo>
 <div id="hotel-popup-container" class="hotel-popup-overlay" style="display: none;">
     <div class="hotel-popup-container">
-        <button class="hotel-popup-close" onclick="closeHotelPopup()">&times;</button>
+        <button id="close-hotel-button" class="hotel-popup-close"">&times;</button>
         <div class="hotel-image-gallery" id="popup-images">
             <!-- Images will be inserted here by JavaScript -->
         </div>
@@ -184,12 +184,12 @@
 </style>
 
 <script>
-     window.closeHotelPopup = function() {
-        const popup = document.getElementById('edit-hotel-info');
-        popup.style.animation = "fadeout 0.3s ease";
-        setTimeout(() => {
-            popup.style.display = 'none';
-        }, 300);
+    const closehotelbutton = document.getElementById('close-hotel-button');
+    closehotelbutton.addEventListener('click', closeHotelPopup);
+    function closeHotelPopup() {
+        const popup = document.getElementById('hotel-popup-container');
+        popup.style.display = 'none';
+        console.log('Popup closed');
     }
 
 document.querySelectorAll('.show-hotel-info').forEach(button => {
