@@ -16,9 +16,10 @@ class PageSeeder extends Seeder
      */
     public function run(): void
     {
-        $pages = [[
-            'name' => 'Home',
-            'content' => '<div class="p-2">
+        $pages = [
+            [
+                'name' => 'Home',
+                'content' => '<div class="p-2">
                             <h1>Studiereizen 3de opleidingsfase Professionele Bachelor</h1>
                             <p>Reeds vele jaren neemt internationalisering een prominente plaats in bij de Professionele Bachelors Elektromechanica, Energietechnologie en Elektronica-ICT. We vinden het immers belangrijk dat studenten tijdens hun opleiding in contact komen met buitenlandse industrie, onderwijs en cultuur. Met het oog op een latere loopbaan en zeker in het Europa van vandaag, is het eveneens niet onbelangrijk dat je jezelf leert uitdrukken in een andere taal. Internationalisering maakt deel uit van de opleiding tot Professionele Bachelor, en behoort dus tot het verplichte curriculum.</p>
                             <p>Dit jaar maken we een rondreis van een week in Duitsland en Tsjechië.</p>
@@ -44,26 +45,27 @@ class PageSeeder extends Seeder
                             <ul>
                             </ul>
                         </div>',
-            'access_level'=> "admin,guide,traveller,guest",
-            'type' => 'html',
-            'routename' => 'home'
-        ],
-        [
-            'name' => 'Voorbeeldreis',
-            'content' => 'http://localhost/storage/files/1/BeperktProgrammaDuitslandTsjechieWebsite.pdf',
-            'access_level' => "admin,guide,traveller,guest",
-            'type' => "pdf",
-            'routename' => "voorbeeldreizen"
-        ],
-        [
-            'name' => 'Contact',
-            'content' => 'Hello',
-            'access_level' => "admin,guide,traveller,guest",
-            'type' => "html",
-            'routename' => 'contact'
-        ]];
-        foreach($pages as $page){
-           PageModel::create($page);
+                'access_level' => "admin,guide,traveller,guest",
+                'type' => 'HTML',
+                'routename' => 'home'
+            ],
+            [
+                'name' => 'Voorbeeldreis',
+                'content' => 'http://localhost/storage/files/1/BeperktProgrammaDuitslandTsjechieWebsite.pdf',
+                'access_level' => "admin,guide,traveller,guest",
+                'type' => "PDF",
+                'routename' => "voorbeeldreizen"
+            ],
+            [
+                'name' => 'Contact',
+                'content' => 'Hello',
+                'access_level' => "admin,guide,traveller,guest",
+                'type' => "HTML",
+                'routename' => 'contact'
+            ]
+        ];
+        foreach ($pages as $page) {
+            PageModel::create($page);
         }
     }
 }

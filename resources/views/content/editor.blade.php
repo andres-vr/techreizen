@@ -37,14 +37,12 @@
             <option value="PDF">PDF</option>
         </select>
     </div>
-
     {{-- HTML editor --}}
     <div id="html-editor">
         <textarea name="content" id="editor" cols="30" rows="10" class="ckeditor form-control">
             {!! $page->content ?? '' !!}
         </textarea>
     </div>
-
     {{-- PDF chooser --}}
     <div id="pdf-chooser">
         <div id="pdf-container">
@@ -61,7 +59,7 @@
             </div>
         </div>
     </div>
-
+    
     {{-- Access level --}}
     <div style="margin: 20px 0;">
         <label style="display: block; margin-bottom: 8px; font-weight: bold;">

@@ -51,7 +51,7 @@ class PageController extends Controller
         $page->name = $name;
         $page->routename = $name;
         $page->content = '';
-        $page->type = 'html';
+        $page->type = 'HTML';
         $page->access_level = 'admin,guide,traveller,guest';
         $page->created_at = now();
         $page->updated_at = now();
@@ -107,7 +107,7 @@ class PageController extends Controller
             'access_level' => implode(',', $request->access_level)
         ];
 
-        if ($request->type == 'pdf') {
+        if ($request->type == 'PDF') {
             // Handle PDF upload
             $filename = $request->file('pdf_file')->store('public/pdfs');
             $updateData['content'] = basename($filename);

@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -14,12 +13,12 @@ return new class extends Migration
         Schema::create('pages', function (Blueprint $table) {
             $table->integer('id')->autoIncrement();
             $table->string('name', 255);
-            $table->string('content',10960); //tekst
+            $table->string('content', 10960); //tekst
             $table->tinyInteger('access_level');
             $table->timestamp('created_at');
             $table->timestamp('updated_at');
-            $table->enum('type', ["html", "pdf"]); //content veranderen naar HTML, PDF, ...
-            $table->string("routename",255);
+            $table->enum('type', ["HTML", "PDF"]); //content veranderen naar HTML, PDF, ...
+            $table->string("routename", 255);
         });
     }
 

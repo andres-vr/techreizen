@@ -2,11 +2,11 @@
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="page-container">
-                @if($page->type == 'html')
+                @if($page->type == 'HTML')
                     <div class="trix-content">
                         {!! $page->content !!}
                     </div>
-                @elseif($page->type == 'pdf')
+                @elseif($page->type == 'PDF')
                     @php
                         $pdfPath = $page->content;
                         $pdfName =  substr($pdfPath,33);
