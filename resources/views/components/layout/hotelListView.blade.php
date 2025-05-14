@@ -8,20 +8,26 @@
 
 <body>
     <x-layout.home>
+    <!--
+    <div style="display: none;">
     <form method="GET" action="{{ route('hotels.filter') }}">
         <div>
             <p>Selecteer een Trip:</p>
             @php
-                $selectedCountries = $selectedCountries ?? [];
                 $countries = DB::table('hotels')->select('country')->distinct()->get();
+                $selectedCountry = request()->get('countries', null); // Get the selected country from the request
             @endphp
+
+            <pre>GET: {{ print_r($_GET, true) }}</pre>
+            <pre>Selected Country: {{ print_r($selectedCountry, true) }}</pre>
+
             <p>Filter op Trip:</p>
 
-            <select id="country-select" name="countries[]" multiple>
+            <select id="country-select" name="countries">
                 <option value="" disabled>--- Selecteer een Trip ---</option>
                 @foreach($countries as $country)
                     <option value="{{ $country->country }}"
-                        @if(in_array($country->country, $selectedCountries)) selected @endif>
+                        @if($country->country == $selectedCountry) selected @endif>
                         {{ $country->country }}
                     </option>
                 @endforeach
@@ -29,7 +35,8 @@
             <button type="submit">Toon hotels</button>
         </div>  
     </form>
-        <div>
+    </div>
+    -->
             <!-- Hotel info -->
             <div class="p-4">
                 <div style="text-align: right;">
