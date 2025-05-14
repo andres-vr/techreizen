@@ -40,7 +40,7 @@ class PageController extends Controller
             //return view('content.editHotel', ['hoteldata' => Hotel::find(1)]);
             //return view('content.hotelinfo');
             return view('content.editor', ['page' => $pageData, 'previousRoute' => $previousRouteName]);
-        } 
+        }
     }
 
     public function createNewPage(Request $request)
@@ -131,19 +131,19 @@ class PageController extends Controller
     public function saveEditorContent(Request $request)
     {
         try {
-            $validated = $request->validate([
-                'content' => 'required',
-                'page_id' => 'required|exists:pages,id',
-                'access_level' => 'required|array',
-                'access_level.*' => 'in:admin,guide,traveller,guest'
-            ]);
-
+            //dd($request->all());
             $page = PageModel::find($request->page_id);
-            $page->update([
-                'type' => $request->input('type'),
-                'content' => $request->input('content'),
-                'access_level' => implode(',', $request->input('access_level'))
-            ]);
+
+            if ($request->content_type == 'HTML') {
+                $page->content = $request->input('content');
+                $page->type = 'HTML';
+            } elseif ($request->content_type == 'PDF') {
+                $page->content = $request->input('pdf_path');
+                $page->type = 'PDF';
+            }
+            $page->access_level = implode(',', $request->input('access_level'));
+
+            $page->save();
 
             $pageData = $page->find($request->page_id);
             return view('content.show', ['page' => $pageData]);
