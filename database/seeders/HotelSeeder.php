@@ -25,7 +25,44 @@ class HotelSeeder extends Seeder
             "phone" => "+49 (0)30 31878787",
             "image1" => "",
             "image2" => "",
-        ]];
+        ],
+        [
+            "name" => "Märchenhotel",
+            "type" => "hotel",
+            "street" => "Dorfstrasse 24",
+            "zip_code" => "8784",
+            "link" => "https://www.maerchenhotel.ch/?trv_reference=ee25998f-0234-389a-bb58-6948b4b5947d", 
+            "city" => "Braunwald",
+            "country" => "Zwitserland",
+            "phone" => "+41(55)6537171",
+            "image1" => "",
+            "image2" => "",
+        ],
+        [
+            "name" => "Pfefferbett Hostel",
+            "type" => "Jeugdherberg",
+            "street" => "Christinenstraße 18-19",
+            "zip_code" => "10119",
+            "link" => "https://pfefferbett.de/en/", 
+            "city" => "Berlijn",
+            "country" => "Duitsland",
+            "phone" => "+49 30 233288100",
+            "image1" => "",
+            "image2" => "",
+        ],
+        [
+            "name" => "Hotel Aurora",
+            "type" => "Jeugdherberg",
+            "street" => "Cristoforo Colombo 57",
+            "zip_code" => "04029",
+            "link" => "https://www.hotelaurorasperlonga.it/home-page-eng/?trv_reference=977523ab-b4c4-3b80-8f28-3440874d6de6", 
+            "city" => "Sperlonga",
+            "country" => "Italië",
+            "phone" => "+390(771)549266",
+            "image1" => "",
+            "image2" => "",
+        ]
+        ];
         foreach($hotels as $hotel){
             Hotel::create($hotel);
         }

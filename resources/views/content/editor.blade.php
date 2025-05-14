@@ -22,9 +22,11 @@
             @endphp
             
             @foreach ($pagen as $pagek)
-                <option value="{{ $pagek->id }}" {{ $previousRoute == $pagek->routename ? 'selected' : '' }}>
+                @if ($pagek->name != "Hotels")
+                    <option value="{{ $pagek->id }}" {{ $previousRoute == $pagek->routename ? 'selected' : '' }}>
                     {{ $pagek->name }}
-                </option>
+                    </option>
+                @endif
             @endforeach
             <option value="newpage">Nieuwe Pagina</option>
         </select>

@@ -62,6 +62,13 @@ class PageSeeder extends Seeder
                 'access_level' => "admin,guide,traveller,guest",
                 'type' => "HTML",
                 'routename' => 'contact'
+            ],
+            [
+                'name' => 'Hotels',
+                'content' => '',
+                'access_level' => "admin",
+                'type' => "HTML",
+                'routename' => 'hotels'
             ]
         ];
         foreach ($pages as $page) {
