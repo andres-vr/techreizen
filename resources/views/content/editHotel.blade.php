@@ -1,93 +1,62 @@
-<x-layout.popup>
-    {{-- @php
-        $hotels = DB::table('hotels')->
-        $hotel = $hotels[/*$id*/0];
-    @endphp --}}
-    
+<x-layout.popup>  
     <!-- Overlay for popup effect -->
-    <div class="hotel-popup-overlay">
+    <div id="edit-hotel-info" class="hotel-popup-overlay">
         <!-- Popup Container -->
         <div class="hotel-popup-container">
             <!-- Close Button -->
             <button class="hotel-popup-close" onclick="closeHotelPopup()">&times;</button>
 
-            <form class="hotel-create" method="POST" action="{{ route('hotels.update', $hoteldata->id) }}">
+            <form class="hotel-create" method="POST" id="editHotelForm" action="">
                 @csrf
-                @method('PUT')
+                <!-- Hidden input to store the hotel ID -->
+                <input type="hidden" id="currentHotelId" name="hotelId" value="">
                 <div style="box-sizing: border-box; display: flex; flex-direction: row; justify-content: space-between; gap: 10px;">
-                    <div>
-                        <div class="row justify-content-center">
-                            <div class="col-2 align">
-                                <label for="hotelName" class="form-label">Hotel naam </label>
+                    <div class="hotel-details">
+                        <!-- Left Column -->
+                        <div class="detail-column">
+                            <div class="detail-item">
+                                <label class="detail-label">Hotel Name:</label>
+                                <input type="text" class="form-input" id="popup-name" name="addHotelName" required>
                             </div>
-                            <div class="col-3">
-                                <input type="text" class="form-control" id="hotelName" name="addHotelName" value="{{$hoteldata->name}}" required readonly>
+                            <div class="detail-item">
+                                <label class="detail-label">Type:</label>
+                                <select class="form-input" id="typeHotel" name="addTypeHotel" required>
+                                    <option value="hotel">Hotel</option>
+                                    <option value="jeugdherberg">Jeugdherberg</option>
+                                </select>
                             </div>
-                        </div>
-                        <div class="row my-3 justify-content-center">
-                            <div class="col-2">
-                                <label for="typeHotel" class="form-label">Type</label>
+                            <div class="detail-item">
+                                <label class="detail-label">Website:</label>
+                                <input type="url" class="form-input" id="popup-link" name="addLinkSiteHotel" required>
                             </div>
-                            <div class="col-3">
-                               <select class="form-control" id="typeHotel" name="addTypeHotel" required>
-                                <option value="hotel" {{ $hoteldata->type == 'hotel' ? 'selected' : '' }}>hotel</option>
-                                <option value="jeugdherberg" {{ $hoteldata->type == 'jeugdherberg' ? 'selected' : '' }}>jeugdherberg</option>
-                            </select>
-                            </div>
-                        </div>
-                        <div class="row my-3 justify-content-center">
-                            <div class="col-2">
-                                <label for="linkSiteHotel" class="form-label">Website link</label>
-                            </div>
-                            <div class="col-3">
-                                <input type="text" class="form-control" id="linkSiteHotel" name="addLinkSiteHotel" required value="{{$hoteldata->link}}">
+                            <div class="detail-item">
+                                <label class="detail-label">Phone:</label>
+                                <input type="tel" class="form-input" id="popup-phone" name="addPhoneNumber" required>
                             </div>
                         </div>
-                        <div class="row my-3 justify-content-center">
-                            <div class="col-2">
-                                <label for="phoneNumber" class="form-label">telefoon nummer</label>
+                        
+                        <!-- Right Column -->
+                        <div class="detail-column">
+                            <div class="detail-item">
+                                <label class="detail-label">Street:</label>
+                                <input type="text" class="form-input" id="popup-street" name="addStreetHotel" required>
                             </div>
-                            <div class="col-3">
-                                <input type="text" class="form-control" id="phoneNumber" name="addPhoneNumber" required value="{{$hoteldata->phone}}">
+                            <div class="detail-item">
+                                <label class="detail-label">Zip Code:</label>
+                                <input type="numeric" class="form-input" id="popup-zip" name="addPostcodeHotel" required>
+                            </div>
+                            <div class="detail-item">
+                                <label class="detail-label">City:</label>
+                                <input type="text" class="form-input" id="popup-city" name="addCityHotel" required>
+                            </div>
+                            <div class="detail-item">
+                                <label class="detail-label">Country:</label>
+                                <input type="text" class="form-input" id="popup-country" name="addCountryHotel" required>
                             </div>
                         </div>
                     </div>
-                    <div>
-                        <div class="row my-3 justify-content-center">
-                            <div class="col-2">
-                                <label for="streetHotel" class="form-label">Straat naam </label>
-                            </div>
-                            <div class="col-3">
-                                <input type="text" class="form-control" id="streetHotel" name="addStreetHotel" required value="{{$hoteldata->street}}">
-                            </div>
-                        </div>
-                        <div class="row my-3 justify-content-center">
-                            <div class="col-2">
-                                <label for="postcodeHotel" class="form-label">Postcode</label>
-                            </div>
-                            <div class="col-3">
-                                <input type="number" class="form-control" id="postcodeHotel" name="addPostcodeHotel" required value="{{$hoteldata->zip_code}}">
-                            </div>
-                             <div class="row my-3 justify-content-center">
-                                <div class="col-2">
-                                    <label for="cityHotel" class="form-label">Stad</label>
-                                </div>
-                                <div class="col-3">
-                                    <input type="text" class="form-control" id="cityHotel" name="addCityHotel" required value="{{$hoteldata->city}}">
-                                </div>
-                            </div>
-                            <div class="row my-3 justify-content-center">
-                                <div class="col-2">
-                                    <label for="countryHotel" class="form-label">Land</label>
-                                </div>
-                                <div class="col-3">
-                                    <input type="text" class="form-control" id="countryHotel" name="addCountryHotel" required value="{{$hoteldata->country}}"> 
-                                </div>
-                            </div>
-                        </div>
-                </div>
-            </div>     
-            <div id="pdf-chooser">
+            </div>         
+             <div id="pdf-chooser">
                     <div id=pdf-container>
                         <div id="pdf-main">
                             <h1>Kies 2 foto's van het hotel</h1>
@@ -96,7 +65,7 @@
                                 <span class="input-group-btn">
                                     <button type="button" id="lfm-btn" data-input="pdf1-path" class="btn btn-secondary" style="background-color: blue">Choose Image</button>
                                 </span>
-                                <input id="pdf1-path" name="pdf1_path" type="text" readonly class="form-control" required value="{{$hoteldata->image1}}" />
+                                <input id="pdf1-path" name="pdf1_path" type="text" readonly class="form-control" required value="" />
                             </div>
                             <br>
                             <!-- Tweede afbeelding -->
@@ -104,7 +73,7 @@
                                 <span class="input-group-btn">
                                     <button type="button" id="lfm2-btn" data-input="pdf2-path" class="btn btn-secondary" style="background-color: blue" >Choose Image</button>
                                 </span>
-                                <input id="pdf2-path" name="pdf2_path" type="text" readonly class="form-control" required value="{{$hoteldata->image2}}"/>
+                                <input id="pdf2-path" name="pdf2_path" type="text" readonly class="form-control" required value=""/>
                             </div>
                         </div>
                     </div>
@@ -207,19 +176,57 @@ label {
 </style>
 
     <script>
-        // Function to close the popup
-        function closeHotelPopup() {
-            const overlay = document.querySelector('.hotel-popup-overlay');
-            if (overlay) {
-                overlay.style.animation = "fadeout 0.3s ease";
-                setTimeout(() => {
-                    overlay.style.display = 'none';
-                }, 300);
-            }
-        }
-    </script>
-   <script>
-        window.SetUrl = function (items, pathInputId) {
+       document.addEventListener('DOMContentLoaded', function() {
+    // Initially hide the popup
+    const editPopup = document.getElementById('edit-hotel-info');
+    if (editPopup) {
+        editPopup.style.display = 'none';
+    }
+    
+    // Add click event listeners to all edit buttons
+    document.querySelectorAll('.show-edit-hotel').forEach(button => {
+        button.addEventListener('click', () => {
+            console.log("Edit button clicked");
+            
+            // Get hotelId from data attribute
+            const hotelId = button.dataset.id;
+            
+            // Set the form action with the Laravel route
+            const form = document.getElementById('editHotelForm');
+            form.action = "/hotels/" + hotelId; // Adjust this based on your actual route structure
+            
+            // Also store hotelId in hidden input field
+            document.getElementById('currentHotelId').value = hotelId;
+            
+            // Set hotel information
+            document.getElementById('popup-name').value = button.dataset.name;
+            document.getElementById('popup-street').value = button.dataset.street;
+            document.getElementById('popup-city').value = button.dataset.city;
+            document.getElementById('popup-zip').value = button.dataset.zip;
+            document.getElementById('popup-country').value = button.dataset.country;
+            document.getElementById('popup-phone').value = button.dataset.phone;
+            document.getElementById('popup-link').value = button.dataset.link;
+            // Set image paths
+            document.getElementById('pdf1-path').value = button.dataset.image1;
+            document.getElementById('pdf2-path').value = button.dataset.image2;
+            
+            const popup = document.getElementById('edit-hotel-info');
+            popup.style.display = 'flex';
+            popup.style.animation = "fadeIn 0.3s ease";
+        });
+    });
+    
+    // Function to close the edit hotel popup
+    window.closeHotelPopup = function() {
+        const popup = document.getElementById('edit-hotel-info');
+        popup.style.animation = "fadeout 0.3s ease";
+        setTimeout(() => {
+            popup.style.display = 'none';
+        }, 300);
+    }
+});
+
+      window.SetUrl = function (items, pathInputId) {
             const url = Array.isArray(items) ? items[0].url : items.url;
             const filename = url.split('/').pop();
             const targetInput = document.getElementById(pathInputId);
@@ -229,7 +236,6 @@ label {
             }
         };
     </script>
-
 
     <!-- Load jQuery and File Manager AFTER SetUrl -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

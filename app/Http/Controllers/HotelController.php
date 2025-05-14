@@ -101,7 +101,7 @@ class HotelController extends Controller
 
         $hotels = DB::table('hotels')->get();
 
-        return view('content.hotelListView', [
+        return view('components.layout.hotelListView', [
             'selectedCountries' => [],
             'hotels' => $hotels,
         ]);

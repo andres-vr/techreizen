@@ -87,7 +87,7 @@
                             <td style="padding: 10px; border: 2px black solid; text-align: center;">
                                 <button style="width: 100px; background-color: blue; color: white;" 
                                 type="button"
-                                class="edit-hotel-info"
+                                class="show-edit-hotel"
                                 data-id="{{ $hotel->id }}"
                                 data-name="{{ $hotel->name }}"
                                 data-street="{{ $hotel->street }}"
@@ -114,6 +114,7 @@
         </div>
         @include('content.hotelinfo')
         @include('content.createhotel')
+        @include('content.editHotel')
 </x-layout.home>
 </body>
 

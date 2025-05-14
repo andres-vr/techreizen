@@ -267,7 +267,7 @@
     // Add event listener to the "Add Hotel" button
     document.querySelectorAll('.show-create-hotel').forEach(button => {
         button.addEventListener('click', showCreateHotelPopup);
-    });
+    }); 
 
     // File manager functions
     window.SetUrl = function (items, pathInputId) {

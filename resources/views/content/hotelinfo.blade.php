@@ -184,6 +184,14 @@
 </style>
 
 <script>
+     window.closeHotelPopup = function() {
+        const popup = document.getElementById('edit-hotel-info');
+        popup.style.animation = "fadeout 0.3s ease";
+        setTimeout(() => {
+            popup.style.display = 'none';
+        }, 300);
+    }
+
 document.querySelectorAll('.show-hotel-info').forEach(button => {
     button.addEventListener('click', () => {
         // Set hotel information
@@ -207,13 +215,5 @@ document.querySelectorAll('.show-hotel-info').forEach(button => {
         popup.style.animation = "fadeIn 0.3s ease";
     });
 });
-
-function closeHotelPopup() {
-    const overlay = document.getElementById('hotel-popup-container');
-    overlay.style.animation = "fadeout 0.3s ease";
-    setTimeout(() => {
-        overlay.style.display = 'none';
-    }, 300);
-}
 </script>
 </x-layout.hotelinfo>
