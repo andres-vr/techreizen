@@ -4,7 +4,7 @@
         <!-- Popup Container -->
         <div class="hotel-popup-container">
             <!-- Close Button -->
-            <button class="hotel-popup-close" onclick="closeCreateHotelPopup()">&times;</button>
+            <button class="hotel-popup-close" id="close-hotel">&times;</button>
             
             <!-- Form Content -->
             <div class="hotel-info">
@@ -256,15 +256,12 @@
         console.log("create popup");
     }
 
-    // Function to close the create hotel popup
-    function closeCreateHotelPopup() {
+    const closebutton = document.getElementById('close-hotel');
+    closebutton.addEventListener('click', function() {
         const popup = document.getElementById('create-hotel-popup-container');
-        popup.style.animation = "fadeout 0.3s ease";
-        setTimeout(() => {
-            popup.style.display = 'none';
-        }, 300);
-    }
-
+        popup.style.display = 'none';
+        console.log('Popup closed');
+    });
     // Add event listener to the "Add Hotel" button
     document.querySelectorAll('.show-create-hotel').forEach(button => {
         button.addEventListener('click', showCreateHotelPopup);
