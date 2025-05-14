@@ -108,6 +108,17 @@ Route::get('/view-pdf/{folder}/{filename}', function ($folder, $filename) {
 
     return response()->file($path);
 });
+
+Route::get('/view-image/{folder}/{filename}', function ($folder, $filename) {
+    $path = "files\\{$folder}\\{$filename}";
+    $fullPath = "C:\Users\andre\Downloads\laragon\laragon\www\\techreizen\public\storage\\app\public\\$path";
+    if (!file_exists($fullPath)) {
+        abort(404, 'Image not found');
+    }
+
+    return response()->file($fullPath);
+});
+
 Route::post('/new-page', [PageController::class, 'createNewPage'])->name('new.page');
 Route::post('/editor', [PageController::class, 'saveEditorContent'])->name('editor.save');
 Route::post('/hotels/store', [HotelController::class, 'store'])->name('hotels.store');
@@ -121,6 +132,6 @@ Route::post('/deletepopup/{id}', [HotelController::class, 'deletepopup'])->name(
 
 Route::get('/hotels', [HotelController::class, 'show'])->name('hotels.show');
 
-Route::get('/hotels/filter', [HotelController::class, 'filter'])->name('hotels.filter');
+Route::get('/hotels/kiezer', [HotelController::class, 'filter'])->name('hotels.filter');
 
 Route::get('/{routename}', [PageController::class, 'showByName'])->name('dynamic.page');
