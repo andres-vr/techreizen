@@ -8,7 +8,7 @@
 
 <body>
     <x-layout.home>
-    <!--
+    <!--    
     <div style="display: none;">
     <form method="GET" action="{{ route('hotels.filter') }}">
         <div>

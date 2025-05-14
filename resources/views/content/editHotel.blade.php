@@ -59,7 +59,7 @@
                     </div>
                     
                     <!-- Images Section -->
-                    <div class="image-upload-section">
+                    <div class="image-upload-section" style="display: none;">
                         <h2>Hotel Images</h2>
                         <div class="image-upload-container">
                             <div class="input-group">
