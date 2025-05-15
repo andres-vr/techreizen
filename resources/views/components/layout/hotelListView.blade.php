@@ -7,10 +7,10 @@
 </head>
 
 <body>
-    <x-layout.home>
-    <!--    
-    <div style="display: none;">
-    <form method="GET" action="{{ route('hotels.filter') }}">
+    <x-layout.home>  
+    <div>
+    <form method="POST" action="{{ route('hotels.filter') }}">
+        @csrf
         <div>
             <p>Selecteer een Trip:</p>
             @php
@@ -18,7 +18,6 @@
                 $selectedCountry = request()->get('countries', null); // Get the selected country from the request
             @endphp
 
-            <pre>GET: {{ print_r($_GET, true) }}</pre>
             <pre>Selected Country: {{ print_r($selectedCountry, true) }}</pre>
 
             <p>Filter op Trip:</p>
@@ -36,7 +35,6 @@
         </div>  
     </form>
     </div>
-    -->
             <!-- Hotel info -->
             <div class="p-4">
                 <div style="text-align: right;">

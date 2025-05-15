@@ -10,6 +10,11 @@ use function Laravel\Prompts\alert;
 
 class HotelController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function show()
     {
         $hotels = DB::table('hotels')->get();
@@ -38,7 +43,7 @@ class HotelController extends Controller
             })
             ->get();
 
-        return view('content.hotelListView', [
+        return view('components.layout.hotelListView', [
             'selectedCountries' => $countries,
             'hotels' => $hotels,
         ]);

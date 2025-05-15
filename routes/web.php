@@ -10,6 +10,38 @@ use App\Http\Controllers\PageController;
 Route::get('/', [PageController::class, 'show'])->name('home');
 Route::resource('page', PageController::class);
 
+// General Routes
+Route::get('/home', [PageController::class, 'show'])->name('home');
+Route::get('/voorbeeldreizen', [PageController::class, 'show'])->name('voorbeeldreizen');
+// File manager routes
+Route::get('/view-pdf/{folder}/{filename}', function ($folder, $filename) {
+    $path = storage_path("app/public/files/{$folder}/{$filename}");
+
+    if (!file_exists($path)) {
+        abort(404, 'File not found');
+    }
+
+    return response()->file($path);
+});
+Route::get('/view-image/{folder}/{filename}', function ($folder, $filename) {
+    $path = "files\\{$folder}\\{$filename}";
+    $fullPath = storage_path("\app\public\\$path");
+    /*$path = "files\\{$folder}\\{$filename}";
+    $fullPath = "C:\Users\andre\Downloads\laragon\laragon\www\\techreizen\public\storage\\app\public\\$path";*/
+    if (!file_exists($fullPath)) {
+        abort(404, 'Image not found');
+    }
+
+    return response()->file($fullPath);
+});
+Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
+    \UniSharp\LaravelFilemanager\Lfm::routes();
+});
+// Hotel Routes
+Route::get('/show-hotels', [HotelController::class, 'show'])->name('hotels.show');
+Route::get('/info-hotels/{id}', [HotelController::class, 'showInfo'])->name('hotels.showinfo');
+Route::post('/filter-hotels', [HotelController::class, 'filter'])->name('hotels.filter');
+
 //route for AJAX request
 Route::get('/majors/{educationId}', [GuestRegistrationController::class, 'getMajorsByEducation'])->name('majors.byEducation');
 
@@ -84,54 +116,26 @@ All Admin Routes List
 --------------------------------------------*/
 Route::middleware(['auth', 'user-access:admin'])->group(function () {
     Route::get('/admin/home', [HomeController::class, 'adminHome'])->name('admin.home');
+
+    // Editor Routes
+    Route::get('/editor', [PageController::class, 'show'])->name('editor');
+    Route::post('/new-page', [PageController::class, 'createNewPage'])->name('new.page');
+    Route::post('/editor', [PageController::class, 'saveEditorContent'])->name('editor.save');
+
+    // Hotel Routes
+    Route::post('store-hotels', [HotelController::class, 'store'])->name('hotels.store');
+    Route::put('update-hotels', [HotelController::class, 'update'])->name('hotels.update');
+
+    Route::post('/delete-hotels/{id}', [HotelController::class, 'deleteHotel'])->name('hotels.delete');
+
+    Route::post('/delete-hotels-popup/{id}', [HotelController::class, 'deletepopup'])->name('hotels.deletepopup');
 });
 
-Route::get('/home', [PageController::class, 'show'])->name('home');
-
-Route::get('/voorbeeldreizen', [PageController::class, 'show'])->name('voorbeeldreizen');
-
-Route::get('/editor', [PageController::class, 'show'])->name('editor');
-
-Route::get('/pages/{id}', [PageController::class, 'getPage']);
-
-
-Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
-    \UniSharp\LaravelFilemanager\Lfm::routes();
+/*------------------------------------------
+--------------------------------------------
+All Traveller, Guide, Routes List
+--------------------------------------------
+--------------------------------------------*/
+Route::middleware(['auth', 'user-access:traveller,guide'])->group(function () {
+    Route::get('/traveller/home', [HomeController::class, 'travellerHome'])->name('traveller.home');
 });
-
-Route::get('/view-pdf/{folder}/{filename}', function ($folder, $filename) {
-    $path = storage_path("app/public/files/{$folder}/{$filename}");
-
-    if (!file_exists($path)) {
-        abort(404, 'File not found');
-    }
-
-    return response()->file($path);
-});
-
-Route::get('/view-image/{folder}/{filename}', function ($folder, $filename) {
-    $path = "files\\{$folder}\\{$filename}";
-    $fullPath = "C:\Users\andre\Downloads\laragon\laragon\www\\techreizen\public\storage\\app\public\\$path";
-    if (!file_exists($fullPath)) {
-        abort(404, 'Image not found');
-    }
-
-    return response()->file($fullPath);
-});
-
-Route::post('/new-page', [PageController::class, 'createNewPage'])->name('new.page');
-Route::post('/editor', [PageController::class, 'saveEditorContent'])->name('editor.save');
-Route::post('/hotels/store', [HotelController::class, 'store'])->name('hotels.store');
-
-Route::get('/hotels/{id}', [HotelController::class, 'showInfo'])->name('hotels.showinfo');
-Route::put('/hotels/updates', [HotelController::class, 'update'])->name('hotels.update');
-
-Route::post('/delete/{id}', [HotelController::class, 'deleteHotel'])->name('hotels.delete');
-
-Route::post('/deletepopup/{id}', [HotelController::class, 'deletepopup'])->name('hotels.deletepopup');
-
-Route::get('/hotels', [HotelController::class, 'show'])->name('hotels.show');
-
-Route::get('/hotels/kiezer', [HotelController::class, 'filter'])->name('hotels.filter');
-
-Route::get('/{routename}', [PageController::class, 'showByName'])->name('dynamic.page');

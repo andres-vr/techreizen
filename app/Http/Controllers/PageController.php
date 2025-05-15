@@ -10,12 +10,10 @@ use Illuminate\Support\Facades\DB;
 
 class PageController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function __construct()
     {
-
+        $this->middleware('auth');
+        $this->middleware('user-access:guest');
     }
 
     /**
@@ -42,13 +40,11 @@ class PageController extends Controller
             } elseif ($previousRouteName == null) {
                 $previousId = 1;
             } else {
-                    $previousId = DB::table('pages')->where('routename', $previousRouteName)->first()->id;
-                
+                $previousId = DB::table('pages')->where('routename', $previousRouteName)->first()->id;
+
             }
             $pageData = DB::table('pages')->where('routename', $previousRouteName)->first();
             $pageData = $page->find(1); // Fetch the entire page data
-            //return view('content.editHotel', ['hoteldata' => Hotel::find(1)]);
-            //return view('content.hotelinfo');
             return view('content.editor', ['page' => $pageData, 'previousRoute' => $previousRouteName, 'previousId' => $previousId]);
         }
     }
@@ -70,22 +66,6 @@ class PageController extends Controller
         $pageData = $page->find($page->id);
 
         return view('content.editor', ['page' => $pageData, 'previousRoute' => $name]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-
     }
 
     /**
@@ -129,15 +109,6 @@ class PageController extends Controller
 
         return redirect()->route('page.show', $pageModel)->with('success', 'Page updated!');
     }
-
-    /**h
-     * Remove the specified resource from storage.
-     */
-    public function destroy(PageModel $pageModel)
-    {
-        //
-    }
-
     public function saveEditorContent(Request $request)
     {
         try {
@@ -189,20 +160,5 @@ class PageController extends Controller
             'content' => $page->content
         ]);
     }
-    public function editor()
-    {
-        $pages = PageModel::all();               // Haalt alle pagina's op
-        $page = $pages->first();                 // Neemt de eerste als standaard (bijv. Home)
-        // $previousRouteName = session('previous_route', null);
-
-        return view('content.editor', [
-            'page' => $page,
-            'pages' => $pages,
-            // 'previousRoute' => $previousRouteName
-        ]);
-    }
-
-
-
 }
 
