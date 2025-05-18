@@ -19,6 +19,7 @@ class Hotel extends Model
         "country",
         "phone",
         "image1",
-        "image2"
+        "image2",
+        "trip_id",
     ];
 }

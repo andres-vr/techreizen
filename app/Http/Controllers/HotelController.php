@@ -27,7 +27,9 @@ class HotelController extends Controller
 
     public function filter(Request $request)
     {
-        $countries = $request->input('countries', []);
+        $tripId = $request->input('trips', []);
+        $countriesJson = DB::table('trips')->where('id', $tripId)->pluck('countries')->first();
+        $countries = json_decode($countriesJson, true);
 
         // Make sure countries is always an array (even if it's empty)
         if (!is_array($countries)) {
@@ -35,16 +37,11 @@ class HotelController extends Controller
         }
 
         $hotels = DB::table('hotels')
-            ->when(!empty($countries), function ($query) use ($countries) {
-                return $query->whereIn('country', $countries);
-            }, function ($query) {
-                // Return all hotels if no countries are selected
-                return $query;
-            })
+            ->when(!empty($countries), fn($query) => $query->whereIn('country', $countries))
             ->get();
 
         return view('components.layout.hotelListView', [
-            'selectedCountries' => $countries,
+            'selectedTrip' => $tripId,
             'hotels' => $hotels,
         ]);
     }
@@ -85,11 +82,12 @@ class HotelController extends Controller
         $hotel->street = $request->input('addStreetHotel');
         $hotel->zip_code = $request->input('addPostcodeHotel');
         $hotel->city = $request->input('addCityHotel');
-        $hotel->country = $request->input('addCountryHotel');
+        $hotel->country = $request->input('country');
         $hotel->link = $request->input('addLinkSiteHotel');
         $hotel->phone = $request->input('addPhoneNumber');
         $hotel->image1 = $request->input('pdf1_path');
         $hotel->image2 = $request->input('pdf2_path0');
+        $hotel->trip_id = $request->input('trip');
 
         $hotel->save();
 

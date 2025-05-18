@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>create/edit hotel</title>
+        <title>edit hotel</title>
     </head>
     <body>
         {{ $slot }}

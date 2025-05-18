@@ -17,7 +17,7 @@ class HotelSeeder extends Seeder
         $hotels = [
             [
                 "name" => "MEININGER hotel",
-                "type" => "hotel",
+                "type" => "Hotel",
                 "street" => "Am Postbahnhof 4",
                 "zip_code" => "10243",
                 "link" => "https://www.meininger-hotels.com/en/hotels/berlin/hotel-berlin-east-side-gallery/?utm_source=gmb&utm_medium=referral&utm_campaign=BER-AP&utm_content=website",
@@ -26,10 +26,11 @@ class HotelSeeder extends Seeder
                 "phone" => "+49 (0)30 31878787",
                 "image1" => "http://localhost/storage/files/1/hotel1.png",
                 "image2" => "http://localhost/storage/files/1/hotel2.png",
+                "trip_id" => "1",
             ],
             [
                 "name" => "Märchenhotel",
-                "type" => "hotel",
+                "type" => "Hotel",
                 "street" => "Dorfstrasse 24",
                 "zip_code" => "8784",
                 "link" => "https://www.maerchenhotel.ch/?trv_reference=ee25998f-0234-389a-bb58-6948b4b5947d",
@@ -38,6 +39,7 @@ class HotelSeeder extends Seeder
                 "phone" => "+41(55)6537171",
                 "image1" => "http://localhost/storage/files/1/hotel3.png",
                 "image2" => "http://localhost/storage/files/1/hotel4.png",
+                "trip_id" => "3",
             ],
             [
                 "name" => "Pfefferbett Hostel",
@@ -50,6 +52,7 @@ class HotelSeeder extends Seeder
                 "phone" => "+49 30 233288100",
                 "image1" => "http://localhost/storage/files/1/hotel5.jpg",
                 "image2" => "http://localhost/storage/files/1/hotel6.jpg",
+                "trip_id" => "1",
             ],
             [
                 "name" => "Hotel Aurora",
@@ -62,6 +65,7 @@ class HotelSeeder extends Seeder
                 "phone" => "+390(771)549266",
                 "image1" => "http://localhost/storage/files/1/hotel7.jpg",
                 "image2" => "http://localhost/storage/files/1/hotel8.jpg",
+                "trip_id" => "2",
             ]
         ];
         foreach ($hotels as $hotel) {

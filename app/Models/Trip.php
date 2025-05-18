@@ -14,5 +14,10 @@ class Trip extends Model
     protected $fillable = [
         'name',
         'contact_email',
+        'countries',
+    ];
+
+    protected $casts = [
+        'countries' => 'array',
     ];
 }

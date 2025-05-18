@@ -1,4 +1,4 @@
-<x-layout.popup>
+<x-layout.createPopup>
     <!-- Overlay for popup effect -->
     <div id="create-hotel-popup-container" class="hotel-popup-overlay" style="display: none;">
         <!-- Popup Container -->
@@ -49,13 +49,37 @@
                                 <label class="detail-label">City:</label>
                                 <input type="text" class="form-input" id="cityHotel" name="addCityHotel" required>
                             </div>
+                           @php
+                                $uniqueTrips = collect($trips)->unique('id');
+                            @endphp
+                             <!-- Country Dropdown (filtered based on trip) -->
                             <div class="detail-item">
-                                <label class="detail-label">Country:</label>
-                                <input type="text" class="form-input" id="countryHotel" name="addCountryHotel" required>
+                                    <label class="detail-label">Country:</label>
+                                    <div id="new-create-country-select" style="display: none;">
+
+                                    </div>
+                                    <div id="country-input" style="display: none;">
+                                        <label class="detail-label">New Trip Countries (comma separated):</label>
+                                        <input type="text" name="country_input" placeholder="e.g. Frankrijk, Duitsland"/>
+                                    </div>
                             </div>
-                        </div>
-                    </div>
-                    
+                    </div>       
+                    <!-- Trip Dropdown -->
+                             <div style="display: flex; flex-direction: column;">
+                                    <label class="detail-label">Trip:</label>
+                                      <select id="create-trip-select" name="trip" required>
+                                        <option value="" disabled selected>-- Select a Trip --</option>
+                                        @foreach($trips as $trip)
+                                            <option value="{{ $trip->id }}">{{ $trip->name }}</option>
+                                        @endforeach
+                                        <option value="newtrip">Nieuwe trip</option>
+                                    </select>
+                                    <!-- Add New Trip -->
+                                    <div id="new-trip" style="display: none;">
+                                        <label class="detail-label">Trip name:</label>
+                                        <input type="text" name="trip_input" placeholder="e.g. Frankrijk, Duitsland"/>
+                                    </div>
+                            </div>
                     <!-- Images Section -->
                     <div class="image-upload-section">
                         <h2>Hotel Images</h2>
@@ -70,7 +94,7 @@
                                 <span class="input-group-btn">
                                     <button type="button" id="lfm2-btn" data-input="pdf2-path" class="btn btn-secondary">Choose Image 2</button>
                                 </span>
-                                <input id="pdf2-path" name="pdf2_path" type="text" readonly class="form-control" required />
+                                <input id="pdf2-path" name="pdf2_path" type="text" readonly class="form-control"/>
                             </div>
                         </div>
                     </div>
@@ -79,6 +103,7 @@
                 </form>
             </div>
         </div>
+    </div>
     </div>
 
     <!-- CSS Styles -->
@@ -247,25 +272,102 @@
     }
     </style>
 
-    <script>
-    // Function to show the create hotel popup
-    function showCreateHotelPopup() {
-        const popup = document.getElementById('create-hotel-popup-container');
-        popup.style.display = 'flex';
-        popup.style.animation = "fadeIn 0.3s ease";
-        console.log("create popup");
+@php
+    $tripCountryMap = [];
+    foreach ($trips as $trip) {
+        $tripCountryMap[$trip->id] = json_decode($trip->countries);
     }
+@endphp
 
-    const closebutton = document.getElementById('close-hotel');
-    closebutton.addEventListener('click', function() {
-        const popup = document.getElementById('create-hotel-popup-container');
+    <script>
+// Function to show the create hotel popup
+function showCreateHotelPopup() {
+    const popup = document.getElementById('create-hotel-popup-container');
+    popup.style.display = 'flex';
+    popup.style.animation = "fadeIn 0.3s ease";
+    console.log("Create popup opened");
+}
+
+// Function to close the create hotel popup
+function closeCreateHotelPopup() {
+    const popup = document.getElementById('create-hotel-popup-container');
+    popup.style.animation = "fadeout 0.3s ease";
+    setTimeout(() => {
         popup.style.display = 'none';
-        console.log('Popup closed');
+    }, 300);
+}
+
+// Add event listener to the close button
+document.getElementById('close-hotel').addEventListener('click', function() {
+    closeCreateHotelPopup();
+    console.log('Create popup closed');
+});
+
+// Add event listener to the "Add Hotel" button
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.create-hotel').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            showCreateHotelPopup();
+        });
     });
-    // Add event listener to the "Add Hotel" button
-    document.querySelectorAll('.show-create-hotel').forEach(button => {
-        button.addEventListener('click', showCreateHotelPopup);
-    }); 
+});
+
+    document.addEventListener('DOMContentLoaded', function() {
+    const tripCountryMap = @json($tripCountryMap);
+    const countrySelect = document.getElementById('country-select');
+    const coutriesInput = document.getElementById('country-input');
+    const newTripInput = document.getElementById('new-trip');
+    const selectedTripId = this.value;
+
+        document.getElementById('create-trip-select').addEventListener('change', function () {
+             if (this.value == "newtrip") {
+                    console.log("New trip selected");
+                    coutriesInput.style.display = 'block';
+                    newTripInput.style.display = 'block';
+                    console.log("New trip input shown");
+                    newTripInput.required = true;
+                    newTripInput.style.display = 'block';
+
+                    const newCountrySelectContainer = document.getElementById('new-create-country-select');
+            } else {
+            coutriesInput.style.display = 'none';
+            coutriesInput.required = false;
+            console.log("coutnries hidden");
+            newTripInput.style.display = 'none';
+            newTripInput.required = false;
+            console.log("New trip input hidden");
+            const selectedTripId = this.value;
+            const countries = tripCountryMap[selectedTripId] || [];
+
+            // Create a fresh <select> element
+            const newCountrySelect = document.createElement('select');
+            newCountrySelect.id = 'country-select';
+            newCountrySelect.name = 'country';
+            newCountrySelect.className = 'form-input';
+
+            // Add default option
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.textContent = '-- Select a Country --';
+            defaultOption.disabled = true;
+            defaultOption.selected = true;
+            newCountrySelect.appendChild(defaultOption);
+
+            // Add new options
+            countries.forEach(function (country) {
+                const option = document.createElement('option');
+                option.value = country;
+                option.textContent = country;
+                newCountrySelect.appendChild(option);
+            });
+            const newCountrySelectContainer = document.getElementById('new-create-country-select');
+            newCountrySelectContainer.innerHTML = "";
+            newCountrySelectContainer.appendChild(newCountrySelect);
+            newCountrySelectContainer.style.display = 'block';
+            }
+        });
+    });
 
     // File manager functions
     window.SetUrl = function (items, pathInputId) {
@@ -289,4 +391,4 @@
             $('#lfm2-btn').filemanager('file', {prefix: '/laravel-filemanager'});
         });
     </script>
-</x-layout.popup>
+</x-layout.createPopup>

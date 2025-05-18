@@ -9,36 +9,29 @@
 <body>
     <x-layout.home>  
     <div>
-    <form method="POST" action="{{ route('hotels.filter') }}">
-        @csrf
-        <div>
-            <p>Selecteer een Trip:</p>
-            @php
-                $countries = DB::table('hotels')->select('country')->distinct()->get();
-                $selectedCountry = request()->get('countries', null); // Get the selected country from the request
-            @endphp
-
-            <pre>Selected Country: {{ print_r($selectedCountry, true) }}</pre>
-
+        @php
+            $trips = DB::table('trips')->get();
+            $selectedTrip = request()->get('trips', null); // Get the selected trip from the request
+        @endphp
+        <form id="trip-form" action="{{ route('hotels.filter') }}" method="POST">
+            @csrf
             <p>Filter op Trip:</p>
 
-            <select id="country-select" name="countries">
-                <option value="" disabled>--- Selecteer een Trip ---</option>
-                @foreach($countries as $country)
-                    <option value="{{ $country->country }}"
-                        @if($country->country == $selectedCountry) selected @endif>
-                        {{ $country->country }}
+            <select id="trip-select" name="trips">
+                <option value="" disabled selected>--- Selecteer een Trip ---</option>
+                @foreach($trips as $trip)
+                    <option value="{{ $trip->id }}"
+                        @if($trip->name == $selectedTrip) selected @endif>
+                        {{ $trip->name }}
                     </option>
                 @endforeach
             </select>
-            <button type="submit">Toon hotels</button>
-        </div>  
-    </form>
+        </form>
     </div>
             <!-- Hotel info -->
             <div class="p-4">
                 <div style="text-align: right;">
-                    <button style="background-color: blue; color:white;" class="show-create-hotel">Add Hotel</button>
+                    <button style="background-color: blue; color:white;" class="create-hotel">Add Hotel</button>
                 </div>
                 <table
                     style="border: 3px black solid; margin: 0 auto; margin-top: 10px; width: 100%; background-color:azure;">
@@ -91,7 +84,7 @@
                             <td style="padding: 10px; border: 2px black solid; text-align: center;">
                                 <button style="width: 100px; background-color: blue; color: white;" 
                                 type="button"
-                                class="show-edit-hotel"
+                                class="edit-hotel"
                                 data-id="{{ $hotel->id }}"
                                 data-name="{{ $hotel->name }}"
                                 data-street="{{ $hotel->street }}"
@@ -100,26 +93,34 @@
                                 data-country="{{ $hotel->country }}"
                                 data-phone="{{ $hotel->phone }}"
                                 data-link="{{ $hotel->link }}"
+                                data-trip="{{ $hotel->trip_id }}"
                                 data-image1="{{ url('view-image/1/' . substr($hotel->image1, 33)) }}"
                                 data-image2="{{ url('view-image/1/' . substr($hotel->image2, 33)) }}">
                                 Edit
                             </button>
                             </td>
                             <td style="padding: 10px; border: 2px black solid; text-align: center;">
-                                <form method="POST" action="{{ route('hotels.deletepopup', $hotel->id) }}">
-                                    @csrf
-                                    <button type="submit" style="width: 100px; background-color: red;" class="delete-hotel">Delete</button>
-                                </form>
+                                    <button type="button" 
+                                    style="width: 100px; background-color: red;" 
+                                    class="delete-hotel" 
+                                    data-id="{{ $hotel->id }}">Delete</button>
                             </td>
                         </tr>
                     @endforeach
                 </table>
             </div>
-        </div>
         @include('content.hotelinfo')
         @include('content.createhotel')
         @include('content.editHotel')
+        @include('content.deleteHotel')
 </x-layout.home>
 </body>
 
 </html>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('trip-select').addEventListener('change', function () {
+        document.getElementById('trip-form').submit();
+    });
+});
+</script>
