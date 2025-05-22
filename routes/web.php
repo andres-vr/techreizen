@@ -139,3 +139,4 @@ All Traveller, Guide, Routes List
 Route::middleware(['auth', 'user-access:traveller,guide'])->group(function () {
     Route::get('/traveller/home', [HomeController::class, 'travellerHome'])->name('traveller.home');
 });
+Route::get('/{routename}', [PageController::class, 'showByName'])->name('dynamic.page');
