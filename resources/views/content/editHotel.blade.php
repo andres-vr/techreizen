@@ -75,18 +75,18 @@
                                     </select>
                             </div>
                         <!-- Images Section -->
-                        <div class="image-upload-section" style="display: none;">
+                        <div class="image-upload-section" >
                             <h2>Hotel Images</h2>
                             <div class="image-upload-container">
                                 <div class="input-group">
                                     <span class="input-group-btn">
-                                        <button type="button" id="lfm-btn" data-input="editpdf1-path" class="btn btn-secondary">Choose Image 1</button>
+                                        <button type="button" id="lfm-btn0" data-input="editpdf1-path" class="btn btn-secondary">Choose Image 1</button>
                                     </span>
                                     <input id="editpdf1-path" name="pdf1_path" type="text" readonly class="form-control" required />
                                 </div>
                                 <div class="input-group">
                                     <span class="input-group-btn">
-                                        <button type="button" id="lfm2-btn" data-input="editpdf2-path" class="btn btn-secondary">Choose Image 2</button>
+                                        <button type="button" id="lfm2-btn1" data-input="editpdf2-path" class="btn btn-secondary">Choose Image 2</button>
                                     </span>
                                     <input id="editpdf2-path" name="pdf2_path0"  type="text" readonly class="form-control" required />
                                 </div>
@@ -351,8 +351,8 @@
         console.log("Edit popup opened for hotel ID:", hotelId);
 
         // Initialize file manager after popup is shown
-        $('#lfm-btn').filemanager('file', { prefix: '/laravel-filemanager' });
-        $('#lfm2-btn').filemanager('file', { prefix: '/laravel-filemanager' });
+        $('#lfm-btn0').filemanager('file', { prefix: '/laravel-filemanager' });
+        $('#lfm2-btn1').filemanager('file', { prefix: '/laravel-filemanager' });
     }
 
     // Function to handle trip selection change and update countries
@@ -400,8 +400,8 @@
     };
 
     // Initialize file managers for image inputs
-    $('#lfm-btn').filemanager('file', { prefix: '/laravel-filemanager' });
-    $('#lfm2-btn').filemanager('file', { prefix: '/laravel-filemanager' });
+    $('#lfm-btn0').filemanager('file', { prefix: '/laravel-filemanager' });
+    $('#lfm2-btn1').filemanager('file', { prefix: '/laravel-filemanager' });
 });
 </script>
 
