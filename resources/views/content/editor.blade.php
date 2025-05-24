@@ -16,15 +16,16 @@
                 $pagen = DB::table('pages')->get();
                 $currentPageId = $page->id ?? null;
 
+                $textareaContent = $page->content ?? '';
                 if (str_ends_with($page->content, ".pdf")) {
-                    $page->content = "";
+                   $textareaContent = ""; 
                 }
             @endphp
             
             @foreach ($pagen as $pagek)
                 @if ($pagek->name != "Hotels")
-                    <option value="{{ $pagek->id }}" {{ $previousRoute == $pagek->routename ? 'selected' : '' }}>
-                    {{ $pagek->name }}
+                    <option value="{{ $pagek->id }}" {{ $currentPageId == $pagek->id ? 'selected' : '' }}>
+                        {{ $pagek->name }}
                     </option>
                 @endif
             @endforeach
@@ -42,7 +43,7 @@
     {{-- HTML editor --}}
     <div id="html-editor">
         <textarea name="content" id="editor" cols="30" rows="10" class="ckeditor form-control">
-            {!! $page->content ?? '' !!}
+            {!! $textareaContent !!}
         </textarea>
     </div>
     {{-- PDF chooser --}}
@@ -99,51 +100,44 @@
         nameDiv.style.display = "none";
 
         // Backend content ophalen
-        const initialContent = `{!! trim($page->content ?? '') !!}`;
-        const defaultType = initialContent.toLowerCase().endsWith('.pdf') ? 'PDF' : 'HTML';
+const initialContent = `{!! trim($page->content ?? '') !!}`;
+console.log("Initial content from backend:", initialContent);
+const textareaContent = `{!! trim($textareaContent ?? '') !!}`;
+const defaultType = initialContent.toLowerCase().endsWith('.pdf') ? 'PDF' : 'HTML';
 
+function updateEditorView() {
+    const value = select.value;
+    if (value === "HTML") {
+        htmlEditor.style.display = "block";
+        pdfChooser.style.display = "none";
+        console.log("HTML mode activated");
+    } else if (value === "PDF") {
+        htmlEditor.style.display = "none";
+        pdfChooser.style.display = "block";
+        console.log("PDF mode activated");
+    }
+}
 
-        function updateEditorView() {
-            const value = select.value;
-            if (value === "HTML") {
-                htmlEditor.style.display = "block";
-                pdfChooser.style.display = "none";
-                console.log("HTML");
-                } else if (value === "PDF") {
-                htmlEditor.style.display = "none";
-                pdfChooser.style.display = "block";
-                console.log("PDF");
-                }
-            };
-        // Stel selectie en invoer correct in op basis van backend
-       
-    window.addEventListener('DOMContentLoaded', function() {
-        select.value = defaultType;
-        disablePDFifHome();
-
-        nameDiv.style.display = "none";
-        
-        const previousPageId = {{ $previousId ?? 'null' }};
-        console.log("Previous page ID:", previousPageId);
-        fetch(`/pages/${previousPageId}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.content !== undefined) {
-                    if (data.content.toLowerCase().endsWith('.pdf')) {
-                        select.value = 'PDF';
-                        pdfPathInput.value = data.content.split('/').pop();
-                    } else {
-                        select.value = 'HTML';
-                        CKEDITOR.instances.editor.setData(data.content);
-                    }
-                    updateEditorView();
-                }
-            })
-
-        if (defaultType === 'PDF') {
-            pdfPathInput.value = initialContent.split('/').pop(); // Alleen bestandsnaam
-        }
-    });
+window.addEventListener('DOMContentLoaded', function() {
+    console.log("Initial content:", initialContent);
+    console.log("Default type:", defaultType);
+    
+    select.value = defaultType;
+    disablePDFifHome();
+    nameDiv.style.display = "none";
+    
+    // Set up initial content based on type
+    if (defaultType === 'PDF') {
+        pdfPathInput.value = initialContent.split('/').pop();
+        console.log("Setting PDF with filename:", initialContent.split('/').pop());
+    } else {
+        CKEDITOR.instances.editor.setData(textareaContent);
+        console.log("Setting HTML content");
+    }
+    
+    // Call updateEditorView to show the correct editor
+    updateEditorView();
+});
 
         select.addEventListener('change', updateEditorView);
 
@@ -202,25 +196,22 @@
             pageSelect.addEventListener('change', function() {
                     disablePDFifHome();
                     nameDiv.style.display = "none";
-                    if (this.value == "newpage") {
+
+                     if (this.value == "newpage") {
                         console.log("New page selected");
                         nameDiv.style.display = "block";
+                        // Clear content for new page
+                        CKEDITOR.instances.editor.setData('');
+                        pdfPathInput.value = '';
+                        select.value = 'HTML';
+                        updateEditorView();
+                        return;
                     } 
-                    const selectedPageId = this.value;
-                    fetch(`/pages/${selectedPageId}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.content !== undefined) {
-                                if (data.content.toLowerCase().endsWith('.pdf')) {
-                                    select.value = 'PDF';
-                                    pdfPathInput.value = data.content.split('/').pop();
-                                } else {
-                                    select.value = 'HTML';
-                                    CKEDITOR.instances.editor.setData(data.content);
-                                }
-                                updateEditorView();
-                            }
-                        })
+                                    const selectedPageId = this.value;
+                    console.log("Redirecting to page:", selectedPageId);
+                    
+                    // Redirect to the editor route with the selected page ID
+                    window.location.href = `/editor/${selectedPageId}`;
                 });
     </script>
 

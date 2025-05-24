@@ -13,7 +13,6 @@ class PageController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('user-access:guest');
     }
 
     /**
@@ -44,7 +43,7 @@ class PageController extends Controller
 
             }
             $pageData = DB::table('pages')->where('routename', $previousRouteName)->first();
-            $pageData = $page->find(1); // Fetch the entire page data
+            $pageData = $page->find($previousId); // Fetch the entire page data
             return view('content.editor', ['page' => $pageData, 'previousRoute' => $previousRouteName, 'previousId' => $previousId]);
         }
     }
@@ -140,6 +139,19 @@ class PageController extends Controller
                 'message' => 'Error: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    public function showEditorContent($pageId = null)
+    {
+        // Default to homepage if no page ID provided
+        $pageId = $pageId ?? 1;
+
+        $page = PageModel::find($pageId);
+
+        $previousUrl = url()->previous();
+        $previousRoute = substr($previousUrl, 17);
+
+        return view('content.editor', ['page' => $page, 'previousRoute' => $previousRoute]);
     }
     public function showByName($name)
     {

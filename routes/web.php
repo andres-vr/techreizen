@@ -13,6 +13,7 @@ Route::resource('page', PageController::class);
 // General Routes
 Route::get('/home', [PageController::class, 'show'])->name('home');
 Route::get('/voorbeeldreizen', [PageController::class, 'show'])->name('voorbeeldreizen');
+
 // File manager routes
 Route::get('/view-pdf/{folder}/{filename}', function ($folder, $filename) {
     $path = storage_path("app/public/files/{$folder}/{$filename}");
@@ -139,3 +140,7 @@ All Traveller, Guide, Routes List
 Route::middleware(['auth', 'user-access:traveller,guide'])->group(function () {
     Route::get('/traveller/home', [HomeController::class, 'travellerHome'])->name('traveller.home');
 });
+
+Route::get('/editor/{pageId?}', [PageController::class, 'showEditorContent'])->name('editor');
+
+Route::get('/{routename}', [PageController::class, 'showByName'])->name('dynamic.page');
