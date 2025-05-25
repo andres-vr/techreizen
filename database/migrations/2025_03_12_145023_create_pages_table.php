@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->integer('id')->autoIncrement();
             $table->string('name', 255);
             $table->string('content', 10960); //tekst
-            $table->tinyInteger('access_level');
+            $table->string('access_level',255);
             $table->timestamp('created_at');
             $table->timestamp('updated_at');
             $table->enum('type', ["HTML", "PDF"]); //content veranderen naar HTML, PDF, ...

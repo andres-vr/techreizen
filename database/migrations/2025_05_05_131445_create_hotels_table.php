@@ -22,8 +22,11 @@ return new class extends Migration {
             $table->string("phone", 255);
             $table->string("image1", 255);
             $table->string("image2", 255);
-            $table->integer("trip_id");
+            $table->foreignId('trip_id')
+                ->constrained('trips')
+                ->onDelete('cascade');
             $table->timestamps();
+            
         });
     }
 
