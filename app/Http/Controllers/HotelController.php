@@ -53,11 +53,12 @@ class HotelController extends Controller
             'addStreetHotel' => 'required|string',
             'addPostcodeHotel' => 'required|numeric',
             'addCityHotel' => 'required|string',
-            'addCountryHotel' => 'required|string',
+            'country' => 'required|string',
             'addLinkSiteHotel' => 'required|url',
             'addPhoneNumber' => 'required|string',
             'pdf1_path' => 'required|string',
             'pdf2_path' => 'required|string',
+            'trip' => 'required|string',
         ]);
 
         DB::table('hotels')->insert([
@@ -66,11 +67,12 @@ class HotelController extends Controller
             'street' => $validated['addStreetHotel'],
             'zip_code' => $validated['addPostcodeHotel'],
             'city' => $validated['addCityHotel'],
-            'country' => $validated['addCountryHotel'],
+            'country' => $validated['country'],
             'link' => $validated['addLinkSiteHotel'],
             'phone' => $validated['addPhoneNumber'],
             'image1' => $validated['pdf1_path'],
             'image2' => $validated['pdf2_path'],
+            'trip_id'=> $validated['trip']
         ]);
         return redirect()->route('hotels.show')->with('success', 'Hotel succesvol toegevoegd!');
     }

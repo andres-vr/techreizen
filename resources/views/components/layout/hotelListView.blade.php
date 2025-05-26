@@ -31,7 +31,9 @@
             <!-- Hotel info -->
             <div class="p-4">
                 <div style="text-align: right;">
-                    <button style="background-color: blue; color:white;" class="create-hotel">Add Hotel</button>
+                    @if (Auth::user()->role == "admin")
+                        <button style="background-color: blue; color:white;" class="create-hotel">Add Hotel</button>
+                    @endif
                 </div>
                 <table
                     style="border: 3px black solid; margin: 0 auto; margin-top: 10px; width: 100%; background-color:azure;">
@@ -44,10 +46,12 @@
                         </th>
                         <th style="padding: 10px; border: 2px black solid; text-align: center; font-size: 1.5em;">Zipcode
                         </th>
-                        <th style="padding: 10px; border: 2px black solid; text-align: center; font-size: 1.5em;">Edit
-                        </th>
-                        <th style="padding: 10px; border: 2px black solid; text-align: center; font-size: 1.5em;">Delete
-                        </th>
+                        @if (Auth::user()->role == "admin")
+                            <th style="padding: 10px; border: 2px black solid; text-align: center; font-size: 1.5em;">Edit
+                            </th>
+                            <th style="padding: 10px; border: 2px black solid; text-align: center; font-size: 1.5em;">Delete
+                            </th>
+                        @endif
 
                     </tr>
                     @foreach ($hotels as $hotel)
@@ -81,7 +85,8 @@
                             <td style="padding: 10px; border: 2px black solid; font-size: 1.2em;">
                                 <p class="text-gray-600 text-sm">{{ $hotel->zip_code }} {{ $hotel->city }}</p>
                             </td>
-                            <td style="padding: 10px; border: 2px black solid; text-align: center;">
+                            @if (Auth::user()->role == "admin")
+                                <td style="padding: 10px; border: 2px black solid; text-align: center;">
                                 <button style="width: 100px; background-color: blue; color: white;" 
                                 type="button"
                                 class="edit-hotel"
@@ -105,6 +110,7 @@
                                     class="delete-hotel" 
                                     data-id="{{ $hotel->id }}">Delete</button>
                             </td>
+                            @endif
                         </tr>
                     @endforeach
                 </table>

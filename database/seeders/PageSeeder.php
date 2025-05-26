@@ -66,7 +66,7 @@ class PageSeeder extends Seeder
             [
                 'name' => 'Hotels',
                 'content' => '',
-                'access_level' => "admin",
+                'access_level' => "admin,guide,traveller",
                 'type' => "HTML",
                 'routename' => 'show-hotels'
             ]

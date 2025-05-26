@@ -72,7 +72,6 @@
                                         @foreach($trips as $trip)
                                             <option value="{{ $trip->id }}">{{ $trip->name }}</option>
                                         @endforeach
-                                        <option value="newtrip">Nieuwe trip</option>
                                     </select>
                                     <!-- Add New Trip -->
                                     <div id="new-trip" style="display: none;">
