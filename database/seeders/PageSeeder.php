@@ -45,28 +45,32 @@ class PageSeeder extends Seeder
                             <ul>
                             </ul>
                         </div>',
-                'access_level' => "admin,guide,traveller,guest",
+                'login' => false,
+                'guideOrTraveller' => false,
                 'type' => 'HTML',
                 'routename' => 'home'
             ],
             [
                 'name' => 'Voorbeeldreis',
                 'content' => 'http://localhost/storage/files/1/BeperktProgrammaDuitslandTsjechieWebsite.pdf',
-                'access_level' => "admin,guide,traveller,guest",
+                'login' => false,
+                'guideOrTraveller' => false,
                 'type' => "PDF",
                 'routename' => "voorbeeldreizen"
             ],
             [
                 'name' => 'Contact',
                 'content' => 'Hello',
-                'access_level' => "admin,guide,traveller,guest",
+                'login' => false,
+                'guideOrTraveller' => false,
                 'type' => "HTML",
                 'routename' => 'contact'
             ],
             [
                 'name' => 'Hotels',
                 'content' => '',
-                'access_level' => "admin,guide,traveller",
+                'login' => true,
+                'guideOrTraveller' => false,
                 'type' => "HTML",
                 'routename' => 'show-hotels'
             ]

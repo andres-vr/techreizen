@@ -57,7 +57,8 @@ class PageController extends Controller
         $page->routename = $name;
         $page->content = '';
         $page->type = 'HTML';
-        $page->access_level = 'admin,guide,traveller,guest';
+        $page->login = 1;
+        $page->guideOrTraveller = 0;
         $page->created_at = now();
         $page->updated_at = now();
         $page->save();
@@ -77,37 +78,6 @@ class PageController extends Controller
             'content' => $pageModel->content
         ]);
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, PageModel $pageModel)
-    {
-        $validated = $request->validate([
-            'type' => 'required|in:html,pdf',
-            'content' => 'required_if:type,html',
-            'pdf_file' => 'required_if:type,pdf|file|mimes:pdf|max:2048',
-            'access_level' => 'required|array',
-            'access_level.*' => 'in:admin,guide,traveller,guest'
-        ]);
-
-        $updateData = [
-            'type' => $request->type,
-            'access_level' => implode(',', $request->access_level)
-        ];
-
-        if ($request->type == 'PDF') {
-            // Handle PDF upload
-            $filename = $request->file('pdf_file')->store('public/pdfs');
-            $updateData['content'] = basename($filename);
-        } else {
-
-            $updateData['content'] = $request->content;
-        }
-        $pageModel->update($updateData);
-
-        return redirect()->route('page.show', $pageModel)->with('success', 'Page updated!');
-    }
     public function saveEditorContent(Request $request)
     {
         try {
@@ -121,7 +91,18 @@ class PageController extends Controller
                 $page->content = $request->input('pdf_path');
                 $page->type = 'PDF';
             }
-            $page->access_level = implode(',', $request->input('access_level'));
+            if(in_array('guest',$request->input('access_level'))){
+                $page->login  = false;
+                $page->guideOrTraveller = false;
+            }
+            elseif(in_array('traveller',$request->input('access_level'))){
+                $page->login = true;
+                $page->guideOrTraveller = false;
+            }
+            else{
+                $page->login = true;
+                $page->guideOrTraveller = true;
+            }
 
             $page->save();
 

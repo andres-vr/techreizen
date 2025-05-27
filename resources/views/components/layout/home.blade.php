@@ -59,11 +59,8 @@
                 @endphp
 
             @foreach($pages as $page)
-                @php
-                    $acceslevelArray = explode(",",$page->access_level);
-                @endphp
                 @if ($counter < 5)
-                    @if (in_array('guest',$acceslevelArray) || Auth::check() && Auth::user()->role == "admin" )
+                    @if ($page->login == false || Auth::check() && Auth::user()->role == "admin" )
                         @php
                             $counter++;
                         @endphp
@@ -71,7 +68,7 @@
                         style="padding: 5px; color: black; white-space: nowrap;">
                         {{ $page->name }}
                     </a>
-                    @elseif (Auth::check() && in_array(Auth::user()->role,$acceslevelArray))
+                    @elseif (Auth::check() && Auth::user()->role == "guide"|| Auth::check() && Auth::user()->role == "traveller" && $page->guideOrTraveller== false)
                         @php
                             $counter++;
                         @endphp
@@ -81,7 +78,7 @@
                     </a>
                     @endif
                 @elseif ($counter == 5)
-                    @if (in_array('guest',$acceslevelArray) || Auth::check() && Auth::user()->role == "admin" )
+                    @if ($page->login == false || Auth::check() && Auth::user()->role == "admin" )
                         @php
                             $counter++;
                         @endphp
@@ -94,7 +91,7 @@
                                     style="padding: 5px; color: black; white-space: nowrap;">
                                     {{ $page->name }}
                                 </a>
-                    @elseif (Auth::check() && in_array(Auth::user()->role,$acceslevelArray))
+                    @elseif (Auth::check() && Auth::user()->role == "guide"|| Auth::check() && Auth::user()->role == "traveller" && $page->guideOrTraveller== false)
                         @php
                             $counter++;
                         @endphp
@@ -110,7 +107,7 @@
                                 </a>
                     @endif
                 @else
-                    @if (in_array('guest',$acceslevelArray) || Auth::check() && Auth::user()->role == "admin" )
+                    @if ($page->login == false || Auth::check() && Auth::user()->role == "admin" || Auth::check() && Auth::user()->role == "guide")
                     @php
                         $counter++;
                     @endphp
@@ -118,7 +115,7 @@
                                 style="padding: 5px; color: black; white-space: nowrap;">
                                 {{ $page->name }}
                             </a>
-                    @elseif (Auth::check() && in_array(Auth::user()->role,$acceslevelArray))
+                    @elseif (Auth::check() && Auth::user()->role == "traveller" && $page->guideOrTraveller== false)
                     @php
                         $counter++;
                     @endphp

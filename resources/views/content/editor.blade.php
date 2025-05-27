@@ -70,12 +70,11 @@
         </label>
         <select name="access_level[]" multiple required
                 style="width: 100px; height: 100px; padding: 8px; border: 1px solid #ddd;">
-            <option value="admin">Admin</option>
             <option value="guide">Guide</option>
             <option value="traveller">Traveller</option>
             <option value="guest">Guest</option>
         </select>
-        <small style="color: #666;">Hou Ctrl (Windows) of Cmd (Mac) ingedrukt om meerdere opties te selecteren</small>
+        {{-- <small style="color: #666;">Hou Ctrl (Windows) of Cmd (Mac) ingedrukt om meerdere opties te selecteren</small> --}}
     </div>
 
     {{-- Buttons --}}
