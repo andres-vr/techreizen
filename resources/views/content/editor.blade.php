@@ -102,48 +102,99 @@
         const initialContent = `{!! trim($page->content ?? '') !!}`;
         const defaultType = initialContent.toLowerCase().endsWith('.pdf') ? 'PDF' : 'HTML';
 
+        // Initialize CKEditor
+        let editorInstance = null;
+
+        function initializeCKEditor() {
+            if (editorInstance) {
+                editorInstance.destroy();
+            }
+            CKEDITOR.replace('editor');
+            editorInstance = CKEDITOR.instances.editor;
+        }
 
         function updateEditorView() {
             const value = select.value;
             if (value === "HTML") {
                 htmlEditor.style.display = "block";
                 pdfChooser.style.display = "none";
+                
+                // Initialize CKEditor if not already done
+                if (!editorInstance || editorInstance.status !== 'ready') {
+                    setTimeout(initializeCKEditor, 100);
+                }
                 console.log("HTML");
-                } else if (value === "PDF") {
+            } else if (value === "PDF") {
                 htmlEditor.style.display = "none";
                 pdfChooser.style.display = "block";
+                
+                // Clear PDF path when switching to PDF mode without content
+                if (!pdfPathInput.value) {
+                    pdfPathInput.value = '';
+                }
                 console.log("PDF");
-                }
-            };
-        // Stel selectie en invoer correct in op basis van backend
-       
-    window.addEventListener('DOMContentLoaded', function() {
-        select.value = defaultType;
-        disablePDFifHome();
-
-        nameDiv.style.display = "none";
-        
-        const previousPageId = {{ $previousId ?? 'null' }};
-        console.log("Previous page ID:", previousPageId);
-        fetch(`/pages/${previousPageId}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.content !== undefined) {
-                    if (data.content.toLowerCase().endsWith('.pdf')) {
-                        select.value = 'PDF';
-                        pdfPathInput.value = data.content.split('/').pop();
-                    } else {
-                        select.value = 'HTML';
-                        CKEDITOR.instances.editor.setData(data.content);
-                    }
-                    updateEditorView();
-                }
-            })
-
-        if (defaultType === 'PDF') {
-            pdfPathInput.value = initialContent.split('/').pop(); // Alleen bestandsnaam
+            }
         }
-    });
+
+        // Stel selectie en invoer correct in op basis van backend
+        window.addEventListener('DOMContentLoaded', function() {
+            select.value = defaultType;
+            disablePDFifHome();
+            nameDiv.style.display = "none";
+            
+            // Initialize editor based on content type
+            updateEditorView();
+            
+            const previousPageId = {{ $previousId ?? 'null' }};
+            console.log("Previous page ID:", previousPageId);
+            
+            if (previousPageId && previousPageId !== 'null') {
+                loadPageContent(previousPageId);
+            }
+        });
+
+        function loadPageContent(pageId) {
+            fetch(`/pages/${pageId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.content !== undefined) {
+                        if (data.content.toLowerCase().endsWith('.pdf')) {
+                            select.value = 'PDF';
+                            pdfPathInput.value = data.content.split('/').pop();
+                        } else {
+                            select.value = 'HTML';
+                            // Wait for CKEditor to be ready before setting data
+                            setTimeout(() => {
+                                if (CKEDITOR.instances.editor && CKEDITOR.instances.editor.status === 'ready') {
+                                    CKEDITOR.instances.editor.setData(data.content);
+                                } else {
+                                    // If editor isn't ready, wait and try again
+                                    CKEDITOR.on('instanceReady', function(evt) {
+                                        if (evt.editor.name === 'editor') {
+                                            evt.editor.setData(data.content);
+                                        }
+                                    });
+                                }
+                            }, 200);
+                        }
+                        updateEditorView();
+                    } else {
+                        // Clear content if no data
+                        if (select.value === 'HTML') {
+                            setTimeout(() => {
+                                if (CKEDITOR.instances.editor && CKEDITOR.instances.editor.status === 'ready') {
+                                    CKEDITOR.instances.editor.setData('');
+                                }
+                            }, 200);
+                        } else {
+                            pdfPathInput.value = '';
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading page content:', error);
+                });
+        }
 
         select.addEventListener('change', updateEditorView);
 
@@ -155,35 +206,8 @@
                 content = CKEDITOR.instances.editor.getData();
             } else {
                 content = document.getElementById('pdf-path').value;
-            }});
-
-        /*document.getElementById('save-button').addEventListener('click', function() {
-            const content = CKEDITOR.instances.editor.getData();
-            
-            const accessLevels = [];
-            const accessSelect = document.querySelector('select[name="access_level[]"]');
-            for (const option of accessSelect.options) {
-                if (option.selected) {
-                    accessLevels.push(option.value);
-                }
             }
-
-            fetch("{{ route('editor.save') }}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                },
-                body: JSON.stringify({
-                    content: content,
-                    page_id: {{ $page->id ?? 'null' }},
-                    access_level: accessLevels
-                })
-            })
-            .then(response => response.json())
-            .then(data => alert(data.message))
-            .catch(error => alert("Error: " + error.message));
-        });*/
+        });
         
         const pageSelect = document.getElementById('page-select');
 
@@ -192,36 +216,37 @@
             contentSelect.options[1].disabled = false;
             if (pageSelect.value == 1) {
                 contentSelect.options[1].disabled = true;
+                // If PDF was selected for home page, switch to HTML
+                if (contentSelect.value === 'PDF') {
+                    contentSelect.value = 'HTML';
+                    updateEditorView();
+                }
             }
-        };
+        }
 
         document.addEventListener('DOMContentLoaded', function() {
             disablePDFifHome();
         });
 
-            pageSelect.addEventListener('change', function() {
-                    disablePDFifHome();
-                    nameDiv.style.display = "none";
-                    if (this.value == "newpage") {
-                        console.log("New page selected");
-                        nameDiv.style.display = "block";
-                    } 
-                    const selectedPageId = this.value;
-                    fetch(`/pages/${selectedPageId}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.content !== undefined) {
-                                if (data.content.toLowerCase().endsWith('.pdf')) {
-                                    select.value = 'PDF';
-                                    pdfPathInput.value = data.content.split('/').pop();
-                                } else {
-                                    select.value = 'HTML';
-                                    CKEDITOR.instances.editor.setData(data.content);
-                                }
-                                updateEditorView();
-                            }
-                        })
-                });
+        pageSelect.addEventListener('change', function() {
+            disablePDFifHome();
+            nameDiv.style.display = "none";
+            pdfPathInput.value = ''; // Clear PDF path when switching pages
+            
+            if (this.value == "newpage") {
+                console.log("New page selected");
+                nameDiv.style.display = "block";
+                // Clear editor for new page
+                if (CKEDITOR.instances.editor && CKEDITOR.instances.editor.status === 'ready') {
+                    CKEDITOR.instances.editor.setData('');
+                }
+                select.value = 'HTML';
+                updateEditorView();
+            } else {
+                const selectedPageId = this.value;
+                loadPageContent(selectedPageId);
+            }
+        });
     </script>
 
     {{-- File manager --}}

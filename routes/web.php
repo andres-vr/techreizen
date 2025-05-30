@@ -121,6 +121,7 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
     // Editor Routes
     Route::get('/editor', [PageController::class, 'show'])->name('editor');
     Route::post('/new-page', [PageController::class, 'createNewPage'])->name('new.page');
+    Route::get('/pages/{id}', [PageController::class, 'getPageContent'])->name('pages.get'); //toegevoegd inas
     Route::post('/editor', [PageController::class, 'saveEditorContent'])->name('editor.save');
 
     // Hotel Routes

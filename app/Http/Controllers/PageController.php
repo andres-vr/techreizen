@@ -145,13 +145,24 @@ class PageController extends Controller
         return view('content.show', ['page' => $page]);
     }
 
-    public function getPage($id)
-    {
+    public function getPageContent($id) //bijgevoegd Inas
+{
+    try {
         $page = PageModel::findOrFail($id);
         return response()->json([
             'id' => $page->id,
-            'content' => $page->content
+            'content' => $page->content ?? '',
+            'type' => $page->type ?? 'HTML',
+            'name' => $page->name
         ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => 'Page not found',
+            'content' => '',
+            'type' => 'HTML'
+        ], 404);
     }
+}
+    
 }
 
