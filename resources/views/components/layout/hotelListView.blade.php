@@ -3,130 +3,101 @@
 
 <head>
     <title>{{ $title ?? 'Hotel Info' }}</title>
-
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body>
-    <x-layout.home>  
-    <div>
-        @php
-            $trips = DB::table('trips')->get();
-            $selectedTrip = request()->get('trips', null); // Get the selected trip from the request
-        @endphp
-        <form id="trip-form" action="{{ route('hotels.filter') }}" method="POST">
-            @csrf
-            <p>Filter op Trip:</p>
+    <x-layout.home>
+        <div class="p-4">
+            @php
+                $trips = DB::table('trips')->get();
+                $selectedTrip = request()->get('trips', null);
+            @endphp
 
-            <select id="trip-select" name="trips">
-                <option value="" disabled selected>--- Selecteer een Trip ---</option>
-                @foreach($trips as $trip)
-                    <option value="{{ $trip->id }}"
-                        @if($trip->name == $selectedTrip) selected @endif>
-                        {{ $trip->name }}
-                    </option>
-                @endforeach
-            </select>
-        </form>
-    </div>
-            <!-- Hotel info -->
-            <div class="p-4">
-                <div style="text-align: right;">
-                    @if (Auth::user()->role == "admin")
-                        <button style="background-color: blue; color:white;" class="create-hotel">Add Hotel</button>
-                    @endif
-                </div>
-                <table
-                    style="border: 3px black solid; margin: 0 auto; margin-top: 10px; width: 100%; background-color:azure;">
-                    <tr>
-                        <th style="padding: 10px; border: 2px black solid; text-align: center; font-size: 1.5em;">Info
-                        </th>
-                        <th style="padding: 10px; border: 2px black solid; text-align: center; font-size: 1.5em;">Hotel
-                        </th>
-                        <th style="padding: 10px; border: 2px black solid; text-align: center; font-size: 1.5em;">Address
-                        </th>
-                        <th style="padding: 10px; border: 2px black solid; text-align: center; font-size: 1.5em;">Zipcode
-                        </th>
-                        @if (Auth::user()->role == "admin")
-                            <th style="padding: 10px; border: 2px black solid; text-align: center; font-size: 1.5em;">Edit
-                            </th>
-                            <th style="padding: 10px; border: 2px black solid; text-align: center; font-size: 1.5em;">Delete
-                            </th>
-                        @endif
-
-                    </tr>
-                    @foreach ($hotels as $hotel)
-                        <tr>
-                            <!-- Info button -->
-                            <td style="padding: 10px; border: 2px black solid; text-align: center;">
-                            <button type="button"
-                                class="show-hotel-info"
-                                data-id="{{ $hotel->id }}"
-                                data-name="{{ $hotel->name }}"
-                                data-street="{{ $hotel->street }}"
-                                data-zip="{{ $hotel->zip_code }}"
-                                data-city="{{ $hotel->city }}"
-                                data-country="{{ $hotel->country }}"
-                                data-phone="{{ $hotel->phone }}"
-                                data-link="{{ $hotel->link }}"
-                                data-image1="{{ url('view-image/1/' . substr($hotel->image1, 33)) }}"
-                                data-image2="{{ url('view-image/1/' . substr($hotel->image2, 33)) }}">
-                                ℹ️
-                            </button>
-                            </td>
-                            <!-- name of hotel -->
-                            <td style="padding: 10px; border: 2px black solid;">
-                                <h3 class="font-bold text-lg mb-1 truncate">{{ $hotel->name }}</h3>
-                            </td>
-                            <!-- hotel address -->
-                            <td style="padding: 10px; border: 2px black solid; font-size: 1.2em;">
-                                <p class="text-gray-600 text-sm">{{ $hotel->street }}</p>
-                            </td>
-                            <!-- zipcode -->
-                            <td style="padding: 10px; border: 2px black solid; font-size: 1.2em;">
-                                <p class="text-gray-600 text-sm">{{ $hotel->zip_code }} {{ $hotel->city }}</p>
-                            </td>
-                            @if (Auth::user()->role == "admin")
-                                <td style="padding: 10px; border: 2px black solid; text-align: center;">
-                                <button style="width: 100px; background-color: blue; color: white;" 
-                                type="button"
-                                class="edit-hotel"
-                                data-id="{{ $hotel->id }}"
-                                data-name="{{ $hotel->name }}"
-                                data-street="{{ $hotel->street }}"
-                                data-zip="{{ $hotel->zip_code }}"
-                                data-city="{{ $hotel->city }}"
-                                data-country="{{ $hotel->country }}"
-                                data-phone="{{ $hotel->phone }}"
-                                data-link="{{ $hotel->link }}"
-                                data-trip="{{ $hotel->trip_id }}"
-                                data-image1="{{ url('view-image/1/' . substr($hotel->image1, 33)) }}"
-                                data-image2="{{ url('view-image/1/' . substr($hotel->image2, 33)) }}">
-                                Edit
-                            </button>
-                            </td>
-                            <td style="padding: 10px; border: 2px black solid; text-align: center;">
-                                    <button type="button" 
-                                    style="width: 100px; background-color: red;" 
-                                    class="delete-hotel" 
-                                    data-id="{{ $hotel->id }}">Delete</button>
-                            </td>
-                            @endif
-                        </tr>
+            <!-- Trip Filter -->
+            <form id="trip-form" action="{{ route('hotels.filter') }}" method="POST" class="mb-6">
+                @csrf
+                <label class="block mb-2 font-semibold">Filter op Trip:</label>
+                <select id="trip-select" name="trips" class="w-full p-2 border rounded-md">
+                    <option value="" disabled selected>--- Selecteer een Trip ---</option>
+                    @foreach ($trips as $trip)
+                        <option value="{{ $trip->id }}" @if ($trip->name == $selectedTrip) selected @endif>
+                            {{ $trip->name }}
+                        </option>
                     @endforeach
-                </table>
+                </select>
+            </form>
+
+            <!-- Add Hotel Button -->
+            @if (Auth::user()->role == 'admin')
+                <div class="text-right mb-4">
+                    <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 create-hotel">
+                        Add Hotel
+                    </button>
+                </div>
+            @endif
+
+            <!-- Hotels Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                @foreach ($hotels as $hotel)
+                    <div class="bg-white rounded-lg shadow-md p-4 border border-gray-200 relative">
+                        <!-- Info Button -->
+                        <button type="button" class="absolute top-2 right-2 text-lg show-hotel-info" title="Hotel Info"
+                            data-id="{{ $hotel->id }}" data-name="{{ $hotel->name }}"
+                            data-street="{{ $hotel->street }}" data-zip="{{ $hotel->zip_code }}"
+                            data-city="{{ $hotel->city }}" data-country="{{ $hotel->country }}"
+                            data-phone="{{ $hotel->phone }}" data-link="{{ $hotel->link }}"
+                            data-image1="{{ url('view-image/1/' . substr($hotel->image1, 33)) }}"
+                            data-image2="{{ url('view-image/1/' . substr($hotel->image2, 33)) }}">
+                            ℹ️
+                        </button>
+
+                        <!-- Hotel Details -->
+                        <h3 class="text-xl font-bold mb-1">{{ $hotel->name }}</h3>
+                        <p class="text-sm text-gray-700 mb-1">{{ $hotel->street }}</p>
+                        <p class="text-sm text-gray-700">{{ $hotel->zip_code }} {{ $hotel->city }}</p>
+
+                        <!-- Admin Buttons -->
+                        @if (Auth::user()->role == 'admin')
+                            <div class="mt-4 flex gap-2">
+                                <button type="button"
+                                    class="flex-1 bg-blue-500 text-white py-1 px-3 rounded edit-hotel"
+                                    data-id="{{ $hotel->id }}" data-name="{{ $hotel->name }}"
+                                    data-street="{{ $hotel->street }}" data-zip="{{ $hotel->zip_code }}"
+                                    data-city="{{ $hotel->city }}" data-country="{{ $hotel->country }}"
+                                    data-phone="{{ $hotel->phone }}" data-link="{{ $hotel->link }}"
+                                    data-trip="{{ $hotel->trip_id }}"
+                                    data-image1="{{ url('view-image/1/' . substr($hotel->image1, 33)) }}"
+                                    data-image2="{{ url('view-image/1/' . substr($hotel->image2, 33)) }}">
+                                    Edit
+                                </button>
+
+                                <button type="button"
+                                    class="flex-1 bg-red-600 text-white py-1 px-3 rounded delete-hotel"
+                                    data-id="{{ $hotel->id }}">
+                                    Delete
+                                </button>
+                            </div>
+                        @endif
+                    </div>
+                @endforeach
             </div>
+        </div>
+
+        <!-- Modals -->
         @include('content.hotelinfo')
         @include('content.createhotel')
         @include('content.editHotel')
         @include('content.deleteHotel')
-</x-layout.home>
+    </x-layout.home>
 </body>
 
 </html>
+
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('trip-select').addEventListener('change', function () {
-        document.getElementById('trip-form').submit();
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('trip-select').addEventListener('change', function() {
+            document.getElementById('trip-form').submit();
+        });
     });
-});
 </script>
