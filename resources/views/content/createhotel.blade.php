@@ -49,9 +49,6 @@
                                 <label class="detail-label">City:</label>
                                 <input type="text" class="form-input" id="cityHotel" name="addCityHotel" required>
                             </div>
-                           @php
-                                $uniqueTrips = collect($trips)->unique('id');
-                            @endphp
                              <!-- Country Dropdown (filtered based on trip) -->
                             <div class="detail-item">
                                     <label class="detail-label">Country:</label>
